@@ -11,5 +11,8 @@ namespace Backend.Models
         public bool isActive { get; set; }
         public virtual Role Role { get; set; }
 
+        // Relations
+        public ICollection<ClassUser> ClassUsers { get; set; }
+
     }
 }
