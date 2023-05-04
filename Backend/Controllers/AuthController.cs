@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Security.Claims;
+using Backend.Services.UserService.UserService;
 
 namespace Backend.Controllers
 {

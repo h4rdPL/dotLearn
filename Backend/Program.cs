@@ -1,6 +1,8 @@
 using Backend.Data;
 using Backend.Data.Enums;
+using Backend.Services.Service;
 using Backend.Services.UserService;
+using Backend.Services.UserService.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
