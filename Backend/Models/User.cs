@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.Data.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models
 {
@@ -9,7 +10,28 @@ namespace Backend.Models
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public bool isActive { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual UserRoles Role { get; set; }
+
+        // Property for getting/setting the subject based on role
+        public Language? Language
+        {
+            get
+            {
+                if (Role == UserRoles.Proffesor)
+                    return _language;
+                else
+                    return null;
+            }
+            set
+            {
+                if (Role == UserRoles.Proffesor)
+                    _language = value;
+            }
+        }
+
+        // Private field for storing the subject for Professor role
+        //private Language? _language;
+        private Language? _language;
 
         // Relations
         public ICollection<ClassUser> ClassUsers { get; set; }

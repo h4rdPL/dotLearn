@@ -23,34 +23,32 @@ namespace Backend.Controllers
         HttpClient httpClient = new HttpClient();
 
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
 
 
-
-        // get configuration access - config keys, data etc
-        public AuthController(IConfiguration configuration)
+        /// <summary>
+        /// Adding user service repository and configuration to current scope
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="userService"></param>
+        public AuthController(IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
+            _userService = userService;
         }
 
         /// <summary>
         /// This method allows user to register
         /// </summary>
         /// <param name="userDTO"></param>
-        /// <returns></returns>
-        [HttpPost("register")]
-        public ActionResult Register (UserDTO userDTO)
+        /// <returns>bool</returns>
+        /// 
+        [HttpPost("Register")]
+        public bool Register(UserDTO userDTO)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest("Zle dane do rejestracji...");
-            }
-
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
-            user.Email = userDTO.Email;
-            user.PasswordHash = passwordHash;
-            user.Role = userDTO.Role;
-            return Ok(user);
+            return _userService.RegisterUser(userDTO);
         }
+
         /// <summary>
         /// This method allows user to login
         /// </summary>
@@ -59,50 +57,9 @@ namespace Backend.Controllers
         /// 
 
         [HttpPost("Login")]
-        public ActionResult Login (UserDTO userDTO)
+        public string Login ( UserDTO userDTO)
         {
-            if (user.Email != userDTO.Email)
-            {
-                return BadRequest("Został wpisany zły adres Email");
-            } else if(!VerifyPassword(userDTO.Password, user.PasswordHash))
-            {
-                return BadRequest("Zostało wpisane złe hasło");
-            }
-                string token = CreateToken(user);
-                return Ok(token);
+            return _userService.Login(userDTO);
         }
-        /// <summary>
-        /// JWT Token
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        private string CreateToken(User user)
-        {
-            var userRole = user.Role.UserRole.ToString(); // Get the user role as a string from the enum
-
-            var claims = new ClaimsIdentity(new[] {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, userRole), // Add the user role as a claim
-
-            });
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                    claims: claims.Claims,
-                    expires: DateTime.Now.AddDays(1),
-                    signingCredentials: cred
-                );
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwt;
-        }
-
-        private bool VerifyPassword(string userPassword, string PasswordHash) 
-        {
-            bool isMatch = BCrypt.Net.BCrypt.Verify(userPassword, PasswordHash);
-            return isMatch;
-        }
-
     }
 }

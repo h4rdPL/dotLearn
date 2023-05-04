@@ -1,6 +1,9 @@
+using Backend.Data;
 using Backend.Data.Enums;
+using Backend.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +23,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IUserService, UserService>();
+
 var app = builder.Build();
 
 
