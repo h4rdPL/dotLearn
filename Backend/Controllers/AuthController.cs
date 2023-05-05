@@ -1,17 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Models.Dto;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using System.Xml.Linq;
-using Microsoft.AspNetCore.Authorization;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Security.Claims;
 using Backend.Services.UserService.UserService;
 
 namespace Backend.Controllers

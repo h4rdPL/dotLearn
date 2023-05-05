@@ -1,11 +1,13 @@
-﻿namespace Backend.Models
+﻿using Backend.Data.Enums;
+
+namespace Backend.Models
 {
     public class Class
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Subname { get; set; }
-        public string Language { get; set; }
+        public virtual Language language { get; set; }
         public string ClassCode { get; set; }
 
         // Relations - n:n -> users & class

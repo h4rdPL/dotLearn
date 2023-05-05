@@ -1,5 +1,6 @@
 using Backend.Data;
 using Backend.Data.Enums;
+using Backend.Services.ClassService;
 using Backend.Services.Service;
 using Backend.Services.UserService;
 using Backend.Services.UserService.UserService;
@@ -25,10 +26,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<IClassService, ClassService>();
 var app = builder.Build();
 
 
