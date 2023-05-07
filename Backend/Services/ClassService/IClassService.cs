@@ -6,9 +6,9 @@ namespace Backend.Services.ClassService
     public interface IClassService
     {
         public bool CreateClass(ClassDTO classDTO);
+        public bool ClassEnrollment(string classCode);
 
         public void DeleteClass();
-        public bool ClassEnrollment(UserIdDTO userIdDTO, string uniqueClassCode);
         public void ExitClass();
         public Task<int> GetMemberNumbers();
         public Task<string> GetProffesorName();

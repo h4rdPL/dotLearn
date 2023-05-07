@@ -33,9 +33,9 @@ namespace Backend.Controllers
         /// <param name="classCode"></param>
         /// <returns></returns>
         [HttpPost("ClassEnrollment")]
-        public bool JoinToClass(UserIdDTO userIdDTO , string uniqueClassCode)
+        public bool JoinToClass(string classCode)
         {
-            return _classService.ClassEnrollment(userIdDTO, uniqueClassCode);
+            return _classService.ClassEnrollment(classCode);
         }
     }
 }

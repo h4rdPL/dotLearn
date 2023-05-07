@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Backend.Data;
 using Backend.Services.UserService;
 using Backend.Services.UserService.UserService;
+using System.Text;
 
 namespace Backend.Services.Service
 {
@@ -87,27 +88,29 @@ namespace Backend.Services.Service
         /// <param name="userDTO">The user to create the token for</param>
         /// <returns>A JWT with the user's email and role claims encoded.</returns>
 
+
         public JwtSecurityToken CreateToken(User user)
         {
-            //var userRole = user.Role.UserRole.ToString(); // Get the user role as a string from the enum
             var userRole = user.Role.ToString();
-            var claims = new ClaimsIdentity(new[] {
+            var claims = new List<Claim>
+            {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, userRole), // Add the user role as a claim
-
-            });
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+                new Claim(ClaimTypes.Role, userRole)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
-                claims: claims.Claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: cred
+                signingCredentials: creds,
+                issuer: "https://localhost:3000",
+                audience: "https://localhost:3000",
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(1)
             );
+
             return token;
         }
-
-
+      
 
         /// <summary>
         /// Verifies whether the given user password matches the specified hashed password.
