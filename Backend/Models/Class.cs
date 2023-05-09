@@ -11,7 +11,9 @@ namespace Backend.Models
         public string ClassCode { get; set; }
 
         // Relations - n:n -> users & class
-        public ICollection<ClassUser> ClassUsers { get; set; }
+        //public ICollection<ClassUser> ClassUsers { get; set; }
+        public List<UserClass> UserClasses { get; set; }
+
 
     }
 }

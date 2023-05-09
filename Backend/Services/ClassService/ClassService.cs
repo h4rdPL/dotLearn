@@ -1,8 +1,13 @@
-﻿using Backend.Data;
+﻿using Azure.Core;
+using Backend.Data;
 using Backend.Models;
 using Backend.Models.Dto;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Backend.Services.ClassService
@@ -85,42 +90,42 @@ namespace Backend.Services.ClassService
             throw new NotImplementedException();
         }
 
+
+        [HttpPost]
         public bool ClassEnrollment(string classCode)
         {
-            // Get the currently logged in user's email
-            var userEmailClaim = _httpContextAccessor.HttpContext.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
-            if (userEmailClaim == null)
+
+            var jwt = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            // Get the user's email from the JWT
+            // 1. Pobranie adresu email użytkownika z tokenu
+            var userEmail = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+            System.Diagnostics.Debug.WriteLine("This will be displayed in output window");
+
+            if (userEmail == null)
             {
                 return false;
             }
-            var userEmail = userEmailClaim.Value;
-            Console.WriteLine($"User email: {userEmail}");
+            // 2. Wyszukanie klasy w bazie danych na podstawie kodu klasy
+            var classes = _context.Class.Where(c => c.ClassCode == classCode.ToString()).FirstOrDefault();
 
-            var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
-
-            if (user == null)
+            // 3. Sprawdzenie czy klasa o podanym kodzie istnieje
+            if (classes == null)
             {
                 return false;
             }
+            Console.WriteLine($"classUser added: {classes} {userEmail}");
 
-            // Get the class with the given code
-            var classObj = _context.Class.FirstOrDefault(c => c.ClassCode == classCode);
-            if (classObj == null)
-            {
-                return false;
-            }
+            // 4. Dodanie użytkownika do klasy
+            var user = _context.Users.Single(u => u.Email == userEmail);
+                var classUser = new UserClass { UserId = user.Id, ClassId = classes.Id };
+            _context.ClassUsers.Add(classUser);
 
-            // Add the user to the class
-            var enrollment = new ClassUser
-            {
-                UserId = user.Id,
-                ClassId = classObj.Id
-            };
-            _context.ClassUsers.Add(enrollment);
             _context.SaveChanges();
 
             return true;
         }
+
 
 
     }

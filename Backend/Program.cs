@@ -7,6 +7,7 @@ using Backend.Services.UserService.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -27,6 +28,19 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
 });
+
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7222/");
+        });
+});
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Test01", Version = "v1" });
@@ -55,30 +69,17 @@ builder.Services.AddSwaggerGen(c =>
                 });
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("GetAccess", policy =>
-    {
-        policy.RequireRole("admin");
-    });
-});
 
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.Audience = "api1";
-    x.Authority = "http://localhost:5000";
-    x.RequireHttpsMetadata = false;
-});
+//IdentityModelEventSource.ShowPII = true;
+
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IClassService, ClassService>();
+
+
 var app = builder.Build();
 
 
