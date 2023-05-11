@@ -17,4 +17,8 @@
     <ProjectReference Include="..\dotLearn.Infrastructure\dotLearn.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
+
 </Project>
