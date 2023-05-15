@@ -26,7 +26,6 @@ namespace dotLearn.Application.Services.Authentication
             {
                 throw new Exception("Użytkownik o podanym adresie email już istnieje");
             }
-
             Guid id = Guid.NewGuid();
             User user = null; // Initialize the user variable with a default value
 
