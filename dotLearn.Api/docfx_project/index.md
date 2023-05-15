@@ -1,7 +1,4 @@
-# Documentation for API (dotLear.Api)
-All updates will be written here. 
+## Documentation **dotLearn**
 
+<hr/>
 
-
-> [!NOTE]
-> This is example of note
