@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using dotLearn.Domain.Entities;
-namespace dotLearn.Application.Common.Interfaces.Authentication.Persistence
+namespace dotLearn.Application.Common.Interfaces.Persisence
 {
     public interface IUserRepository
     {

@@ -1,5 +1,6 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Domain.Entities;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -15,32 +16,32 @@ namespace dotLearn.Infrastructure.Authentication
     {
         private readonly JwtSettings _jwtSettings;
 
-        public JwtTokenGenerator(JwtSettings jwtSettings)
+        public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
         {
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtSettings.Value;
         }
 
         public string GenerateToken(User user)
         {
             var signingCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super-secret-key")),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
                     SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
                  new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                  new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
                  new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-                 new Claim(JwtRegisteredClaimNames.UniqueName, Guid.NewGuid().ToString())
+                 new Claim(JwtRegisteredClaimNames.UniqueName, Guid.NewGuid().ToString()),
+                 new Claim("role", user.Role.ToString())
             };
             var securityToken = new JwtSecurityToken(
-                issuer: "dotLearn",
-                audience: "dotLearn",
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
                 signingCredentials: signingCredentials,
                 claims: claims
                 );
-            
-            return new JwtSecurityTokenHandler().WriteToken(securityToken );
+            return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
     }
 }

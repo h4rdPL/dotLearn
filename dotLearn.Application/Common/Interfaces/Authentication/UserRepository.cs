@@ -1,4 +1,4 @@
-﻿using dotLearn.Application.Common.Interfaces.Authentication.Persistence;
+﻿using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,11 +10,12 @@ namespace dotLearn.Application.Common.Interfaces.Authentication
 {
     public class UserRepository : IUserRepository
     {
-        private static readonly List<User> _users = new List<User>();
+        private static readonly List<User> _users = new();
         public void Add(User user)
         {
             _users.Add(user);
         }
+
 
         public User? GetUserByEmail(string email)
         {

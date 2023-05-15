@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dotLearn.Domain.Data.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,9 @@ namespace dotLearn.Contracts.Authentication
 {
     public record RegisterRequest (
             string FirstName,
-            string LastName, 
+            string LastName,
             string Email,
-            string Password
+            string Password,
+            Role Role
         );
 }
