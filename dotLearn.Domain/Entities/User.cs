@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace dotLearn.Domain.Entities
 {
-    public class User
+    public abstract class User
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string? FirstName { get; set; }

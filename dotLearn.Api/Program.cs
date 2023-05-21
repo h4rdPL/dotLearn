@@ -1,6 +1,12 @@
 using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Infrastructure;
 using dotLearn.Application;
+using Microsoft.OpenApi.Models;
+using dotLearn.Domain.Data.Enum;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +17,62 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = "dotLearn",
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "dotLearn",
+            IssuerSigningKey =
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes("super-secret-key-from-users-secrets")),
+
+        };
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("StudentPolicy", policy =>
+    {
+        policy.RequireClaim(ClaimTypes.Role, Role.Student.ToString());;
+    });
+    options.AddPolicy("ProfessorPolicy", policy =>
+    {
+        policy.RequireClaim(ClaimTypes.Role, Role.Professor.ToString());
+    });
+});
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Test01", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 
 var app = builder.Build();
@@ -22,6 +84,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
+app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -1,2 +1,2 @@
 
-{"items":[{"name":"Introduction","href":"intro.html","topicHref":"intro.html"}]}
+{"items":[{"name":"Blueprint","href":"blueprint.html","topicHref":"blueprint.html"},{"name":"Authentication","items":[{"name":"Register","href":"register.html","topicHref":"register.html"},{"name":"Login","href":"login.html","topicHref":"login.html"},{"name":"Validation","href":"validation.html","topicHref":"validation.html"}]}]}

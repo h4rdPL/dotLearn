@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Application.Common.Interfaces.Persisence;
 
+using dotLearn.Infrastructure.Profile;
+
 namespace dotLearn.Application
 {
     public static class DependencyInjection

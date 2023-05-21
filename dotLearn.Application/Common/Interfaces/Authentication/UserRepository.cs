@@ -15,8 +15,6 @@ namespace dotLearn.Application.Common.Interfaces.Authentication
         {
             _users.Add(user);
         }
-
-
         public User? GetUserByEmail(string email)
         {
             return _users.SingleOrDefault(u => u.Email == email);

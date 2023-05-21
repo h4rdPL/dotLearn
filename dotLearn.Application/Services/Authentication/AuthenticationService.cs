@@ -1,12 +1,16 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Application.Common.Interfaces.Persisence;
+using dotLearn.Application.Common.Interfaces.Validation;
 using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using static dotLearn.Domain.Entities.Student;
 
 namespace dotLearn.Application.Services.Authentication
 {
@@ -14,49 +18,60 @@ namespace dotLearn.Application.Services.Authentication
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly IValidator _validator;
 
-        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator ,IUserRepository userRepository)
         {
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _validator = validator; 
         }
+
         public AuthenticationResult Register(string firstName, string lastName, string email, string password, Role role)
         {
             if (_userRepository.GetUserByEmail(email) is not null)
             {
                 throw new Exception("Użytkownik o podanym adresie email już istnieje");
+            } 
+            else if (!_validator.IsValidEmail(email))
+            {
+                throw new Exception("Podany adres email jest niepoprawnie skonstruowany");
             }
-            Guid id = Guid.NewGuid();
-            User user = null; // Initialize the user variable with a default value
+
+        Guid id = Guid.NewGuid();
+            User user = null; 
 
             if (role == Role.Student)
             {
-                user = new User
+                var cardIdGenerator = new CardIdGenerator();
+                var cardId = cardIdGenerator.GenerateCardId();
+                user = new Student
                 {
                     Id = id,
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
                     Password = password,
-                    Role = Role.Student
+                    Role = Role.Student,
+                    CardId = cardId 
                 };
             }
             else if (role == Role.Professor)
             {
-                user = new User
+                user = new Professor
                 {
                     Id = id,
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
                     Password = password,
-                    Role = Role.Professor
+                    Role = Role.Professor,
                 };
             }
 
             if (user is null)
             {
-                throw new Exception("Invalid user role"); // Handle the case when the user role is neither Student nor Professor
+                throw new Exception("Rola, która została podana, nie istnieje");
             }
 
             _userRepository.Add(user);
@@ -65,25 +80,24 @@ namespace dotLearn.Application.Services.Authentication
 
             return new AuthenticationResult(user, token);
         }
+
         public AuthenticationResult Login(string email, string password)
         {
             // 1. Validate the user exists
-
             if (_userRepository.GetUserByEmail(email) is not User user)
             {
-                throw new Exception("User with given Email does not exist");
+                throw new Exception("Użytkownik o podanym adresie email nie istnieje");
             }
+
             // 2. Validate the password is correct
-            if (user.Password != password)
+            if (!_validator.IsValidPassword(password, user))
             {
-                throw new Exception("Invalid password");
+                throw new Exception("Hasło jest niepoprawne");
             }
+
             // 3. Create Jwt Token
             var token = _jwtTokenGenerator.GenerateToken(user);
             return new AuthenticationResult(user, token);
         }
-
-      
-
     }
 }

@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
+using dotLearn.Application.Common.Interfaces.Validation;
+using dotLearn.Infrastructure.Validation;
 
 namespace dotLearn.Infrastructure
 {
@@ -18,6 +20,7 @@ namespace dotLearn.Infrastructure
         {
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IValidator, Validator>();
             return services;
 
         }

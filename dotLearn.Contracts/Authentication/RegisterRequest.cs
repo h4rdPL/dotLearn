@@ -8,10 +8,6 @@ using System.Threading.Tasks;
 namespace dotLearn.Contracts.Authentication
 {
     public record RegisterRequest (
-            string FirstName,
-            string LastName,
-            string Email,
-            string Password,
-            Role Role
+            
         );
 }

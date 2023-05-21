@@ -1,4 +1,5 @@
-﻿using dotLearn.Domain.Entities;
+﻿using dotLearn.Domain.Data.Enum;
+using dotLearn.Domain.Entities;
 
 namespace dotLearn.Contracts.Authentication;
 public record AuthenticationResponse(
@@ -7,5 +8,7 @@ public record AuthenticationResponse(
         string LastName,
         string Email,
         string Token
+
+
     );
 

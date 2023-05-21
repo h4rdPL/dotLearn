@@ -1,4 +1,5 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
+using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -24,23 +25,28 @@ namespace dotLearn.Infrastructure.Authentication
         public string GenerateToken(User user)
         {
             var signingCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
-                    SecurityAlgorithms.HmacSha256);
-            var claims = new[]
+     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
+     SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
             {
-                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                 new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
-                 new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-                 new Claim(JwtRegisteredClaimNames.UniqueName, Guid.NewGuid().ToString()),
-                 new Claim("role", user.Role.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+                new Claim(JwtRegisteredClaimNames.UniqueName, Guid.NewGuid().ToString()),
             };
+
+            // Add the "role" claim using the correct claim type
+            claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
+
             var securityToken = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
+                issuer: "dotLearn",
+                audience: "dotLearn",
+                expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: signingCredentials,
                 claims: claims
-                );
+            );
+
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
     }

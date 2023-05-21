@@ -1,2 +1,5 @@
-# PLACEHOLDER
-TODO: Add .NET projects to the *src* folder and run `docfx` to generate **REAL** *API Documentation*!
+## Docs Todo list
+
+[ - ] JWT Token explemantion 
+
+[ * ] Add seperate articles for: Register, Login etc. Main articles should be for the blueprint.

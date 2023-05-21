@@ -1,2 +1,12 @@
-- name: Introduction
-  href: intro.md
+items: 
+    - name: Blueprint 
+      href: blueprint.md 
+      items: 
+    - name: Authentication
+      items: 
+      - name: Register
+        href: register.md
+      - name: Login
+        href: login.md
+      - name: Validation
+        href: validation.md
