@@ -80,7 +80,7 @@ namespace dotLearn.Application.Services.Authentication
 
             return new AuthenticationResult(user, token);
         }
-
+        
         public AuthenticationResult Login(string email, string password)
         {
             // 1. Validate the user exists

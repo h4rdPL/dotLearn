@@ -1,6 +1,7 @@
 import type { Preview } from "@storybook/react";
 import { withThemeFromJSXProvider } from "@storybook/addon-styling";
-import { createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { theme } from "../src/theme/myTheme";
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },
@@ -21,7 +22,9 @@ const GlobalStyles = createGlobalStyle`
 
 export const decorators = [
   withThemeFromJSXProvider({
+    themes: { theme },
     GlobalStyles,
+    Provider: ThemeProvider,
   }),
 ];
 
