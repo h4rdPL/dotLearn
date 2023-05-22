@@ -11,6 +11,9 @@ const GlobalStyle = createGlobalStyle`
 img {
     width: 100%;
 }
+button {
+    cursor: pointer;
+}
 `;
 
 export default GlobalStyle;
