@@ -1,11 +1,3 @@
-export const breakpoints = {
-  smallTablet: 576,
-  tablet: 768,
-  smallDesktop: 996,
-  desktop: 1200,
-  largeDesktop: 1600,
-};
-
 export const theme = {
   // landing page
   background: "#401386",
@@ -20,4 +12,12 @@ export const theme = {
   // platform
   purpleLightSidebar: "#5A28A7",
   yellowBright: "#FFFA8B",
+
+  breakpoints: {
+    smallTablet: 576,
+    tablet: 768,
+    smallDesktop: 996,
+    desktop: 1200,
+    largeDesktop: 1600,
+  },
 };

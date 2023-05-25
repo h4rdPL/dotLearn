@@ -15,11 +15,24 @@ const preview: Preview = {
 };
 
 const GlobalStyles = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Source+Sans+Pro:wght@400;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
   body {
-    font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    background-color: ${({ theme }) => theme.background};
+    overflow-x: hidden;
   }
   button {
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+  }
+  ul {
+    list-style: none;
   }
 `;
 
