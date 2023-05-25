@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { LinkProps } from "../../../interfaces/types";
 
-interface LinkProps {
-  label: string;
-}
+
 const NavbarLink = styled.a`
   color: ${({ theme }) => theme.white};
   position: relative;

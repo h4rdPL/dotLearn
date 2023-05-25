@@ -7,6 +7,8 @@ const MainHeading = styled.h1`
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     font-size: 3.875rem;
   }
+
+  
 `;
 export const Heading = ({ firstLabel, secondLabel }: HeadingProps) => {
   return (

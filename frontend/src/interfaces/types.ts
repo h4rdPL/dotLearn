@@ -1,15 +1,23 @@
 export interface MenuProps {
   isActive: boolean;
 }
-
 export interface HeadingProps {
   firstLabel: string;
   secondLabel: string;
 }
 
-export interface Information {
-  firstLabel: string;
-  secondLabel: string;
-  thirdLabel: string;
-  description: string;
+export interface LinkProps {
+  label: string;
+}
+
+export interface InformationProps {
+  firstLabel?: string;
+  secondLabel?: string;
+  thirdLabel?: string;
+  description?: string;
+  secondary?: boolean;
+}
+
+export interface SecondaryHeadingProps {
+  label: string;
 }

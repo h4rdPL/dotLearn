@@ -6,8 +6,9 @@ import styled from "styled-components";
 import onlineLearning from "../../../assets/images/onlineLearning.svg";
 import backgroundCirclesDesktop from "../../../assets/images/backgroundCirclesDesktop.svg";
 import backgroundCirclesMobile from "../../../assets/images/backgroundCirclesMobile.svg";
+
 const HeadingWrapper = styled.div`
-  min-height: 100vh;
+  min-height: 140vh;
   display: flex;
   justify-content: center;
   align-items: center;
