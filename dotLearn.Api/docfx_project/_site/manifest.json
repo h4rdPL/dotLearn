@@ -38,6 +38,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/jobBoard.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/jobBoard.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/login.md",
       "output": {
         ".html": {

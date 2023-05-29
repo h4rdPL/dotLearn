@@ -2,13 +2,11 @@ import React from "react";
 import { styled } from "styled-components";
 import { InformationProps } from "../../../interfaces/types";
 const Wrapper = styled.div`
-  max-width: 80%;
   align-self: flex-start;
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     max-width: 40%;
     align-self: center;
   }
-
 `;
 const InnerWrapper = styled.div`
   width: fit-content;
@@ -28,7 +26,6 @@ const Paragraph = styled.p`
   font-size: 1rem;
   font-weight: lighter;
   color: ${({ theme }) => theme.white};
-  width: 80%;
 `;
 const SpanWrapper = styled.span`
   position: relative;
@@ -43,7 +40,12 @@ const SpanWrapper = styled.span`
     border-radius: 50px;
   }
 `;
-export const Information = ({ firstLabel, secondLabel, thirdLabel, description }: InformationProps) => {
+export const Information = ({
+  firstLabel,
+  secondLabel,
+  thirdLabel,
+  description,
+}: InformationProps) => {
   return (
     <>
       <Wrapper>

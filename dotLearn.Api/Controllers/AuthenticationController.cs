@@ -1,5 +1,6 @@
 ﻿using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Services.Authentication;
+using dotLearn.Application.Services.Jobs;
 using dotLearn.Contracts.Authentication;
 using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.Entities;
@@ -13,11 +14,12 @@ namespace dotLearn.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRepository _userRepository;
-        public AuthenticationController(IAuthenticationService authenticationService, IUserRepository userRepository)
+        private readonly IJobService _jobService;
+        public AuthenticationController(IAuthenticationService authenticationService, IUserRepository userRepository, IJobService jobService)
         {
+            _jobService = jobService;
             _userRepository = userRepository;
             _authenticationService = authenticationService;
         }
@@ -35,7 +37,7 @@ namespace dotLearn.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost("login")] 
+        [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
             var authResult = _authenticationService.Login(request.Email, request.Password);

@@ -20,4 +20,8 @@ export const theme = {
     desktop: 1200,
     largeDesktop: 1600,
   },
+  padding: {
+    desktopPadding: "1rem 12rem",
+    innerPadding: "0rem 3rem",
+  },
 };

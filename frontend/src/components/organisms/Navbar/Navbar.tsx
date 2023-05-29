@@ -7,14 +7,18 @@ import { Button } from "../../atoms/Button/Button";
 import { MenuProps } from "../../../interfaces/types";
 
 const SidebarWrapper = styled.nav`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   z-index: 999;
+  background-color: ${({ theme }) => theme.background};
+
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-    padding: 0;
+    padding: ${({ theme }) => theme.padding.desktopPadding};
   }
 `;
 
@@ -61,8 +65,12 @@ const NavWrapper = styled.div<MenuProps>`
 `;
 const MenuWrapper = styled.ul`
   text-align: center;
-  width: 100%;
+  min-width: 100%;
+  position: absolute;
+  left: 0;
+  background-color: ${({ theme }) => theme.background};
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
+    position: relative;
     display: flex;
     gap: 2rem;
     align-items: center;

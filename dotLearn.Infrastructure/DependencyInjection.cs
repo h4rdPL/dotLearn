@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using dotLearn.Application.Common.Interfaces.Validation;
 using dotLearn.Infrastructure.Validation;
+using dotLearn.Application.Common.Interfaces.JobBoard;
+using dotLearn.Domain.Entities;
+using dotLearn.Infrastructure.JobBoard;
 
 namespace dotLearn.Infrastructure
 {

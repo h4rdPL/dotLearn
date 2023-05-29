@@ -9,6 +9,7 @@ using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Application.Common.Interfaces.Persisence;
 
 using dotLearn.Infrastructure.Profile;
+using dotLearn.Application.Services.Jobs;
 
 namespace dotLearn.Application
 {
@@ -17,6 +18,7 @@ namespace dotLearn.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IJobService, JobService>();
             services.AddScoped<IUserRepository, UserRepository>();
             return services;
         }

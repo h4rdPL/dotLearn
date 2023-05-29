@@ -21,3 +21,7 @@ export interface InformationProps {
 export interface SecondaryHeadingProps {
   label: string;
 }
+
+export interface ParagraphProps {
+  label: string;
+}

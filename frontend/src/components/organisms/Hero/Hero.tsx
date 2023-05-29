@@ -8,16 +8,11 @@ import backgroundCirclesDesktop from "../../../assets/images/backgroundCirclesDe
 import backgroundCirclesMobile from "../../../assets/images/backgroundCirclesMobile.svg";
 
 const HeadingWrapper = styled.div`
-  min-height: 140vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   flex-direction: column;
-  padding: 0 2rem;
-  @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-    flex-direction: column;
-    gap: 2rem;
-  }
 `;
 
 const InnerWrapper = styled.div`
@@ -34,9 +29,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     flex-direction: row;
+    padding: ${({ theme }) => theme.padding.desktopPadding};
   }
 `;
 const Image = styled.img`
@@ -47,7 +43,6 @@ const Image = styled.img`
 `;
 
 const ImageContainer = styled.div`
-  padding-top: 2rem;
   align-self: center;
 `;
 
