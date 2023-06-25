@@ -19,13 +19,16 @@ const SubHeading = styled.h2`
   color: ${({ theme }) => theme.white};
   font-weight: lighter;
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-    font-size: 2rem;
+    font-size: 3rem;
   }
 `;
 const Paragraph = styled.p`
-  font-size: 1rem;
-  font-weight: lighter;
+  font-size: 1.2rem;
+  line-height: 1.4;
   color: ${({ theme }) => theme.white};
+  @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
+    width: 90%;
+  }
 `;
 const SpanWrapper = styled.span`
   position: relative;
@@ -40,12 +43,12 @@ const SpanWrapper = styled.span`
     border-radius: 50px;
   }
 `;
-export const Information = ({
+export const Information: React.FC<InformationProps> = ({
   firstLabel,
   secondLabel,
   thirdLabel,
   description,
-}: InformationProps) => {
+}) => {
   return (
     <>
       <Wrapper>

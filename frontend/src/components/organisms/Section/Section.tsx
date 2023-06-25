@@ -50,7 +50,7 @@ export const Section = () => {
   return (
     <>
       <Wrapper>
-        <SecondaryHeading label="zaufali_nam" />
+        <SecondaryHeading secondary={false} label="zaufali_nam" />
         <InnerWrapper>
           <Span>
             <SubHeading>30k+</SubHeading>

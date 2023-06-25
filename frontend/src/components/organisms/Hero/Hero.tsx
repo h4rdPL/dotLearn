@@ -8,10 +8,9 @@ import backgroundCirclesDesktop from "../../../assets/images/backgroundCirclesDe
 import backgroundCirclesMobile from "../../../assets/images/backgroundCirclesMobile.svg";
 
 const HeadingWrapper = styled.div`
-  min-height: 100vh;
+  min-height: 120vh;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   flex-direction: column;
 `;
 
@@ -26,11 +25,14 @@ const InnerWrapper = styled.div`
 `;
 const Wrapper = styled.div`
   display: flex;
+  gap: 2rem;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  padding: ${({ theme }) => theme.padding.mobilePadding};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
+    gap: 0;
     flex-direction: row;
     padding: ${({ theme }) => theme.padding.desktopPadding};
   }
@@ -68,7 +70,7 @@ export const Hero = () => {
         <Wrapper>
           <InnerWrapper>
             <Heading firstLabel="Zacznij się uczyć" secondLabel="z nami" />
-            <Cta />
+            <Cta label="Dołącz do nas!" />
           </InnerWrapper>
           <Image src={onlineLearning} alt="learning" />
         </Wrapper>

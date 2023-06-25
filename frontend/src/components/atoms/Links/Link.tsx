@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { LinkProps } from "../../../interfaces/types";
 
-
 const NavbarLink = styled.a`
   color: ${({ theme }) => theme.white};
   position: relative;
@@ -43,6 +42,6 @@ const NavbarLink = styled.a`
   }
 `;
 
-export const Link = ({ label }: LinkProps) => {
-  return <NavbarLink>{label}</NavbarLink>;
+export const Link: React.FC<LinkProps> = ({ label, href }) => {
+  return <NavbarLink href={href}>{label}</NavbarLink>;
 };

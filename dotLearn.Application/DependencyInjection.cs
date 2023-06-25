@@ -10,6 +10,7 @@ using dotLearn.Application.Common.Interfaces.Persisence;
 
 using dotLearn.Infrastructure.Profile;
 using dotLearn.Application.Services.Jobs;
+using dotLearn.Application.Services.Test;
 
 namespace dotLearn.Application
 {
@@ -19,6 +20,7 @@ namespace dotLearn.Application
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IJobService, JobService>();
+            services.AddScoped<ITestService, TestService>();
             services.AddScoped<IUserRepository, UserRepository>();
             return services;
         }

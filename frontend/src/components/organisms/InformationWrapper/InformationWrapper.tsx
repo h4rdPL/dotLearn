@@ -15,11 +15,14 @@ const Wrapper = styled.div<InformationProps>`
   min-width: 100%;
   min-height: 50vh;
   display: flex;
+  gap: 2rem;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  padding: ${({ theme }) => theme.padding.mobilePadding};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
+    gap: 0;
     padding: ${({ theme }) => theme.padding.desktopPadding};
     flex-direction: row;
     ${({ secondary }) =>

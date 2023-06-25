@@ -13,3 +13,9 @@ export const Primary: Story = {
     label: "Dołącz!",
   },
 };
+export const Secondary: Story = {
+  args: {
+    label: "Sprawdź oferty!",
+    secondary: true,
+  },
+};

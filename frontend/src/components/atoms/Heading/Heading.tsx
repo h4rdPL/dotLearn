@@ -7,10 +7,11 @@ const MainHeading = styled.h1`
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     font-size: 3.875rem;
   }
-
-  
 `;
-export const Heading = ({ firstLabel, secondLabel }: HeadingProps) => {
+export const Heading: React.FC<HeadingProps> = ({
+  firstLabel,
+  secondLabel,
+}) => {
   return (
     <MainHeading>
       {firstLabel} <br /> {secondLabel}

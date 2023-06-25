@@ -1,11 +1,13 @@
 export const theme = {
   // landing page
   background: "#401386",
+  darkBackground: "#330E6A",
   highlight: "#54DE62",
   textGray: "#BCBCBC",
   textGrayDark: "#A3A3A3",
   purple: "#571D86",
   purpleLight: "#9036D9",
+  darkBlue: "#140747",
   white: "#fff",
   black: "#000",
 
@@ -22,6 +24,7 @@ export const theme = {
   },
   padding: {
     desktopPadding: "1rem 12rem",
-    innerPadding: "0rem 3rem",
+    mobilePadding: "1rem 2rem",
+    innerPadding: "0rem 5rem",
   },
 };

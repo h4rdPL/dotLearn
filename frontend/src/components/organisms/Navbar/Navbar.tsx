@@ -16,7 +16,7 @@ const SidebarWrapper = styled.nav`
   width: 100%;
   z-index: 999;
   background-color: ${({ theme }) => theme.background};
-
+  padding: ${({ theme }) => theme.padding.mobilePadding};
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     padding: ${({ theme }) => theme.padding.desktopPadding};
   }
@@ -102,19 +102,19 @@ export const Navbar: React.FC = () => {
         <NavWrapper isActive={isActive}>
           <MenuWrapper>
             <ListItem>
-              <Link label="Strona główna" />
+              <Link href={"/"} label="Strona główna" />
             </ListItem>
             <ListItem>
-              <Link label="O nas" />
+              <Link href={"/about"} label="O nas" />
             </ListItem>
             <ListItem>
-              <Link label="Kariera" />
+              <Link href={"/carrer"} label="Kariera" />
             </ListItem>
             <ListItem>
-              <Link label="Kontakt" />
+              <Link href={"/contact"} label="Kontakt" />
             </ListItem>
             <ListItem>
-              <Button label="Dołącz!" />
+              <Button href={"/login"} label="Dołącz!" />
             </ListItem>
           </MenuWrapper>
         </NavWrapper>
