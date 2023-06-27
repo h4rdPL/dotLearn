@@ -1,9 +1,8 @@
 import React from "react";
 import { Forms } from "../../components/organisms/Forms/Forms";
-import { Navbar } from "../../components/organisms/Navbar/Navbar";
 import styled from "styled-components";
 import { SecondaryHeading } from "../../components/atoms/Heading/SecondaryHeading";
-import { Footer } from "../../components/organisms/Footer/Footer";
+import { LandingPageLayout } from "../../templates/LandingPageLayout";
 
 export const ContactPage = () => {
   const Wrapper = styled.div`
@@ -18,8 +17,7 @@ export const ContactPage = () => {
     }
   `;
   return (
-    <>
-      <Navbar />
+    <LandingPageLayout>
       <Wrapper>
         <SecondaryHeading
           style={{ alignSelf: "center" }}
@@ -29,7 +27,6 @@ export const ContactPage = () => {
         />
         <Forms />
       </Wrapper>
-      <Footer />
-    </>
+    </LandingPageLayout>
   );
 };

@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { jobOffers } from "../../assets/data/jobs";
 import { Input } from "../../components/atoms/Input/Input";
 import { Footer } from "../../components/organisms/Footer/Footer";
+import { LandingPageLayout } from "../../templates/LandingPageLayout";
 const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,57 +38,57 @@ export const Offer: React.FC = () => {
 
   return (
     <>
-      <Navbar />
-      <Wrapper>
-        <SecondaryHeading label="Aplikuj" secondary isSectionTitle />
-        <InnerWrapper>
-          <SecondaryHeading
-            style={{
-              fontSize: "1rem",
-              textAlign: "center",
-              width: "100%",
-            }}
-            label={job.title}
-            secondary
-            isSectionTitle
-          />
-          <p>{job.responsibilities}</p>
-          {job.expectations && (
-            <>
-              <h3>Nasze oczekiwania:</h3>
-              <ListItem>
-                {job.expectations.map((expectation) => (
-                  <Item key={expectation} label={expectation} />
-                ))}
-              </ListItem>
-            </>
-          )}
-          {job.offers && (
-            <>
-              <h3>W zamian oferujemy:</h3>
-              <ListItem>
-                {job.offers.map((offer) => (
-                  <Item key={offer} label={offer} />
-                ))}
-              </ListItem>
-            </>
-          )}
-          {job.benefits && (
-            <>
-              <h3>Benefity:</h3>
-              <ListItem>
-                {job.benefits.map((benefit) => (
-                  <Item key={benefit} label={benefit} />
-                ))}
-              </ListItem>
-            </>
-          )}
-          <Input style={{ width: "30%" }} placeholder="Twój email" />
-          <Input style={{ width: "30%", padding: 0 }} isFileType />
-          <Cta label="Aplikuj" isJobOffer />
-        </InnerWrapper>
-      </Wrapper>
-      <Footer />
+      <LandingPageLayout>
+        <Wrapper>
+          <SecondaryHeading label="Aplikuj" secondary isSectionTitle />
+          <InnerWrapper>
+            <SecondaryHeading
+              style={{
+                fontSize: "1rem",
+                textAlign: "center",
+                width: "100%",
+              }}
+              label={job.title}
+              secondary
+              isSectionTitle
+            />
+            <p>{job.responsibilities}</p>
+            {job.expectations && (
+              <>
+                <h3>Nasze oczekiwania:</h3>
+                <ListItem>
+                  {job.expectations.map((expectation) => (
+                    <Item key={expectation} label={expectation} />
+                  ))}
+                </ListItem>
+              </>
+            )}
+            {job.offers && (
+              <>
+                <h3>W zamian oferujemy:</h3>
+                <ListItem>
+                  {job.offers.map((offer) => (
+                    <Item key={offer} label={offer} />
+                  ))}
+                </ListItem>
+              </>
+            )}
+            {job.benefits && (
+              <>
+                <h3>Benefity:</h3>
+                <ListItem>
+                  {job.benefits.map((benefit) => (
+                    <Item key={benefit} label={benefit} />
+                  ))}
+                </ListItem>
+              </>
+            )}
+            <Input style={{ width: "30%" }} placeholder="Twój email" />
+            <Input style={{ width: "30%", padding: 0 }} isFileType />
+            <Cta label="Aplikuj" isJobOffer />
+          </InnerWrapper>
+        </Wrapper>
+      </LandingPageLayout>
     </>
   );
 };

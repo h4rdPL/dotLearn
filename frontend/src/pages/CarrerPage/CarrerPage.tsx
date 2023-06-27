@@ -1,12 +1,10 @@
 import React from "react";
-import { Navbar } from "../../components/organisms/Navbar/Navbar";
 import { JobOffer } from "../../components/organisms/JobOffer/JobOffer";
-import { Heading } from "../../components/atoms/Heading/Heading";
 import { SecondaryHeading } from "../../components/atoms/Heading/SecondaryHeading";
 import { jobOffers } from "../../assets/data/jobs";
 import styled from "styled-components";
 import { JobInterface } from "../../interfaces/types";
-import { Footer } from "../../components/organisms/Footer/Footer";
+import { LandingPageLayout } from "../../templates/LandingPageLayout";
 
 export const CarrerPage = () => {
   const Wrapper = styled.div`
@@ -24,8 +22,7 @@ export const CarrerPage = () => {
     }
   `;
   return (
-    <>
-      <Navbar />
+    <LandingPageLayout>
       <Wrapper>
         <SecondaryHeading label="Oferty_pracy" secondary isSectionTitle />
         <JobWrapper>
@@ -42,7 +39,6 @@ export const CarrerPage = () => {
           ))}
         </JobWrapper>
       </Wrapper>
-      <Footer />
-    </>
+    </LandingPageLayout>
   );
 };
