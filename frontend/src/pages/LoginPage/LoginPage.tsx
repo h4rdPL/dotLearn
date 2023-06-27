@@ -1,10 +1,9 @@
 import React from "react";
 import { SecondaryHeading } from "../../components/atoms/Heading/SecondaryHeading";
-import { Navbar } from "../../components/organisms/Navbar/Navbar";
 import styled from "styled-components";
 import { Input } from "../../components/atoms/Input/Input";
 import { Cta } from "../../components/atoms/Button/Cta";
-import { Footer } from "../../components/organisms/Footer/Footer";
+import { LandingPageLayout } from "../../templates/LandingPageLayout";
 
 export const LoginPage = () => {
   const Wrapper = styled.div`
@@ -34,28 +33,30 @@ export const LoginPage = () => {
   return (
     <>
       <Wrapper>
-        <Navbar />
-        <SecondaryHeading
-          style={{ alignSelf: "flex-start" }}
-          label="Zaloguj_się"
-          secondary
-          isSectionTitle
-        />
-        <InnerWrapper>
-          <Input placeholder={"Adres Email"} />
-          <Input placeholder={"Hasło"} />
-          <Cta
-            style={{ alignSelf: "flex-end" }}
-            label="Zaloguj się"
-            isJobOffer
+        <LandingPageLayout>
+          <SecondaryHeading
+            style={{ alignSelf: "flex-start" }}
+            label="Zaloguj_się"
+            secondary
+            isSectionTitle
           />
-          <a style={{ alignSelf: "flex-end" }} href="/register">
-            Nie masz konta?
-            <span style={{ textDecoration: "underline" }}>Zarejestruj się</span>
-          </a>
-        </InnerWrapper>
+          <InnerWrapper>
+            <Input placeholder={"Adres Email"} />
+            <Input placeholder={"Hasło"} />
+            <Cta
+              style={{ alignSelf: "flex-end" }}
+              label="Zaloguj się"
+              isJobOffer
+            />
+            <a style={{ alignSelf: "flex-end" }} href="/register">
+              Nie masz konta?
+              <span style={{ textDecoration: "underline" }}>
+                Zarejestruj się
+              </span>
+            </a>
+          </InnerWrapper>
+        </LandingPageLayout>
       </Wrapper>
-      <Footer />
     </>
   );
 };

@@ -1,11 +1,10 @@
 import React from "react";
 import { SecondaryHeading } from "../../components/atoms/Heading/SecondaryHeading";
 import { MissionWrapper } from "../../components/organisms/MissionWrapper/MissionWrapper";
-import { Navbar } from "../../components/organisms/Navbar/Navbar";
 import { styled } from "styled-components";
 import { Paragraph } from "../../components/atoms/Paragraph/Paragraph";
 import { Team } from "../../components/organisms/Team/Team";
-import { Footer } from "../../components/organisms/Footer/Footer";
+import { LandingPageLayout } from "../../templates/LandingPageLayout";
 
 const SectionWrapper = styled.section`
   padding: ${({ theme }) => theme.padding.mobilePadding};
@@ -26,8 +25,7 @@ const Wrapper = styled.div`
 `;
 export const AboutPage = () => {
   return (
-    <>
-      <Navbar />
+    <LandingPageLayout>
       <Wrapper>
         <SecondaryHeading label="Nasza_misja" secondary isSectionTitle />
         <SectionWrapper>
@@ -52,7 +50,6 @@ export const AboutPage = () => {
           <Team />
         </SectionWrapper>
       </Wrapper>
-      <Footer />
-    </>
+    </LandingPageLayout>
   );
 };
