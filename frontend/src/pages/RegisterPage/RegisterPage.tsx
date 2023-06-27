@@ -43,7 +43,7 @@ export const RegisterPage = () => {
     align-items: center;
     gap: 1rem;
     @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-      width: 30%;
+      width: 40%;
     }
   `;
   return (

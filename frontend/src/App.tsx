@@ -1,17 +1,18 @@
-import React from "react";
-import logo from "./logo.svg";
-import styled from "styled-components";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Root } from "./routes/Roots";
 import ErrorPage from "./pages/ErrorPage/Error";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { AboutPage } from "./pages/AboutPage/AboutPage";
-import { MainTemplate } from "./templates/MainTemplate";
 import { CarrerPage } from "./pages/CarrerPage/CarrerPage";
 import { Offer } from "./pages/CarrerDetailPage/Offer";
 import { ContactPage } from "./pages/ContactPage/ContactPage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage/RegisterPage";
+import { DashboardPage } from "./pages/Platform/DashboardPage/DashboardPage";
+import { AIPage } from "./pages/Platform/AIPage/AIPage";
+import { LearnPage } from "./pages/Platform/LearnPage/LearnPage";
+import { TestPage } from "./pages/Platform/TestPage/TestPage";
+import { ClassPage } from "./pages/Platform/ClassPage/ClassPage";
+import { SettingPage } from "./pages/Platform/SettingPage/SettingPage";
 
 const router = createBrowserRouter([
   {
@@ -49,13 +50,42 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/platform/dashboard",
+    element: <DashboardPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/class",
+    element: <ClassPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/test",
+    element: <TestPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/learn",
+    element: <LearnPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/ai",
+    element: <AIPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/settings",
+    element: <SettingPage />,
+    errorElement: <ErrorPage />,
+  },
+  
 ]);
 export const App = () => {
   return (
     <>
-      <MainTemplate>
         <RouterProvider router={router}></RouterProvider>
-      </MainTemplate>
     </>
   );
 };
