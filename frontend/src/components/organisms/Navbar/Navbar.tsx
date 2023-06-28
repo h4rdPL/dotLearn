@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { css, styled } from "styled-components";
 import logo from "../../../assets/images/logo.svg";
 import hamburger from "../../../assets/icons/hamburger.svg";
-import { Link } from "../../atoms/Links/Link";
+// import { Link } from "../../atoms/Links/Link";
 import { Button } from "../../atoms/Button/Button";
 import { MenuProps } from "../../../interfaces/types";
-
+import { Link } from "react-router-dom";
+import { Link as MyLink } from "../../atoms/Links/Link";
 const SidebarWrapper = styled.nav`
   position: fixed;
   top: 0;
@@ -102,19 +103,29 @@ export const Navbar: React.FC = () => {
         <NavWrapper isActive={isActive}>
           <MenuWrapper>
             <ListItem>
-              <Link href={"/"} label="Strona główna" />
+              <Link to={"/"}>
+                <MyLink label="Strona główna" />
+              </Link>
             </ListItem>
             <ListItem>
-              <Link href={"/about"} label="O nas" />
+              <Link to={"/about"}>
+                <MyLink label="O nas" />
+              </Link>
             </ListItem>
             <ListItem>
-              <Link href={"/carrer"} label="Kariera" />
+              <Link to={"/carrer"}>
+                <MyLink label="Kariera" />
+              </Link>
             </ListItem>
             <ListItem>
-              <Link href={"/contact"} label="Kontakt" />
+              <Link to={"/contact"}>
+                <MyLink label="Kontakt" />
+              </Link>
             </ListItem>
             <ListItem>
-              <Button href={"/login"} label="Dołącz!" />
+              <Link to={"/login"}>
+                <Button label="Dołącz!" />
+              </Link>
             </ListItem>
           </MenuWrapper>
         </NavWrapper>

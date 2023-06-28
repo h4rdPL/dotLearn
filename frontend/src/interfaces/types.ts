@@ -1,3 +1,5 @@
+// TODO: RENAME INTERFACE
+
 export interface ButtonProps {
   label: string;
   secondary?: boolean;
@@ -83,4 +85,19 @@ export interface JobInterface {
   expectations?: string[];
   offers?: string[];
   benefits?: string[];
+}
+
+// platform
+
+export interface SpanInterface {
+  label: string;
+  titleLabel: string;
+  gradeLabel?:string;
+  isGrade: boolean;
+
+}
+
+export interface CalendarInterface {
+  month?: number | undefined;
+  year?: number | undefined;
 }

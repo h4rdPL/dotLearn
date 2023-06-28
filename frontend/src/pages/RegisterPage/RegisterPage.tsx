@@ -5,6 +5,7 @@ import { SecondaryHeading } from "../../components/atoms/Heading/SecondaryHeadin
 import { Cta } from "../../components/atoms/Button/Cta";
 import { Checkbox } from "../../components/atoms/Checkbox/Checkbox";
 import { LandingPageLayout } from "../../templates/LandingPageLayout";
+import { Link } from "react-router-dom";
 
 export const RegisterPage = () => {
   const [checkboxes, setCheckboxes] = useState([
@@ -77,10 +78,10 @@ export const RegisterPage = () => {
               label="Zarejestruj się"
               isJobOffer
             />
-            <a style={{ alignSelf: "flex-end" }} href="/login">
+            <Link to="/login" style={{ alignSelf: "flex-end" }}>
               Masz już konto?
               <span style={{ textDecoration: "underline" }}>zaloguj się</span>
-            </a>
+            </Link>
           </InnerWrapper>
         </LandingPageLayout>
       </Wrapper>

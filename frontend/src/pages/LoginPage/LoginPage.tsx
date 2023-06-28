@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Input } from "../../components/atoms/Input/Input";
 import { Cta } from "../../components/atoms/Button/Cta";
 import { LandingPageLayout } from "../../templates/LandingPageLayout";
+import { Link } from "react-router-dom";
 
 export const LoginPage = () => {
   const Wrapper = styled.div`
@@ -48,12 +49,12 @@ export const LoginPage = () => {
               label="Zaloguj się"
               isJobOffer
             />
-            <a style={{ alignSelf: "flex-end" }} href="/register">
+            <Link style={{ alignSelf: "flex-end" }} to={"/register"}>
               Nie masz konta?
               <span style={{ textDecoration: "underline" }}>
                 Zarejestruj się
               </span>
-            </a>
+            </Link>
           </InnerWrapper>
         </LandingPageLayout>
       </Wrapper>
