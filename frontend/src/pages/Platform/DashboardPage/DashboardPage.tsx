@@ -56,7 +56,6 @@ const IconWrapper = styled.span`
 `;
 
 export const DashboardPage: React.FC<CalendarInterface> = () => {
-  const [firstDate, lastDate] = generateDate({ month: 10, year: 2000 });
   const percentage = 4;
   return (
     <PlatformLayout>
