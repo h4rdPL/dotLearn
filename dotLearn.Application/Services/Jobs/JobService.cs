@@ -15,9 +15,12 @@ namespace dotLearn.Application.Services.Jobs
             _jobs.Add(job);
             return new JobResult(job);
         }
-        public List<Job> GetJobs()
+
+
+        public async Task<List<Job>> GetJobs()
         {
             return _jobs.ToList();
         }
+
     }
 }

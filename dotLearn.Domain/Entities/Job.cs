@@ -1,4 +1,5 @@
 ﻿using dotLearn.Domain.Data.Enum;
+using dotLearn.Domain.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace dotLearn.Domain.Entities
         public Money Currency { get; set; }
         public string? description { get; set; }
         public string? Email { get; set; }
-        public List<Expectations>? Expectations { get; set; }
-        public List<Offer>? Offer { get; set; }
-        public List<Benefits>? Benefits { get; set; }
+        public List<ExpectationsCreateDTO>? Expectations { get; set; }
+        public List<OfferCreateDTO>? Offer { get; set; }
+        public List<BenefitsCreateDTO>? Benefits { get; set; }
         //public byte[]? CV { get; set; }
     }
 }

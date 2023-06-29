@@ -4,6 +4,7 @@ import { SpanInterface } from "../../../interfaces/types";
 
 const SpanWrapper = styled.span`
   color: ${({ theme }) => theme.yellowBright};
+  font-size: 14px;
 `;
 
 const Wrapper = styled.div`
@@ -12,13 +13,16 @@ const Wrapper = styled.div`
   gap: 0.5rem;
 `;
 
-const Title = styled.h3``;
+const Title = styled.h3`
+  font-size: 14px;
+`;
 
 const GradeWrapper = styled.span`
   background-color: ${({ theme }) => theme.purple};
   padding: 1rem;
   border-radius: 10px;
   align-self: flex-end;
+  font-size: 14px;
 `;
 export const Span: React.FC<SpanInterface> = ({
   gradeLabel,

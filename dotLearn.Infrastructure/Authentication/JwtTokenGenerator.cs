@@ -25,7 +25,7 @@ namespace dotLearn.Infrastructure.Authentication
         public string GenerateToken(User user)
         {
             var signingCredentials = new SigningCredentials(
-     new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super-secret-key")),
+     new SymmetricSecurityKey(Encoding.UTF8.GetBytes("user-super-secret-key-from-users")),
      SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>

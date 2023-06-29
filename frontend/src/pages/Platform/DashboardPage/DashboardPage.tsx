@@ -5,7 +5,6 @@ import "react-circular-progressbar/dist/styles.css";
 import styled from "styled-components";
 import { Span } from "../../../components/atoms/Span/Span";
 import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
-import { generateDate } from "../../../utils/calendar";
 import { CalendarInterface } from "../../../interfaces/types";
 import Calendar from "../../../components/organisms/Calendar/Calendar";
 
@@ -14,8 +13,11 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   grid-template-columns: repeat(1, 1fr);
+  font-size: 14px;
+  max-height: 100vh;
+
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-    padding: 2rem 4rem;
+    padding: 1.5rem 2rem 0;
     width: 100%;
     grid-template-columns: repeat(2, 1fr);
   }
@@ -23,18 +25,19 @@ const Wrapper = styled.div`
 
 const Boxes = styled.span`
   display: flex;
+  align-items: flex;
   flex-direction: column;
+  font-size: 1rem;
   height: 100%;
-  width: 100%;
 `;
 
 const ProgressWrapper = styled.div`
-  width: 200px;
+  width: 150px;
   align-self: flex-start;
 `;
 
 const InnerWrapper = styled.div<CalendarInterface>`
-  padding: 2rem 4rem;
+  padding: 2rem 0rem 0 0;
 `;
 
 const GradeWrapper = styled.div`
@@ -61,7 +64,9 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
     <PlatformLayout>
       <Wrapper>
         <Boxes>
-          <h2>Twój progres</h2>
+          <span style={{ fontSize: "14px" }}>
+            <h2>Twój progres</h2>
+          </span>
           <InnerWrapper>
             <ProgressWrapper>
               <CircularProgressbar
@@ -80,32 +85,17 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
           </InnerWrapper>
         </Boxes>
         <Boxes>
-          <h2>Ostatnie oceny</h2>
+          <span style={{ fontSize: "14px" }}>
+            <h2>Kalendarz</h2>
+          </span>
           <InnerWrapper>
-            <GradeWrapper>
-              <Span
-                titleLabel="Język angielski /"
-                label="Czasowniki nieregularne "
-                gradeLabel="4"
-                isGrade
-              />
-              <Span
-                titleLabel="Język angielski /"
-                label="Czas Present simple "
-                gradeLabel="2"
-                isGrade
-              />
-              <Span
-                titleLabel="Język angielski /"
-                label="Czas Present perfect"
-                gradeLabel="4"
-                isGrade
-              />
-            </GradeWrapper>
+            <Calendar year={0} month={0} />
           </InnerWrapper>
         </Boxes>
         <Boxes>
-          <h2>Nadchodzące testy</h2>
+          <span style={{ fontSize: "14px" }}>
+            <h2>Nadchodzące testy</h2>
+          </span>
           <InnerWrapper>
             <TestWrapper>
               <span>
@@ -153,10 +143,32 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
             </TestWrapper>
           </InnerWrapper>
         </Boxes>
+
         <Boxes>
-          <h2>Kalendarz</h2>
+          <span style={{ fontSize: "14px" }}>
+            <h2>Ostatnie oceny</h2>
+          </span>
           <InnerWrapper>
-            <Calendar year={0} month={0} />
+            <GradeWrapper>
+              <Span
+                titleLabel="Język angielski /"
+                label="Czasowniki nieregularne "
+                gradeLabel="4"
+                isGrade
+              />
+              <Span
+                titleLabel="Język angielski /"
+                label="Czas Present simple "
+                gradeLabel="2"
+                isGrade
+              />
+              <Span
+                titleLabel="Język angielski /"
+                label="Czas Present perfect"
+                gradeLabel="4"
+                isGrade
+              />
+            </GradeWrapper>
           </InnerWrapper>
         </Boxes>
       </Wrapper>

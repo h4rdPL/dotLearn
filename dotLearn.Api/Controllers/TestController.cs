@@ -15,7 +15,7 @@ namespace dotLearn.Api.Controllers
             _testService = testService;
         }
         [HttpPost("create")]
-        public IActionResult CreateTest(TestClass testClass)
+        public async Task<ActionResult<TestClass>> CreateTest(TestClass testClass)
         {
             _testService.Create(testClass);
             return Ok(testClass);

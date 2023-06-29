@@ -10,6 +10,6 @@ namespace dotLearn.Application.Services.Jobs
     public interface IJobService
     {
         JobResult CreateJob(Job job);
-        List<Job> GetJobs();
+        Task<List<Job>> GetJobs();
     }
 }

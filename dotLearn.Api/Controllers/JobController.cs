@@ -15,7 +15,7 @@ namespace dotLearn.Api.Controllers
         }
 
         [HttpPost("job")]
-        public IActionResult Job(Job job)
+        public async Task<ActionResult<Job>> Job(Job job)
         {
             var authResult = _jobService.CreateJob(job);
             var response = new JobResult(job);
@@ -24,9 +24,10 @@ namespace dotLearn.Api.Controllers
 
 
         [HttpGet("getJobs")]
-        public List<Job> GetJobsList()
+        public async Task<ActionResult<List<Job>>> GetJobsList()
         {
-            return _jobService.GetJobs();
+            var jobs = await Task.FromResult(_jobService.GetJobs());
+            return Ok(jobs);
         }
     }
 }

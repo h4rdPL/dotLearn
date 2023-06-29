@@ -1,8 +1,5 @@
-import React from "react";
 import styled from "styled-components";
 import logo from "../../../assets/images/logo.svg";
-import icon from "../../../assets/icons/test_icons.svg";
-import arrow from "../../../assets/icons/arrowRightIcon.svg";
 import {
   IoIosHome,
   IoIosRibbon,
@@ -21,17 +18,11 @@ const SidebarWrapper = styled.nav`
   align-items: center;
   min-height: 100vh;
   background-color: ${({ theme }) => theme.purpleLightSidebar};
-  @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-    width: 25%;
-  }
+
   a {
     color: #fff;
     text-decoration: none;
   }
-`;
-
-const LogoImage = styled.img`
-  padding-top: 2rem;
 `;
 
 const ListWrapper = styled.ul`
@@ -48,6 +39,9 @@ const ListItem = styled.li`
   &:hover {
     background-color: ${({ theme }) => theme.background};
   }
+  @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
+    padding: 0 1rem;
+  }
 `;
 
 const LinkItem = styled.a`
@@ -56,19 +50,17 @@ const LinkItem = styled.a`
   align-items: center;
   gap: 0.5rem;
   min-width: 100%;
-  padding: 1rem 3rem;
+  padding: 1rem 2rem;
   font-weight: bold;
 `;
 export const Sidebar = () => {
   return (
     <SidebarWrapper>
-      <LogoImage style={{ width: "100px" }} src={logo} alt="logo" />
       <ListWrapper>
         <Link to="/platform/dashboard">
           <ListItem>
             <LinkItem>
               <IoIosHome fill="#fff" style={{ fontSize: "2rem" }} />
-              Dashboard
             </LinkItem>
           </ListItem>
         </Link>
@@ -76,7 +68,6 @@ export const Sidebar = () => {
           <ListItem>
             <LinkItem>
               <IoIosRibbon fill="#fff" style={{ fontSize: "2rem" }} />
-              Klasa
             </LinkItem>
           </ListItem>
         </Link>
@@ -84,7 +75,6 @@ export const Sidebar = () => {
           <ListItem>
             <LinkItem>
               <IoMdClipboard fill="#fff" style={{ fontSize: "2rem" }} />
-              Testy
             </LinkItem>
           </ListItem>
         </Link>
@@ -92,7 +82,6 @@ export const Sidebar = () => {
           <ListItem>
             <LinkItem>
               <IoIosBulb fill="#fff" style={{ fontSize: "2rem" }} />
-              Nauka
             </LinkItem>
           </ListItem>
         </Link>
@@ -100,7 +89,6 @@ export const Sidebar = () => {
           <ListItem>
             <LinkItem>
               <IoIosChatboxes fill="#fff" style={{ fontSize: "2rem" }} />
-              Rozmowa z AI
             </LinkItem>
           </ListItem>
         </Link>
@@ -110,7 +98,6 @@ export const Sidebar = () => {
           <ListItem>
             <LinkItem>
               <IoMdBuild fill="#fff" style={{ fontSize: "2rem" }} />
-              Ustawienia
             </LinkItem>
           </ListItem>
         </Link>
@@ -118,7 +105,6 @@ export const Sidebar = () => {
           <ListItem>
             <LinkItem>
               <IoIosLogOut fill="#fff" style={{ fontSize: "2rem" }} />
-              Wyloguj się
             </LinkItem>
           </ListItem>
         </Link>

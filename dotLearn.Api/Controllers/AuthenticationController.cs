@@ -25,7 +25,7 @@ namespace dotLearn.Api.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(string FirstName,
+        public async Task<ActionResult<AuthenticationResult>> Register(string FirstName,
             string LastName,
             string Email,
             string Password,
@@ -38,7 +38,7 @@ namespace dotLearn.Api.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)
         {
             var authResult = _authenticationService.Login(request.Email, request.Password);
             var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);

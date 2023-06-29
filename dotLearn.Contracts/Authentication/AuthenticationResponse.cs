@@ -8,7 +8,5 @@ public record AuthenticationResponse(
         string LastName,
         string Email,
         string Token
-
-
     );
 
