@@ -1,1 +1,1 @@
-Readme will be avaliable soon
+Readme will be avaliable soon - PROJECT IN PROGRESS
