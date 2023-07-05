@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Hero } from "../../components/organisms/Hero/Hero";
 import { InformationWrapper } from "../../components/organisms/InformationWrapper/InformationWrapper";
 import { Section } from "../../components/organisms/Section/Section";
 import { LandingPageLayout } from "../../templates/LandingPageLayout";
 
 export const HomePage = () => {
+  // simple API fetch data
+  const fetchData = async () => {
+    try {
+      const response = await fetch("https://localhost:7024/api/Job/getJobs", {
+        headers: {
+          Origin: "http://localhost:3000",
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Błąd pobierania danych:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <LandingPageLayout>
       <Hero />

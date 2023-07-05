@@ -17,8 +17,8 @@ namespace dotLearn.Application.Services.Test
             {
                 Id = Guid.NewGuid(),
                 TestName = "New Test",
-                Questions = new List<Question>(),
-                isActive = true,
+                Question = new List<Question>(),
+                IsActive = true,
                 ActiveDate = DateTime.Now
             };
             _testClasses.Add(newTestClass);

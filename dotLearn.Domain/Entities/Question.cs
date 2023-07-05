@@ -4,7 +4,7 @@ namespace dotLearn.Domain.Entities
 {
     public class Question
     {
-        public int MyProperty { get; set; }
+        public int Id { get; set; }
         public string QuestionName { get; set; }
         public List<Answer> Answer { get; set; }
         public int CorrectAnswerIndex { get; set; }

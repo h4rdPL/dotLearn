@@ -13,5 +13,7 @@
 
         // Relations -> question, user, class
 
+        //public List<Question> MyProperty { get; set; }
+
     }
 }

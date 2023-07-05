@@ -26,8 +26,9 @@ namespace dotLearn.Api.Controllers
         [HttpGet("getJobs")]
         public async Task<ActionResult<List<Job>>> GetJobsList()
         {
-            var jobs = await Task.FromResult(_jobService.GetJobs());
+            var jobs = await _jobService.GetJobs();
             return Ok(jobs);
         }
+
     }
 }

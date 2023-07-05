@@ -11,8 +11,10 @@ namespace dotLearn.Domain.Entities
     {
         public Guid Id { get; set; }
         public string? TestName { get; set; }
-        public List<AnswerDTO>? Question { get; set; }
-        public bool isActive { get; set; }
+
+        public List<Question>? Question { get; set; }
+        public List<AnswerDTO>? Answer { get; set; }
+        public bool IsActive { get; set; }
         public DateTime ActiveDate { get; set; }
     }
 }
