@@ -18,7 +18,7 @@ namespace dotLearn.Api.Controllers
         public async Task<ActionResult<TestClass>> CreateTest(TestClass testClass)
         {
             _testService.Create(testClass);
-            return Ok(testClass);
+            return await Task.FromResult(Ok(testClass));
         }
     }
 }

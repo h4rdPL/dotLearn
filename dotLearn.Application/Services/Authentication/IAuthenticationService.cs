@@ -11,7 +11,7 @@ namespace dotLearn.Application.Services.Authentication
 {
     public interface IAuthenticationService
     {
-        AuthenticationResult Register(string firstName, string lastName, string email, string password, Role role);
+        AuthenticationResult Register(int id, string firstName, string lastName, string email, string password, Role role);
         AuthenticationResult Login(string email, string password);
     }
 }

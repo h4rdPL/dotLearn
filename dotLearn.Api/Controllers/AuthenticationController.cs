@@ -25,24 +25,26 @@ namespace dotLearn.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthenticationResult>> Register(string FirstName,
+        public async Task<ActionResult<AuthenticationResult>> Register(
+            int id,
+            string FirstName,
             string LastName,
             string Email,
             string Password,
             Role Role
             )
         {
-            var authResult = _authenticationService.Register(FirstName, LastName, Email, Password, Role);
-            var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
-            return Ok(response);
+            var authResult = _authenticationService.Register(id, FirstName, LastName, Email, Password, Role);
+            var response = new AuthenticationResponse(authResult.user.Guid, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
+            return await Task.FromResult(Ok(response));
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)
         {
             var authResult = _authenticationService.Login(request.Email, request.Password);
-            var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
-            return Ok(response);
+            var response = new AuthenticationResponse(authResult.user.Guid, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
+            return await Task.FromResult(Ok(response));
         }
     }
 }

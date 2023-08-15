@@ -6,7 +6,7 @@ namespace Backend.Services.ClassService
     public interface IClassService
     {
         public bool CreateClass(ClassDTO classDTO);
-        public bool ClassEnrollment(string classCode);
+        public bool ClassEnrollment(Guid classCode);
 
         public void DeleteClass();
         public void ExitClass();

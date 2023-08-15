@@ -31,11 +31,11 @@ namespace Backend.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <param name="classCode"></param>
-        /// <returns></returns>
-        [HttpPost("ClassEnrollment")]
-        public bool JoinToClass(string classCode)
-        {
-            return _classService.ClassEnrollment(classCode);
-        }
+        ///// <returns></returns>
+        //[HttpPost("ClassEnrollment")]
+        //public bool JoinToClass(string classCode)
+        //{
+        //    return _classService.ClassEnrollment(classCode);
+        //}
     }
 }

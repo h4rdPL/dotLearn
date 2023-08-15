@@ -3,6 +3,7 @@ import people from "../../../assets/images/employeeImage.png";
 import { styled } from "styled-components";
 import { SecondaryHeading } from "../../atoms/Heading/SecondaryHeading";
 import { Button } from "../../atoms/Button/Button";
+import { Link } from "react-router-dom";
 const TeamWrapper = styled.div`
   display: flex;
 
@@ -43,7 +44,9 @@ export const Team = () => {
         </InnerWrapper>
       </Span>
       <span style={{ display: "flex", justifyContent: "center" }}>
-        <Button secondary label="Sprawdź oferty" />
+        <Link to={"/carrer"}>
+          <Button secondary label="Sprawdź oferty" />
+        </Link>
       </span>
     </TeamWrapper>
   );

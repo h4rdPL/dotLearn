@@ -19,5 +19,9 @@ namespace dotLearn.Application.Common.Interfaces.Authentication
         {
             return _users.SingleOrDefault(u => u.Email == email);
         }
+        public User? GetUserById(Guid guid)
+        {
+            return _users.SingleOrDefault(u => u.Guid == guid);
+        }
     }
 }

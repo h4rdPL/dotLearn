@@ -16,7 +16,6 @@ namespace dotLearn.Infrastructure.Profile
         [Authorize(Policy = "StudentPolicy")]
         public bool AddSubject(Subject subject, string role)
         {
-            
             return true;
         }
     }

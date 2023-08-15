@@ -20,14 +20,14 @@ namespace dotLearn.Application.Services.Authentication
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IValidator _validator;
 
-        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator ,IUserRepository userRepository)
+        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator, IUserRepository userRepository)
         {
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
             _validator = validator; 
         }
 
-        public AuthenticationResult Register(string firstName, string lastName, string email, string password, Role role)
+        public AuthenticationResult Register(int id, string firstName, string lastName, string email, string password, Role role)
         {
             if (_userRepository.GetUserByEmail(email) is not null)
             {
@@ -38,7 +38,7 @@ namespace dotLearn.Application.Services.Authentication
                 throw new Exception("Podany adres email jest niepoprawnie skonstruowany");
             }
 
-        Guid id = Guid.NewGuid();
+       
             User user = null; 
 
             if (role == Role.Student)
@@ -47,7 +47,7 @@ namespace dotLearn.Application.Services.Authentication
                 var cardId = cardIdGenerator.GenerateCardId();
                 user = new Student
                 {
-                    Id = id,
+                    Guid = Guid.NewGuid(),
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
@@ -60,7 +60,7 @@ namespace dotLearn.Application.Services.Authentication
             {
                 user = new Professor
                 {
-                    Id = id,
+                    Guid = Guid.NewGuid(),
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
@@ -99,5 +99,7 @@ namespace dotLearn.Application.Services.Authentication
             var token = _jwtTokenGenerator.GenerateToken(user);
             return new AuthenticationResult(user, token);
         }
+
+
     }
 }

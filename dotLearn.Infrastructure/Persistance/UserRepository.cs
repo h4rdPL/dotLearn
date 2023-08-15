@@ -20,5 +20,10 @@ namespace dotLearn.Infrastructure.Persistance
         {
             return _users.SingleOrDefault(x => x.Email == email);
         }
+
+        public User? GetUserById(Guid guid)
+        {
+            return _users.FirstOrDefault(x => x.Guid == guid);
+        }
     }
 }

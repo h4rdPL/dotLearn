@@ -19,7 +19,7 @@ namespace dotLearn.Api.Controllers
         {
             var authResult = _jobService.CreateJob(job);
             var response = new JobResult(job);
-            return Ok(response);
+            return await Task.FromResult(Ok(response));
         }
 
 

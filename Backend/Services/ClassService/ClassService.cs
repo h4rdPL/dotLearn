@@ -92,7 +92,7 @@ namespace Backend.Services.ClassService
 
 
         [HttpPost]
-        public bool ClassEnrollment(string classCode)
+        public bool ClassEnrollment(Guid classCode)
         {
 
             var jwt = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");

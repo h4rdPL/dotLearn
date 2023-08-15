@@ -24,6 +24,7 @@ namespace dotLearn.Infrastructure
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IValidator, Validator>();
+
             return services;
 
         }
