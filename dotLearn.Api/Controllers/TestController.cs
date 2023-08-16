@@ -15,15 +15,16 @@ namespace dotLearn.Api.Controllers
             _testService = testService;
         }
         /// <summary>
-        /// 
+        /// Creates a new test.
         /// </summary>
-        /// <param name="testClass"></param>
-        /// <returns></returns>
+        /// <param name="testClass">The test instance to be created.</param>
+        /// <returns>Returns the newly created test instance.</returns>
         [HttpPost("create")]
         public async Task<ActionResult<TestClass>> CreateTest(TestClass testClass)
         {
             _testService.Create(testClass);
             return await Task.FromResult(Ok(testClass));
         }
+
     }
 }

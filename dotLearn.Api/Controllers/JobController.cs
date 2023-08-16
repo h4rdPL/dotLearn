@@ -15,28 +15,29 @@ namespace dotLearn.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Creates a new job posting.
         /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
+        /// <param name="job">The job posting to be created.</param>
+        /// <returns>Returns the newly job created.</returns>
         [HttpPost("job")]
-        public async Task<ActionResult<Job>> Job(Job job)
+        public async Task<ActionResult<Job>> CreateJob(Job job)
         {
-            var authResult = _jobService.CreateJob(job);
-            var response = new JobResult(job);
-            return await Task.FromResult(Ok(response));
+            var createdJob = _jobService.CreateJob(job);
+            //var response = new JobResult(createdJob);
+            return await Task.FromResult(Ok(createdJob));
         }
 
         /// <summary>
-        /// 
+        /// Retrieves a list of all available job offers.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns a list of job postings.</returns>
         [HttpGet("getJobs")]
         public async Task<ActionResult<List<Job>>> GetJobsList()
         {
-            var jobs = await _jobService.GetJobs();
-            return Ok(jobs);
+            var jobsList = await _jobService.GetJobs();
+            return Ok(jobsList);
         }
+
 
     }
 }

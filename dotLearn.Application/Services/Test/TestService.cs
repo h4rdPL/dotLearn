@@ -21,10 +21,10 @@ namespace dotLearn.Application.Services.Test
             _userRepository = userRepository;   
         }
         /// <summary>
-        /// 
+        /// Creates a new test class and associates it with the logged-in professor.
         /// </summary>
-        /// <param name="testClass"></param>
-        /// <returns></returns>
+        /// <param name="testClass">The test class entity to be created.</param>
+        /// <returns>Returns the newly created test class entity.</returns>
         public TestClass Create(TestClass testClass)
         {
             var currentPrincipal = System.Security.Claims.ClaimsPrincipal.Current;
@@ -34,7 +34,7 @@ namespace dotLearn.Application.Services.Test
 
             if (professorIdClaim != null && Guid.TryParse(professorIdClaim.Value, out Guid professorId))
             {
-                // Pobierz profesora z bazy danych na podstawie identyfikatora
+                // Retrieve the professor from the database based on the identifier
                 var professor = _userRepository.GetUserById(professorId) as Professor;
 
                 if (professor != null)
@@ -43,6 +43,8 @@ namespace dotLearn.Application.Services.Test
                     testClass.Professor = professor;
                 }
             }
+
+            // Create a new test class with default values
             TestClass newTestClass = new TestClass
             {
                 Id = Guid.NewGuid(),
@@ -53,9 +55,14 @@ namespace dotLearn.Application.Services.Test
                 Students = null,
                 Professor = loggedProfessor
             };
+
+            // Add the new test class to the list
             _testClasses.Add(newTestClass);
+
+            // Return the newly created test class entity
             return newTestClass;
         }
+
 
     }
 }

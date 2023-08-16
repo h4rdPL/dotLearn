@@ -20,11 +20,10 @@ namespace dotLearn.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Creates a new class.
         /// </summary>
-        /// <param name="newClass"></param>
-        /// <returns></returns>
-
+        /// <param name="newClass">The class entity to be created.</param>
+        /// <returns>Returns the newly created class entity.</returns>
         [HttpPost("createClass")]
         public async Task<ActionResult<ClassEntities>> CreateClass(ClassEntities newClass)
         {
@@ -33,11 +32,11 @@ namespace dotLearn.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Joins a student to a class.
         /// </summary>
-        /// <param name="myClass"></param>
-        /// <param name="user"></param>
-        /// <returns></returns>
+        /// <param name="classCode">The code of the class to join.</param>
+        /// <param name="studentId">The ID of the student to join.</param>
+        /// <returns>Returns the result of the join operation.</returns>
         [HttpPost("joinClass")]
         public async Task<ActionResult<ClassEntities>> JoinToClass(Guid classCode, Guid studentId)
         {
@@ -46,10 +45,11 @@ namespace dotLearn.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Leaves a class for a student.
         /// </summary>
-        /// <param name="myClass"></param>
-        /// <returns></returns>
+        /// <param name="classCode">The code of the class to leave.</param>
+        /// <param name="studentId">The ID of the student leaving the class.</param>
+        /// <returns>Returns a boolean indicating the success of the leave operation.</returns>
         [HttpPost("leaveClass")]
         public async Task<ActionResult<bool>> LeaveClass(Guid classCode, Guid studentId)
         {
@@ -58,16 +58,17 @@ namespace dotLearn.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Removes a class.
         /// </summary>
-        /// <param name="classCode"></param>
-        /// <returns></returns>
+        /// <param name="classCode">The code of the class to remove.</param>
+        /// <returns>Returns a boolean indicating the success of the removal operation.</returns>
         [HttpPost("removeClass")]
         public async Task<ActionResult<bool>> RemoveClass(Guid classCode)
         {
             _classService.RemoveClass(classCode);
             return true;
         }
+
 
     }
 }

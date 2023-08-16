@@ -12,6 +12,5 @@ namespace dotLearn.Application.Services.Flashcards
         public Task<FlashCard> Create(FlashCard flashCard);
         public bool Delete(FlashCard flashCard);
         public FlashCard Update(FlashCard flashCard);
-
     }
 }
