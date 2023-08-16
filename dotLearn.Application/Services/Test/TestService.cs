@@ -20,6 +20,11 @@ namespace dotLearn.Application.Services.Test
         {
             _userRepository = userRepository;   
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testClass"></param>
+        /// <returns></returns>
         public TestClass Create(TestClass testClass)
         {
             var currentPrincipal = System.Security.Claims.ClaimsPrincipal.Current;
@@ -38,7 +43,6 @@ namespace dotLearn.Application.Services.Test
                     testClass.Professor = professor;
                 }
             }
-
             TestClass newTestClass = new TestClass
             {
                 Id = Guid.NewGuid(),

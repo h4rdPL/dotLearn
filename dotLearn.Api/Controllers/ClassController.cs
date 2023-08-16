@@ -45,9 +45,6 @@ namespace dotLearn.Api.Controllers
             return Ok();
         }
 
-
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -59,6 +56,7 @@ namespace dotLearn.Api.Controllers
             await _classService?.RemoveStudentFromClass(classCode, studentId);
             return true;
         }
+
         /// <summary>
         /// 
         /// </summary>

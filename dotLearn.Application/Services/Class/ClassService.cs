@@ -15,6 +15,11 @@ namespace dotLearn.Application.Services.Class
     {
         private static List<ClassEntities> _class = new List<ClassEntities>();
         private static List<Student> _students = new List<Student>();   
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="newClass"></param>
+       /// <returns></returns>
         public async Task<ClassEntities> Create(ClassEntities newClass)
         {
             _class.Add(newClass);
@@ -25,7 +30,12 @@ namespace dotLearn.Application.Services.Class
         {
             _class.Remove(myClass);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="classCode"></param>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
         public async Task<bool> RemoveStudentFromClass(Guid classCode, Guid studentId)
         {
             var classContainingStudent = _class.FirstOrDefault(cls => cls.ClassCode == classCode);
@@ -42,7 +52,11 @@ namespace dotLearn.Application.Services.Class
 
             return false;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <returns></returns>
         public async Task<bool> RemoveClass(Guid classId)
         {
             var classToRemove = _class.FirstOrDefault(c => c.ClassCode == classId);
@@ -55,7 +69,13 @@ namespace dotLearn.Application.Services.Class
 
             return await Task.FromResult(false);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="classCode"></param>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public Task<ClassEntities> JoinClass(Guid classCode, Guid studentId)
         {
             var classToJoin = _class.FirstOrDefault(c => c.ClassCode == classCode);

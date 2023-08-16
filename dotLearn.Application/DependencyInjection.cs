@@ -12,6 +12,7 @@ using dotLearn.Infrastructure.Profile;
 using dotLearn.Application.Services.Jobs;
 using dotLearn.Application.Services.Test;
 using dotLearn.Application.Services.Class;
+using dotLearn.Application.Services.Flashcards;
 
 namespace dotLearn.Application
 {
@@ -23,6 +24,7 @@ namespace dotLearn.Application
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<IFlashcardsService, FlashcardsService>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             return services;

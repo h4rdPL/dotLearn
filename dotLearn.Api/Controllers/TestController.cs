@@ -14,6 +14,11 @@ namespace dotLearn.Api.Controllers
         {
             _testService = testService;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testClass"></param>
+        /// <returns></returns>
         [HttpPost("create")]
         public async Task<ActionResult<TestClass>> CreateTest(TestClass testClass)
         {

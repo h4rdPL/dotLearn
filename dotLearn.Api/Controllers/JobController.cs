@@ -14,6 +14,11 @@ namespace dotLearn.Api.Controllers
             _jobService = jobService;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
         [HttpPost("job")]
         public async Task<ActionResult<Job>> Job(Job job)
         {
@@ -22,7 +27,10 @@ namespace dotLearn.Api.Controllers
             return await Task.FromResult(Ok(response));
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("getJobs")]
         public async Task<ActionResult<List<Job>>> GetJobsList()
         {
