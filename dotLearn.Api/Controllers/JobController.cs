@@ -19,7 +19,7 @@ namespace dotLearn.Api.Controllers
         /// </summary>
         /// <param name="job">The job posting to be created.</param>
         /// <returns>Returns the newly job created.</returns>
-        [HttpPost("job")]
+        [HttpPost("create")]
         public async Task<ActionResult<Job>> CreateJob(Job job)
         {
             var createdJob = _jobService.CreateJob(job);
@@ -37,7 +37,10 @@ namespace dotLearn.Api.Controllers
             var jobsList = await _jobService.GetJobs();
             return Ok(jobsList);
         }
-
-
+        [HttpDelete("deleteJob")]
+        public void DeleteJob(Job job, int jobId)
+        {
+            _jobService.DeleteJob(job, jobId);
+        }
     }
 }

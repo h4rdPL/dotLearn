@@ -11,5 +11,6 @@ namespace dotLearn.Application.Common.Interfaces.JobBoard
     {
         void Add(Job job);
         List<Job> GetAll();
+        void Delete(Job job, int jobId);
     }
 }

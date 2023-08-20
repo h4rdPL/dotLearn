@@ -32,7 +32,7 @@ namespace dotLearn.Application.Services.Test
 
             Professor loggedProfessor = null; // Declare the variable outside the if block
 
-            if (professorIdClaim != null && Guid.TryParse(professorIdClaim.Value, out Guid professorId))
+            if (professorIdClaim != null && int.TryParse(professorIdClaim.Value, out int professorId))
             {
                 // Retrieve the professor from the database based on the identifier
                 var professor = _userRepository.GetUserById(professorId) as Professor;

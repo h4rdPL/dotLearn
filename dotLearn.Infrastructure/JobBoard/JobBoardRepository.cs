@@ -1,5 +1,7 @@
 ﻿using dotLearn.Application.Common.Interfaces.JobBoard;
 using dotLearn.Domain.Entities;
+using dotLearn.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +12,39 @@ namespace dotLearn.Infrastructure.JobBoard
 {
     public class JobBoardRepository : IJobBoardRepository
     {
-        private static readonly List<Job> _jobs = new();
-        
+        private readonly DotLearnDbContext _context;
+
+        public JobBoardRepository(DotLearnDbContext context)
+        {
+            _context = context;
+        }
+        /// <summary>
+        /// Add jobs to the database
+        /// </summary>
+        /// <param name="job">Job entitie</param>
         public void Add(Job job)
         {
-            _jobs.Add(job);
+            _context.Add(job);
+            _context.SaveChanges();
+        }
+
+        public void Delete(Job job, int jobId)
+        {
+            var jobOffr = _context.Jobs.FirstOrDefault(j => j.Id == jobId);
+            if(jobOffr != null)
+            {
+                _context.Remove(jobOffr);
+                _context.SaveChanges();
+            }
         }
 
         public List<Job> GetAll()
         {
-            return (List<Job>)(from job in _jobs select job);
+            var query = _context.Jobs
+                .Include(j => j.Offer)
+                .Include(j => j.Expectations)
+                .Include(j => j.Benefits);
+            return query.ToList();     
         }
     }
 }

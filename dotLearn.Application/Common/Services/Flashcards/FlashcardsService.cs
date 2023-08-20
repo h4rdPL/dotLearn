@@ -1,23 +1,32 @@
-﻿using dotLearn.Domain.Entities;
+﻿using dotLearn.Application.Common.Interfaces.FlashCards;
+using dotLearn.Application.Services.Flashcards;
+using dotLearn.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotLearn.Application.Services.Flashcards
+namespace dotLearn.Application.Common.Services.Flashcards
 {
     public class FlashcardsService : IFlashcardsService
     {
+        private readonly IFlashCardsRepository _flashCardsRepository;
+        public FlashcardsService(IFlashCardsRepository flashCardsRepository)
+        {
+            _flashCardsRepository = flashCardsRepository;
+        }
         /// <summary>
         /// Creates a flash card
         /// </summary>
         /// <param name="flashCard">the flash card entity to be created.</param>
         /// <returns>new entity which will be created</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task<FlashCard> Create(FlashCard flashCard)
+        public void Create(FlashCard flashCard)
         {
-            throw new NotImplementedException();
+            _flashCardsRepository.Create(flashCard);
+            
         }
         /// <summary>
         /// Deletes a flash card.

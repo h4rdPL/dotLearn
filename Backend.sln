@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotLearn.Domain", "dotLearn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotLearn.Infrastructure", "dotLearn.Infrastructure\dotLearn.Infrastructure.csproj", "{F304C1CC-830B-43B8-8273-00620447BCB0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotLearn.Test", "dotLearn.Test", "{5B239B24-80D0-4CBC-A6EA-392912B0DF0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

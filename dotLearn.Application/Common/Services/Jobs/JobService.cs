@@ -4,22 +4,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using dotLearn.Application.Common.Interfaces.JobBoard;
 
 namespace dotLearn.Application.Services.Jobs
 {
     public class JobService : IJobService
     {
-        private static List<Job> _jobs = new List<Job>();
-
+        private readonly IJobBoardRepository _JobBoardRepository;
+        public JobService(IJobBoardRepository jobBoardRepository)
+        {
+            _JobBoardRepository = jobBoardRepository;
+        }
         /// <summary>
         /// Creates a new job and adds it to the list of jobs.
         /// </summary>
         /// <param name="job">The job entity to be created.</param>
         /// <returns>Returns a JobResult object containing information about the created job.</returns>
-        public JobResult CreateJob(Job job)
+        public Job CreateJob(Job job)
         {
-            _jobs.Add(job);
-            return new JobResult(job);
+            _JobBoardRepository.Add(job);
+            return job;
+        }
+
+        public void DeleteJob(Job job, int jobId)
+        {
+            _JobBoardRepository.Delete(job, jobId); 
         }
 
         /// <summary>
@@ -28,9 +38,8 @@ namespace dotLearn.Application.Services.Jobs
         /// <returns>Returns a list of all job entities.</returns>
         public async Task<List<Job>> GetJobs()
         {
-            return await Task.FromResult(_jobs.ToList());
+            return _JobBoardRepository.GetAll();
+
         }
-
-
     }
 }

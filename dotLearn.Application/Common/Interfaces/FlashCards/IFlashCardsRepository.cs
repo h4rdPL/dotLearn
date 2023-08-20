@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotLearn.Application.Services.Jobs
+namespace dotLearn.Application.Common.Interfaces.FlashCards
 {
-    public interface IJobService
+    public interface IFlashCardsRepository
     {
-        JobResult CreateJob(Job job);
-        Task<List<Job>> GetJobs();
+        void Create(FlashCard flashCard);
     }
 }

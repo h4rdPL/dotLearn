@@ -3,7 +3,7 @@ using dotLearn.Domain.Entities;
 
 namespace dotLearn.Contracts.Authentication;
 public record AuthenticationResponse(
-        Guid guid,
+        int id,
         string FirstName,
         string LastName,
         string Email,

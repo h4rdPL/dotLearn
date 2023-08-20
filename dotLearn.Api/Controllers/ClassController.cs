@@ -1,5 +1,5 @@
 ﻿using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Application.Services.Class;
+using dotLearn.Application.Common.Services.Class;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

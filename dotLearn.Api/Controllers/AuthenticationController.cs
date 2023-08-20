@@ -35,7 +35,7 @@ namespace dotLearn.Api.Controllers
             )
         {
             var authResult = _authenticationService.Register(id, FirstName, LastName, Email, Password, Role);
-            var response = new AuthenticationResponse(authResult.user.Guid, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
+            var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
             return await Task.FromResult(Ok(response));
         }
 
@@ -43,7 +43,7 @@ namespace dotLearn.Api.Controllers
         public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)
         {
             var authResult = _authenticationService.Login(request.Email, request.Password);
-            var response = new AuthenticationResponse(authResult.user.Guid, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
+            var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
             return await Task.FromResult(Ok(response));
         }
     }

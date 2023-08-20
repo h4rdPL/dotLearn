@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotLearn.Infrastructure.Profile
+namespace dotLearn.Application.Common.Interfaces.Services.Profile
 {
-    public class UserProfile 
+    public class UserProfile
     {
 
 

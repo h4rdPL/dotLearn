@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Web.Http;
+using dotLearn.Application.Common.Services.Class;
 
 namespace dotLearn.Application.Services.Class
 {
@@ -41,13 +42,13 @@ namespace dotLearn.Application.Services.Class
         /// <param name="classCode">The code of the class.</param>
         /// <param name="studentId">The ID of the student to be removed.</param>
         /// <returns>Returns true if the student was successfully removed, otherwise false.</returns>
-        public async Task<bool> RemoveStudentFromClass(Guid classCode, Guid studentId)
+        public async Task<bool> RemoveStudentFromClass(Guid classCode, int studentId)
         {
             var classContainingStudent = _class.FirstOrDefault(cls => cls.ClassCode == classCode);
 
             if (classContainingStudent != null)
             {
-                var studentToRemove = classContainingStudent.Student.FirstOrDefault(st => st.Guid == studentId);
+                var studentToRemove = classContainingStudent.Student.FirstOrDefault(st => st.Id == studentId);
                 if (studentToRemove != null)
                 {
                     classContainingStudent.Student.Remove(studentToRemove);
@@ -98,5 +99,9 @@ namespace dotLearn.Application.Services.Class
             return Task.FromResult(classToJoin);
         }
 
+        public Task<bool> RemoveStudentFromClass(Guid classId, Guid studentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

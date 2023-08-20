@@ -10,7 +10,8 @@ namespace dotLearn.Application.Common.Interfaces.Persisence
     {
         User? GetUserByEmail(string email);
         void Add(User user);
-        User? GetUserById(Guid id);
+        User? GetUserById(int id);
+        Student? GetStudentById(int id);
 
     }
 }

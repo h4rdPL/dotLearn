@@ -14,6 +14,8 @@ using dotLearn.Infrastructure.Validation;
 using dotLearn.Application.Common.Interfaces.JobBoard;
 using dotLearn.Domain.Entities;
 using dotLearn.Infrastructure.JobBoard;
+using dotLearn.Application.Common.Interfaces.FlashCards;
+using dotLearn.Infrastructure.FlashCards;
 
 namespace dotLearn.Infrastructure
 {
@@ -21,6 +23,10 @@ namespace dotLearn.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
         {
+            // Repository injection
+            services.AddScoped<IJobBoardRepository, JobBoardRepository>();
+            services.AddScoped<IFlashCardsRepository, FlashCardsRepository>();
+
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IValidator, Validator>();

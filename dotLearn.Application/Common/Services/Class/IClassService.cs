@@ -5,9 +5,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using static dotLearn.Application.Services.Class.ClassService;
 
-namespace dotLearn.Application.Services.Class
+namespace dotLearn.Application.Common.Services.Class
 {
     public interface IClassService
     {

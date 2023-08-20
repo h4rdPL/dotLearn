@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace dotLearn.Domain.DTO
 {
-    public record struct BenefitsCreateDTO(string DevelopmentOpportunities, string ProjectWork, string SportsPackage, string MedicalInsurance);
+    public record struct BenefitsCreateDTO(int Id, string DevelopmentOpportunities, string ProjectWork, string SportsPackage, string MedicalInsurance);
 }

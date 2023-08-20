@@ -1,5 +1,9 @@
-﻿using dotLearn.Application.Services.Flashcards;
+﻿using dotLearn.Application.Common.Interfaces.Authentication;
+using dotLearn.Application.Common.Interfaces.Persisence;
+using dotLearn.Application.Services.Flashcards;
+using dotLearn.Application.Services.Jobs;
 using dotLearn.Domain.Entities;
+using dotLearn.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,20 +14,22 @@ namespace dotLearn.Api.Controllers
     public class FlashCardController : ControllerBase
     {
         private readonly IFlashcardsService _flashCardsService;
-        public FlashCardController(IFlashcardsService flashcardsService)
+        private readonly IUserRepository _userRepository;
+
+        public FlashCardController(IFlashcardsService flashcardsService, IUserRepository userRepository)
         {
             _flashCardsService = flashcardsService;
+            _userRepository = userRepository;
         }
         /// <summary>
         /// Creates a new flash card.
         /// </summary>
-        /// <param name="flashCard">The flash card entity to be created.</param>
         /// <returns>Returns the newly created flash card entity.</returns>
         [HttpPost("create")]
-        public async Task<ActionResult<FlashCard>> Create(FlashCard flashCard)
+        public void Create(FlashCard flashCard)
         {
-            var createdFlashCard = _flashCardsService.Create(flashCard);
-            return await Task.FromResult(Ok(createdFlashCard));
+
+            _flashCardsService.Create(flashCard);
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace dotLearn.Application.Services.Flashcards
 {
     public interface IFlashcardsService
     {
-        public Task<FlashCard> Create(FlashCard flashCard);
+        public void Create(FlashCard flashCard);
         public bool Delete(FlashCard flashCard);
         public FlashCard Update(FlashCard flashCard);
     }

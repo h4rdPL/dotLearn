@@ -47,7 +47,7 @@ namespace dotLearn.Application.Services.Authentication
                 var cardId = cardIdGenerator.GenerateCardId();
                 user = new Student
                 {
-                    Guid = Guid.NewGuid(),
+                    Id = id,
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
@@ -60,7 +60,7 @@ namespace dotLearn.Application.Services.Authentication
             {
                 user = new Professor
                 {
-                    Guid = Guid.NewGuid(),
+                    Id= id,
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
