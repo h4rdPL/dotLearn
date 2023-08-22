@@ -12,6 +12,5 @@ namespace dotLearn.Domain.Entities
     {
         public int Id { get; set; }
         public int CardId { get; set; }
-        //public List<FlashCard> FlashCards { get; set; }
     }
 }

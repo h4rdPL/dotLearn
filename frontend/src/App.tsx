@@ -13,6 +13,9 @@ import { LearnPage } from "./pages/Platform/LearnPage/LearnPage";
 import { TestPage } from "./pages/Platform/TestPage/TestPage";
 import { ClassPage } from "./pages/Platform/ClassPage/ClassPage";
 import { SettingPage } from "./pages/Platform/SettingPage/SettingPage";
+import { CreateFlashCards } from "./pages/Platform/CreateFlashCards/CreateFlashCards";
+import { FlashCardDetails } from "./pages/Platform/FlashCardDetails/FlashCardDetails";
+import { CreateTestPage } from "./pages/Platform/CreateTestPage/CreateTestPage";
 
 const router = createBrowserRouter([
   {
@@ -80,12 +83,26 @@ const router = createBrowserRouter([
     element: <SettingPage />,
     errorElement: <ErrorPage />,
   },
-  
+  {
+    path: "/platform/learn/create",
+    element: <CreateFlashCards />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/learn/:flashCardId",
+    element: <FlashCardDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/test/create",
+    element: <CreateTestPage />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 export const App = () => {
   return (
     <>
-        <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router}></RouterProvider>
     </>
   );
 };

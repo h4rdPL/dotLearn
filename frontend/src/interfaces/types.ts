@@ -97,6 +97,13 @@ export interface SpanInterface {
 
 }
 
+export interface FlashCardsInterface {
+  id: number,
+  name: string,
+  definition: string,
+  meaning: string,
+}
+
 export interface CalendarInterface {
   month?: number | undefined;
   year?: number | undefined;

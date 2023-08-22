@@ -5,14 +5,20 @@ import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { Button } from "../../../components/atoms/Button/Button";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const ClassHeading = styled.h2``;
 
 export const ClassPage = () => {
   return (
     <PlatformLayout>
       <Wrapper>
         <span style={{ fontSize: "14px" }}>
-          <h2>Twoje klasy</h2>
+          <ClassHeading>Twoje klasy</ClassHeading>
         </span>
         <div>
           <Span
@@ -24,7 +30,7 @@ export const ClassPage = () => {
             <p>Ilość osób: 20</p>
           </span>
         </div>
-        <Cta style={{ alignSelf: "flex-end" }} label="Wejdź" isJobOffer />
+        <Cta style={{ alignSelf: "flex-start" }} label="Wejdź" isJobOffer />
         <Button label="Stwórz klasę" />
       </Wrapper>
     </PlatformLayout>

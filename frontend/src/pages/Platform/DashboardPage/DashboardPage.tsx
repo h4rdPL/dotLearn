@@ -12,12 +12,13 @@ const Wrapper = styled.div`
   display: grid;
   justify-content: center;
   align-items: center;
+  align-self: center;
+  justify-self: center;
   grid-template-columns: repeat(1, 1fr);
   font-size: 14px;
   max-height: 100vh;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-    padding: 1.5rem 2rem 0;
     width: 100%;
     grid-template-columns: repeat(2, 1fr);
   }
@@ -33,11 +34,11 @@ const Boxes = styled.span`
 
 const ProgressWrapper = styled.div`
   width: 150px;
-  align-self: flex-start;
 `;
 
 const InnerWrapper = styled.div<CalendarInterface>`
   padding: 2rem 0rem 0 0;
+  align-self: center;
 `;
 
 const GradeWrapper = styled.div`

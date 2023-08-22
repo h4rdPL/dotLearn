@@ -2,12 +2,10 @@ import React from "react";
 import { SecondaryHeading } from "../../components/atoms/Heading/SecondaryHeading";
 import { Cta } from "../../components/atoms/Button/Cta";
 import { styled } from "styled-components";
-import { Navbar } from "../../components/organisms/Navbar/Navbar";
 import { Item } from "../../components/atoms/Item/Item";
 import { useParams } from "react-router-dom";
 import { jobOffers } from "../../assets/data/jobs";
 import { Input } from "../../components/atoms/Input/Input";
-import { Footer } from "../../components/organisms/Footer/Footer";
 import { LandingPageLayout } from "../../templates/LandingPageLayout";
 const InnerWrapper = styled.div`
   display: flex;

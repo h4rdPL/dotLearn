@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { css, styled } from "styled-components";
 import logo from "../../../assets/images/logo.svg";
 import hamburger from "../../../assets/icons/hamburger.svg";
-// import { Link } from "../../atoms/Links/Link";
 import { Button } from "../../atoms/Button/Button";
 import { MenuProps } from "../../../interfaces/types";
 import { Link } from "react-router-dom";

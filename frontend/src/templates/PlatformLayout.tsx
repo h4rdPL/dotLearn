@@ -1,19 +1,18 @@
 import React from "react";
 import { Sidebar } from "../components/organisms/Platform_sidebar/Sidebar";
 import styled from "styled-components";
-
 const Wrapper = styled.section`
-  display: flex;
   color: #fff;
 `;
 
+const InnerWrapper = styled.div`
+  padding: 2rem;
+`;
 export const PlatformLayout = ({ children }: any) => {
   return (
-    <>
-      <Wrapper>
-        <Sidebar />
-        {children}
-      </Wrapper>
-    </>
+    <Wrapper>
+      <Sidebar />
+      <InnerWrapper>{children}</InnerWrapper>
+    </Wrapper>
   );
 };

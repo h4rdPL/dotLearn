@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import logo from "../../../assets/images/logo.svg";
 import {
   IoIosHome,
   IoIosRibbon,
@@ -13,10 +12,9 @@ import { Link } from "react-router-dom";
 
 const SidebarWrapper = styled.nav`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-height: 100vh;
   background-color: ${({ theme }) => theme.purpleLightSidebar};
 
   a {
@@ -27,6 +25,8 @@ const SidebarWrapper = styled.nav`
 
 const ListWrapper = styled.ul`
   width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const ListItem = styled.li`
@@ -46,12 +46,12 @@ const ListItem = styled.li`
 
 const LinkItem = styled.a`
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
   min-width: 100%;
   padding: 1rem 2rem;
-  font-weight: bold;
 `;
 export const Sidebar = () => {
   return (
@@ -92,8 +92,6 @@ export const Sidebar = () => {
             </LinkItem>
           </ListItem>
         </Link>
-      </ListWrapper>
-      <ListWrapper>
         <Link to="/platform/settings">
           <ListItem>
             <LinkItem>
