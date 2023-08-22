@@ -4,6 +4,7 @@ import { Span } from "../../../components/atoms/Span/Span";
 import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { Button } from "../../../components/atoms/Button/Button";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,7 +32,10 @@ export const ClassPage = () => {
           </span>
         </div>
         <Cta style={{ alignSelf: "flex-start" }} label="Wejdź" isJobOffer />
-        <Button label="Stwórz klasę" />
+
+        <Link to={"/platform/class/create"}>
+          <Button label="Stwórz klasę" />
+        </Link>
       </Wrapper>
     </PlatformLayout>
   );

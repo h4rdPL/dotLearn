@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
-
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 const TestInput = styled.input`
   padding: 1rem;
   border: none;
@@ -33,7 +36,17 @@ const TestButton = styled.button`
   width: fit-content;
 `;
 
+const InformationWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+
 export const CreateTestPage = () => {
+  const [value, onChange] = useState<Value>(new Date());
   const [testQuestions, setTestQuestions] = useState([
     {
       id: 1,
@@ -108,10 +121,18 @@ export const CreateTestPage = () => {
           </AnswerWrapper>
         </React.Fragment>
       ))}
-      <TestButton style={{ marginBottom: "1rem" }} onClick={handleAddQuestion}>
-        Dodaj test 🐻‍❄️
-      </TestButton>
-      <Cta style={{ alignSelf: "flex-start" }} label="Stwórz" isJobOffer />
+      <InformationWrapper>
+        <TestButton
+          style={{ marginBottom: "1rem" }}
+          onClick={handleAddQuestion}
+        >
+          Dodaj pytanie 🐻‍❄️
+        </TestButton>
+        <h3>Data aktywności testu:</h3>
+        <DateTimePicker onChange={onChange} value={value} />
+
+        <Cta style={{ alignSelf: "flex-start" }} label="Stwórz" isJobOffer />
+      </InformationWrapper>
     </PlatformLayout>
   );
 };
