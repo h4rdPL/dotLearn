@@ -5,7 +5,8 @@ import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { Button } from "../../../components/atoms/Button/Button";
 import { Link } from "react-router-dom";
-
+import { ClassData } from "../../../interfaces/types";
+import { classData } from "../../../assets/data/classes";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,27 +15,39 @@ const Wrapper = styled.div`
 
 const ClassHeading = styled.h2``;
 
-export const ClassPage = () => {
+export const ClassPage: React.FC = () => {
   return (
     <PlatformLayout>
       <Wrapper>
         <span style={{ fontSize: "14px" }}>
-          <ClassHeading>Twoje klasy</ClassHeading>
+          <ClassHeading>Twoje klasy:</ClassHeading>
         </span>
-        <div>
-          <Span
-            titleLabel="Język angielski /"
-            label="Jan Kowalski"
-            isGrade={false}
-          />
-          <span style={{ fontSize: "14px" }}>
-            <p>Ilość osób: 20</p>
-          </span>
-        </div>
-        <Cta style={{ alignSelf: "flex-start" }} label="Wejdź" isJobOffer />
+        {classData.map((myClass: ClassData) => (
+          <>
+            <div>
+              <Span
+                titleLabel={`${myClass.subject}`}
+                label={`${myClass.professor.firstName} ${myClass.professor.lastName}`}
+                isGrade={false}
+              />
+              <span style={{ fontSize: "14px" }}>
+                <p>Ilość osób: 20</p>
+              </span>
+            </div>
 
+            <Cta
+              href={`/platform/class/${myClass.id}`}
+              style={{ alignSelf: "flex-start" }}
+              label="Wejdź"
+              isJobOffer
+            />
+          </>
+        ))}
         <Link to={"/platform/class/create"}>
           <Button label="Stwórz klasę" />
+        </Link>
+        <Link to={"/platform/class/create"}>
+          <Button label="Dołącz do klasy" />
         </Link>
       </Wrapper>
     </PlatformLayout>

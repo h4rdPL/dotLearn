@@ -108,3 +108,82 @@ export interface CalendarInterface {
   month?: number | undefined;
   year?: number | undefined;
 }
+interface Professor {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: number;
+  id: number;
+  subject: number;
+}
+
+interface Student {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: number;
+  id: number;
+  cardId: number;
+}
+
+export interface ClassData {
+  id: number;
+  classCode: string;
+  subject: string;
+  professor: Professor;
+  student: Student[];
+}
+
+interface Answer {
+  id: number;
+  answerName: string;
+  isCorrect: boolean;
+}
+
+interface Question {
+  id: number;
+  questionName: string;
+  answers: Answer[];
+}
+
+interface Student {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: number;
+  id: number;
+  cardId: number;
+}
+
+interface Professor {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: number;
+  id: number;
+  subject: number;
+}
+
+interface ClassEntity {
+  id: number;
+  classCode: string;
+  subject: number;
+  professor: Professor;
+  student: Student[];
+}
+
+export interface TestInterface {
+  id?: string;
+  testName?: string;
+  question?: Question[];
+  students?: Student[];
+  professor?: Professor;
+  classEntities?: ClassEntity;
+  time?: number;
+  isActive?: boolean;
+  activeDate?: string;
+}

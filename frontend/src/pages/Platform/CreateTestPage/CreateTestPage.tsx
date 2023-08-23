@@ -130,7 +130,6 @@ export const CreateTestPage = () => {
         </TestButton>
         <h3>Data aktywności testu:</h3>
         <DateTimePicker onChange={onChange} value={value} />
-
         <Cta style={{ alignSelf: "flex-start" }} label="Stwórz" isJobOffer />
       </InformationWrapper>
     </PlatformLayout>

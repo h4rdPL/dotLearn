@@ -17,6 +17,8 @@ import { CreateFlashCards } from "./pages/Platform/CreateFlashCards/CreateFlashC
 import { FlashCardDetails } from "./pages/Platform/FlashCardDetails/FlashCardDetails";
 import { CreateTestPage } from "./pages/Platform/CreateTestPage/CreateTestPage";
 import { CreateClassPage } from "./pages/Platform/CreateClassPage/CreateClassPage";
+import { ClassPageDetail } from "./pages/Platform/ClassPageDetail/ClassPageDetail";
+import { TestPageDetail } from "./pages/Platform/TestPageDetail/TestPageDetail";
 
 const router = createBrowserRouter([
   {
@@ -100,8 +102,18 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: "/platform/test/:testId",
+    element: <TestPageDetail />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/platform/class/create",
     element: <CreateClassPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/class/:classId",
+    element: <ClassPageDetail />,
     errorElement: <ErrorPage />,
   },
 ]);

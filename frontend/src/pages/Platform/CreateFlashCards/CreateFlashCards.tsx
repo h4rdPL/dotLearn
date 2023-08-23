@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
-
+import { IoIosAdd } from "react-icons/io";
 const FlashCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,7 +40,7 @@ const FlashCard = styled.div`
 const FlashCardButton = styled.button`
   background-color: ${({ theme }) => theme.purple};
   color: ${({ theme }) => theme.white};
-  padding: 1.5rem 2rem;
+  padding: 0.75rem;
   border: none;
   outline: none;
   border-radius: 5px;
@@ -76,7 +76,11 @@ export const CreateFlashCards = () => {
           style={{ marginBottom: "1rem" }}
           onClick={handleAddFlashcard}
         >
-          Dodaj fiszkę 🐻‍❄️
+          <IoIosAdd
+            style={{
+              fontSize: "2rem",
+            }}
+          />
         </FlashCardButton>
         <Cta style={{ alignSelf: "flex-start" }} label="Stwórz" isJobOffer />
       </FlashCardWrapper>
