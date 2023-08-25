@@ -74,13 +74,13 @@ export const SettingPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <InputLabel>New Password:</InputLabel>
+          <InputLabel>Nowe hasło:</InputLabel>
           <InputField
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <InputLabel>Confirm New Password:</InputLabel>
+          <InputLabel>Potwierdź nowe hasło:</InputLabel>
           <InputField
             type="password"
             value={confirmPassword}

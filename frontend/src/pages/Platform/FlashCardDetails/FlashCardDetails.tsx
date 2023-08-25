@@ -2,28 +2,31 @@ import React, { useState } from "react";
 import { FlashCards } from "../../../assets/data/flashCards";
 import { useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FlashCardState } from "../../../interfaces/types";
+import { ImArrowLeft2, ImArrowRight2 } from "react-icons/im";
 
 const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: c;
   color: #fff;
   padding: 1rem;
 `;
 
 const FlashcardContainer = styled.div`
-  background-color: ${({ theme }) => theme.secondaryBackground};
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
-  width: 300px;
-  height: 200px;
+  width: 500px;
+  min-height: 300px;
   perspective: 1000px;
 `;
 
 const Flashcard = styled.div<FlashCardState>`
   width: 100%;
-  height: 100%;
+  height: fit-content;
   position: relative;
   -webkit-transition: 0.6s;
   -webkit-transform-style: preserve-3d;
@@ -41,7 +44,7 @@ const Flashcard = styled.div<FlashCardState>`
 
 const FlashcardFront = styled.div`
   width: 100%;
-  height: 100%;
+  height: 300px;
   backface-visibility: hidden;
   display: flex;
   justify-content: center;
@@ -71,6 +74,50 @@ const FlashcardText = styled.p`
   margin: 0;
   text-align: center;
   color: #fff;
+`;
+
+const FlashcardList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+`;
+
+const FlashcardListItem = styled.li`
+  background-color: ${({ theme }) => theme.purple};
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  font-size: 16px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+`;
+
+const InnerButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  outline: none;
+  color: ${({ theme }) => theme.white};
+  border: none;
+  background-color: ${({ theme }) => theme.purple};
+  padding: 1rem;
+  ${(props) =>
+    props.disabled &&
+    css`
+      background-color: transparent;
+      color: #999;
+      cursor: not-allowed;
+      opacity: 0.6;
+    `}
 `;
 
 export const FlashCardDetails: React.FC = () => {
@@ -109,23 +156,35 @@ export const FlashCardDetails: React.FC = () => {
                 </FlashcardText>
               </FlashcardBack>
             </Flashcard>
-            <button
-              onClick={() => handleCardSwitch(currentCard - 1)}
-              disabled={currentCard === 0}
-            >
-              Previous Card
-            </button>
-            <button
-              onClick={() => handleCardSwitch(currentCard + 1)}
-              disabled={currentCard === flashCardSet.flashcards.length - 1}
-            >
-              Next Card
-            </button>
+            <ButtonContainer>
+              <InnerButton
+                onClick={() => handleCardSwitch(currentCard - 1)}
+                disabled={currentCard === 0}
+              >
+                <ImArrowLeft2 />
+                Previous Card
+              </InnerButton>
+              <InnerButton
+                onClick={() => handleCardSwitch(currentCard + 1)}
+                disabled={currentCard === flashCardSet.flashcards.length - 1}
+              >
+                Next Card
+                <ImArrowRight2 />
+              </InnerButton>
+            </ButtonContainer>
           </FlashcardContainer>
         ) : (
           <p>Flashcard set not found</p>
         )}
       </Wrapper>
+      <FlashcardList>
+        {flashCardSet &&
+          flashCardSet.flashcards.map((flashcard, index) => (
+            <FlashcardListItem key={index}>
+              {flashcard.concept} - {flashcard.translation}
+            </FlashcardListItem>
+          ))}
+      </FlashcardList>
     </PlatformLayout>
   );
 };
