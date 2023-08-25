@@ -5,7 +5,6 @@ import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { Button } from "../../../components/atoms/Button/Button";
 import { Link } from "react-router-dom";
-import { ClassData } from "../../../interfaces/types";
 import { classData } from "../../../assets/data/classes";
 const Wrapper = styled.div`
   display: flex;
@@ -22,7 +21,7 @@ export const ClassPage: React.FC = () => {
         <span style={{ fontSize: "14px" }}>
           <ClassHeading>Twoje klasy:</ClassHeading>
         </span>
-        {classData.map((myClass: ClassData) => (
+        {classData.map((myClass: any) => (
           <>
             <div>
               <Span

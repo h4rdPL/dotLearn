@@ -126,21 +126,21 @@ export const testData: TestInterface[] = [
           email: "john.doe@example.com",
           password: "password123",
           role: 1,
-          id: 1,
-          subject: 1
+          id: "1",
+          subject: "Angielski"
         },
         classEntities: {
           id: 1,
           classCode: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          subject: 1,
+          subject: "Angielski",
           professor: {
             firstName: "John",
             lastName: "Doe",
             email: "john.doe@example.com",
             password: "password123",
             role: 1,
-            id: 1,
-            subject: 1
+            id: "1",
+            subject: "Angielski"
           },
           student: [
             {
@@ -188,7 +188,6 @@ export const testData: TestInterface[] = [
               }
             ]
           },
-          // ... Question 2, 3, and 4 for Test 2
         ],
         students: [
           {
@@ -202,26 +201,26 @@ export const testData: TestInterface[] = [
           }
         ],
         professor: {
+          id: "3",
           firstName: "Jane",
           lastName: "Smith",
           email: "jane.smith@example.com",
           password: "password123",
           role: 1,
-          id: 3,
-          subject: 2
+          subject: "Angielski"
         },
         classEntities: {
           id: 2,
           classCode: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          subject: 2,
+          subject: "Angielski",
           professor: {
             firstName: "Jane",
             lastName: "Smith",
             email: "jane.smith@example.com",
             password: "password123",
             role: 1,
-            id: 3,
-            subject: 2
+            id: "3",
+            subject: "Angielski"
           },
           student: [
             {

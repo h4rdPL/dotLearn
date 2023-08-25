@@ -66,8 +66,12 @@ export const CreateFlashCards = () => {
                 <p>Pojęcie</p>
               </FlashCard>
               <FlashCard>
+                <FlashCardInput type="text" placeholder="Znaczenie" />
+                <p>Znaczenie</p>
+              </FlashCard>
+              <FlashCard>
                 <FlashCardInput type="text" placeholder="Definicja" />
-                <p>Definicja</p>
+                <p>Definicja (opcjonalnie)</p>
               </FlashCard>
             </FlashCardInnerWrapper>
           </React.Fragment>

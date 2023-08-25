@@ -3,7 +3,8 @@ import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
-import { FlashCards } from "../../../assets/data/flashCards";
+import { FlashCards } from "../../../assets/data/flashCards"; // Update the import to match the new interface
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,21 +26,24 @@ const FlashCardsListItem = styled.li`
   width: 100%;
   background-color: ${({ theme }) => theme.purple};
 `;
-export const LearnPage = ({ id }: any) => {
+
+export const LearnPage: React.FC = () => {
   return (
     <PlatformLayout>
       <Wrapper>
         <h2>Twoje fiszki:</h2>
         <FlashCardsList>
-          {FlashCards.map((flashcard) => (
-            <FlashCardsListItem>
-              Nazwa: {flashcard.name}
-              <Cta
-                style={{ alignSelf: "flex-start" }}
-                href={`learn/${flashcard.id}`}
-                label="Wejdź"
-                isJobOffer
-              />
+          {FlashCards.map((flashcardSet) => (
+            <FlashCardsListItem key={flashcardSet.id}>
+              <div key={flashcardSet.id}>
+                Nazwa: {flashcardSet.name}
+                <Cta
+                  style={{ alignSelf: "flex-start" }}
+                  href={`/platform/learn/${flashcardSet.id}`}
+                  label="Wejdź"
+                  isJobOffer
+                />
+              </div>
             </FlashCardsListItem>
           ))}
         </FlashCardsList>

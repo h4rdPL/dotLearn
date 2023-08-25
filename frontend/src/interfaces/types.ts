@@ -97,12 +97,20 @@ export interface SpanInterface {
 
 }
 
-export interface FlashCardsInterface {
-  id: number,
-  name: string,
-  definition: string,
-  meaning: string,
+
+interface Flashcard {
+  id: number;
+  concept: string;
+  translation: string;
+  definition: string;
 }
+
+export interface FlashCardsInterface {
+  id: number;
+  name: string;
+  flashcards: Flashcard[];
+}
+
 
 export interface CalendarInterface {
   month?: number | undefined;
@@ -114,8 +122,8 @@ interface Professor {
   email: string;
   password: string;
   role: number;
-  id: number;
-  subject: number;
+  id: string;
+  subject: string;
 }
 
 interface Student {
@@ -131,21 +139,34 @@ interface Student {
 export interface ClassData {
   id: number;
   classCode: string;
-  subject: string;
+  subject: string; 
   professor: Professor;
   student: Student[];
 }
 
-interface Answer {
-  id: number;
-  answerName: string;
-  isCorrect: boolean;
+
+export interface TestInterface {
+  id?: string;
+  testName?: string;
+  question?: Question[];
+  students?: Student[];
+  professor?: Professor;
+  classEntities?: ClassEntity;
+  time?: number;
+  isActive?: boolean;
+  activeDate?: string;
 }
 
 interface Question {
   id: number;
   questionName: string;
   answers: Answer[];
+}
+
+interface Answer {
+  id: number;
+  answerName: string;
+  isCorrect: boolean;
 }
 
 interface Student {
@@ -164,26 +185,25 @@ interface Professor {
   email: string;
   password: string;
   role: number;
-  id: number;
-  subject: number;
+  id: string;
+  subject: string;
 }
+
 
 interface ClassEntity {
   id: number;
   classCode: string;
-  subject: number;
+  subject: string;
   professor: Professor;
   student: Student[];
 }
 
-export interface TestInterface {
-  id?: string;
-  testName?: string;
-  question?: Question[];
-  students?: Student[];
-  professor?: Professor;
-  classEntities?: ClassEntity;
-  time?: number;
-  isActive?: boolean;
-  activeDate?: string;
+export interface FlashCardState {
+  flipped: boolean;
+}
+
+export interface Message {
+  text: string;
+  isUser: boolean;
+  isBot?: boolean;
 }
