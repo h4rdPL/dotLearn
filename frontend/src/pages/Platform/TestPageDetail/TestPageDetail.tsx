@@ -67,13 +67,38 @@ const SubmitButton = styled.button`
     background-color: ${({ theme }) => theme.darkPurple};
   }
 `;
+const RadioInput = styled.input.attrs({ type: "radio" })`
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+`;
+
+const RadioLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0.5rem 0;
+`;
+
+const RadioCustomButton = styled.span<{ checked: boolean }>`
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid ${({ theme }) => theme.purple};
+  border-radius: 50%;
+  background-color: ${({ checked, theme }) =>
+    checked ? theme.purple : "transparent"};
+`;
 
 export const TestPageDetail = () => {
   const { testId } = useParams<{ testId: string }>();
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<string, number>
   >({});
-  const [isTestAvailable, setIsTestAvailable] = useState(true); // Test availability state
+  const [isTestAvailable, setIsTestAvailable] = useState(true);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
 
   const test = testData.find((t) => t.id === testId) as TestInterface;
@@ -100,17 +125,18 @@ export const TestPageDetail = () => {
     };
   }, []);
 
-  const handleAnswerSelect = (questionId: number, answerId: number) => {
+  const handleAnswerSelect = (questionId: number, id: number) => {
     setSelectedAnswers((prevSelectedAnswers) => ({
       ...prevSelectedAnswers,
-      [`${questionId}`]: answerId,
+      [`${questionId}`]: id,
     }));
   };
 
+  useEffect(() => {
+    console.log(selectedAnswers);
+  }, [selectedAnswers]);
   const handleSubmitTest = () => {
-    // Implement your logic to submit the test
     console.log("Selected Answers:", selectedAnswers);
-    // Set any additional logic you need after submitting the test
   };
 
   return (
@@ -121,7 +147,6 @@ export const TestPageDetail = () => {
         </TestHeader>
         <TestInfo>
           <TestInfoItem>{`Professor: ${test.professor?.firstName} ${test.professor?.lastName}`}</TestInfoItem>
-          {/* Add more test info items here */}
         </TestInfo>
         {test.question?.map((question) => (
           <TestQuestion key={question.id}>
@@ -131,16 +156,24 @@ export const TestPageDetail = () => {
               {question.answers.map((answer) => (
                 <li key={answer.id}>
                   <AnswerOption>
-                    <input
-                      type="radio"
-                      name={`question-${question.id}`}
-                      checked={selectedAnswers[`${question.id}`] === answer.id}
-                      onChange={() =>
-                        handleAnswerSelect(question.id, answer.id)
-                      }
-                    />
-                    {answer.answerName} -{" "}
-                    {answer.isCorrect ? "Correct" : "Incorrect"}
+                    <RadioLabel>
+                      <RadioInput
+                        type="radio"
+                        name={`question-${question.id}`}
+                        checked={
+                          selectedAnswers[`${question.id}`] === answer.id
+                        }
+                        onChange={() =>
+                          handleAnswerSelect(question.id, answer.id)
+                        }
+                      />
+                      <RadioCustomButton
+                        checked={
+                          selectedAnswers[`${question.id}`] === answer.id
+                        }
+                      />
+                      {answer.answerName}
+                    </RadioLabel>
                   </AnswerOption>
                 </li>
               ))}

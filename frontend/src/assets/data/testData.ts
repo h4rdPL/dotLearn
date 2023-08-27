@@ -35,22 +35,22 @@ export const testData: TestInterface[] = [
             questionName: "Question 2 for Test 1",
             answers: [
               {
-                id: 5,
+                id: 1,
                 answerName: "Answer 1",
                 isCorrect: false
               },
               {
-                id: 6,
+                id: 2,
                 answerName: "Answer 2",
                 isCorrect: true
               },
               {
-                id: 7,
+                id: 3,
                 answerName: "Answer 3",
                 isCorrect: false
               },
               {
-                id: 8,
+                id: 4,
                 answerName: "Answer 4",
                 isCorrect: false
               }
@@ -61,22 +61,22 @@ export const testData: TestInterface[] = [
             questionName: "Question 3 for Test 1",
             answers: [
               {
-                id: 9,
+                id: 1,
                 answerName: "Answer 1",
                 isCorrect: false
               },
               {
-                id: 10,
+                id: 2,
                 answerName: "Answer 2",
                 isCorrect: false
               },
               {
-                id: 11,
+                id: 3,
                 answerName: "Answer 3",
                 isCorrect: true
               },
               {
-                id: 12,
+                id: 4,
                 answerName: "Answer 4",
                 isCorrect: false
               }
@@ -87,22 +87,22 @@ export const testData: TestInterface[] = [
             questionName: "Question 4 for Test 1",
             answers: [
               {
-                id: 13,
+                id: 1,
                 answerName: "Answer 1",
                 isCorrect: false
               },
               {
-                id: 14,
+                id: 2,
                 answerName: "Answer 2",
                 isCorrect: false
               },
               {
-                id: 15,
+                id: 3,
                 answerName: "Answer 3",
                 isCorrect: false
               },
               {
-                id: 16,
+                id: 4,
                 answerName: "Answer 4",
                 isCorrect: true
               }

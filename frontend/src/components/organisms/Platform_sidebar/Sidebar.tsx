@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import {
   IoIosHome,
   IoIosRibbon,
@@ -8,7 +9,6 @@ import {
   IoIosLogOut,
   IoIosBulb,
 } from "react-icons/io";
-import { Link } from "react-router-dom";
 
 const SidebarWrapper = styled.nav`
   display: flex;
@@ -16,7 +16,6 @@ const SidebarWrapper = styled.nav`
   justify-content: space-between;
   align-items: center;
   background-color: ${({ theme }) => theme.purpleLightSidebar};
-
   a {
     color: #fff;
     text-decoration: none;
@@ -26,6 +25,7 @@ const SidebarWrapper = styled.nav`
 const ListWrapper = styled.ul`
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 `;
 

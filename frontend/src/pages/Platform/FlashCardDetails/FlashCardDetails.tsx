@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlashCards } from "../../../assets/data/flashCards";
 import { useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
@@ -126,6 +126,28 @@ export const FlashCardDetails: React.FC = () => {
 
   const [flipped, setFlipped] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (flashCardSet) {
+      if (event.key === "ArrowLeft" && currentCard > 0) {
+        handleCardSwitch(currentCard - 1);
+      } else if (
+        event.key === "ArrowRight" &&
+        currentCard < flashCardSet.flashcards.length - 1
+      ) {
+        handleCardSwitch(currentCard + 1);
+      } else if (event.key === " ") {
+        handleCardFlip();
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentCard, flipped, flashCardSet]);
 
   const handleCardSwitch = (nextCard: any) => {
     setCurrentCard(nextCard);
