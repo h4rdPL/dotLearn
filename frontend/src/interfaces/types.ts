@@ -78,7 +78,7 @@ export interface CheckboxProps {
   isChecked?: boolean;
   onClick?: () => void;
   label?: string;
-  id?: string;
+  id?: number;
   onChange?: any;
 }
 

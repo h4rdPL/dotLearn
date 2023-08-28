@@ -3,6 +3,7 @@ using dotLearn.Application.Services.Authentication;
 using dotLearn.Application.Services.Jobs;
 using dotLearn.Contracts.Authentication;
 using dotLearn.Domain.Data.Enum;
+using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,19 +26,13 @@ namespace dotLearn.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthenticationResult>> Register(
-            int id,
-            string FirstName,
-            string LastName,
-            string Email,
-            string Password,
-            Role Role
-            )
+        public async Task<ActionResult<AuthenticationResult>> Register(UserDTO userDTO)
         {
-            var authResult = _authenticationService.Register(id, FirstName, LastName, Email, Password, Role);
+            var authResult = _authenticationService.Register(userDTO);
             var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
             return await Task.FromResult(Ok(response));
         }
+
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)

@@ -30,10 +30,14 @@ builder.Services.AddDbContext<DotLearnDbContext>(options =>
         b.MigrationsAssembly("dotLearn.Infrastructure");
     });
 });
-builder.Services.AddControllersWithViews()
-    .AddJsonOptions(options =>
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
-);
+builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+    opt.JsonSerializerOptions.AllowTrailingCommas = true;
+    opt.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString |
+        JsonNumberHandling.WriteAsString;
+    opt.JsonSerializerOptions.IncludeFields = true;
+});
 
 var options = new JsonSerializerOptions()
 {

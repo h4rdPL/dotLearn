@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using static dotLearn.Domain.Entities.Student;
 using dotLearn.Application.Helpers;
+using dotLearn.Domain.DTO;
 
 namespace dotLearn.Application.Services.Authentication
 {
@@ -38,43 +39,43 @@ namespace dotLearn.Application.Services.Authentication
         /// <param name="role">User's role - Student or Professor</param>
         /// <returns>Authentication result containing user and JWT token</returns>
         /// <exception cref="Exception">Thrown when an invalid email or password is provided</exception>
-        public AuthenticationResult Register(int id, string firstName, string lastName, string email, string password, Role role)
+        public AuthenticationResult Register(UserDTO userDTO)
         {
-            if (_userRepository.GetUserByEmail(email) is not null)
+            if (_userRepository.GetUserByEmail(userDTO.Email) is not null)
             {
                 throw new Exception("A user with the provided email address already exists");
             }
-            else if (!_validator.IsValidEmail(email))
-            {
-                throw new Exception("The provided email address is not properly formatted");
-            }
+            //else if (!_validator.IsValidEmail(userDTO.Email))
+            //{
+            //    throw new Exception("The provided email address is not properly formatted");
+            //}
 
             User user = null;
 
-            if (role == Role.Student)
+            if (userDTO.Role == Role.Student)
             {
                 var cardIdGenerator = new CardIdGenerator();
                 var cardId = cardIdGenerator.GenerateCardId();
                 user = new Student
                 {
-                    Id = id,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = email,
-                    Password = PasswordHasher.EncryptPassword(password),
+                    Id = userDTO.Id,
+                    FirstName = userDTO.FirstName,
+                    LastName = userDTO.LastName,
+                    Email = userDTO.Email,
+                    Password = PasswordHasher.EncryptPassword(userDTO.Password),
                     Role = Role.Student,
                     CardId = cardId
                 };
             }
-            else if (role == Role.Professor)
+            else if (userDTO.Role == Role.Professor)
             {
                 user = new Professor
                 {
-                    Id = id,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = email,
-                    Password = PasswordHasher.EncryptPassword(password),
+                    Id = userDTO.Id,
+                    FirstName = userDTO.FirstName,
+                    LastName = userDTO.LastName,
+                    Email = userDTO.Email,
+                    Password = PasswordHasher.EncryptPassword(userDTO.Password),
                     Role = Role.Professor,
                 };
             }

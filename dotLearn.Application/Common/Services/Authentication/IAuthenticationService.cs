@@ -1,4 +1,5 @@
 ﻿using dotLearn.Domain.Data.Enum;
+using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace dotLearn.Application.Services.Authentication
 {
     public interface IAuthenticationService
     {
-        AuthenticationResult Register(int id, string firstName, string lastName, string email, string password, Role role);
+        AuthenticationResult Register(UserDTO userDTO);
         AuthenticationResult Login(string email, string password);
     }
 }

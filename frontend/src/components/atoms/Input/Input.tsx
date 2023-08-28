@@ -16,8 +16,18 @@ export const Input: React.FC<InputProps> = ({
   placeholder,
   style,
   isFileType,
+  name,
+  onChange,
 }) => {
   const inputType = isFileType ? "file" : "text";
 
-  return <FormInput style={style} placeholder={placeholder} type={inputType} />;
+  return (
+    <FormInput
+      onChange={onChange}
+      style={style}
+      placeholder={placeholder}
+      type={inputType}
+      name={name}
+    />
+  );
 };
