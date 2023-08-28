@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using dotLearn.Infrastructure.Database;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,23 @@ builder.Services.AddDbContext<DotLearnDbContext>(options =>
         b.MigrationsAssembly("dotLearn.Infrastructure");
     });
 });
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+);
+
+var options = new JsonSerializerOptions()
+{
+    NumberHandling = JsonNumberHandling.AllowReadingFromString |
+     JsonNumberHandling.WriteAsString
+};
+
+
+builder.Services.AddControllers().
+    AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -56,6 +75,10 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim(ClaimTypes.Role, Role.Professor.ToString());
     });
 });
+builder.Services.AddCors(p => p.AddPolicy("corspolicy", build => {
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -85,10 +108,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
-{
-    build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
-}));
 
 var app = builder.Build();
 

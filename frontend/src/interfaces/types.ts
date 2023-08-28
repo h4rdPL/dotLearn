@@ -1,5 +1,7 @@
 // TODO: RENAME INTERFACE
 
+import { SyntheticEvent } from "react";
+
 export interface ButtonProps {
   label: string;
   secondary?: boolean;
@@ -49,6 +51,7 @@ export interface CTAInterface {
   label?: string;
   href?: string;
   style?: any;
+  onClick?: (e : SyntheticEvent) => void; // Update the signature to accept no arguments
 }
 
 export interface MissionProps {
@@ -65,6 +68,10 @@ export interface InputProps {
   placeholder?: string;
   style?: any;
   isFileType?: boolean;
+  value?: string;
+  onChange?: (e: any) => any;
+  type?: string;
+  name?: string;
 }
 
 export interface CheckboxProps {

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using static dotLearn.Domain.Entities.Student;
+using dotLearn.Application.Helpers;
 
 namespace dotLearn.Application.Services.Authentication
 {
@@ -24,22 +25,31 @@ namespace dotLearn.Application.Services.Authentication
         {
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
-            _validator = validator; 
+            _validator = validator;
         }
-
+        /// <summary>
+        /// Registers a user, either as a Student or a Professor.
+        /// </summary>
+        /// <param name="id">User ID</param>
+        /// <param name="firstName">User's first name</param>
+        /// <param name="lastName">User's last name</param>
+        /// <param name="email">User's email</param>
+        /// <param name="password">User's password</param>
+        /// <param name="role">User's role - Student or Professor</param>
+        /// <returns>Authentication result containing user and JWT token</returns>
+        /// <exception cref="Exception">Thrown when an invalid email or password is provided</exception>
         public AuthenticationResult Register(int id, string firstName, string lastName, string email, string password, Role role)
         {
             if (_userRepository.GetUserByEmail(email) is not null)
             {
-                throw new Exception("Użytkownik o podanym adresie email już istnieje");
-            } 
+                throw new Exception("A user with the provided email address already exists");
+            }
             else if (!_validator.IsValidEmail(email))
             {
-                throw new Exception("Podany adres email jest niepoprawnie skonstruowany");
+                throw new Exception("The provided email address is not properly formatted");
             }
 
-       
-            User user = null; 
+            User user = null;
 
             if (role == Role.Student)
             {
@@ -51,27 +61,27 @@ namespace dotLearn.Application.Services.Authentication
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
-                    Password = password,
+                    Password = PasswordHasher.EncryptPassword(password),
                     Role = Role.Student,
-                    CardId = cardId 
+                    CardId = cardId
                 };
             }
             else if (role == Role.Professor)
             {
                 user = new Professor
                 {
-                    Id= id,
+                    Id = id,
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
-                    Password = password,
+                    Password = PasswordHasher.EncryptPassword(password),
                     Role = Role.Professor,
                 };
             }
 
             if (user is null)
             {
-                throw new Exception("Rola, która została podana, nie istnieje");
+                throw new Exception("The provided role does not exist");
             }
 
             _userRepository.Add(user);
@@ -80,26 +90,31 @@ namespace dotLearn.Application.Services.Authentication
 
             return new AuthenticationResult(user, token);
         }
-        
+
+        /// <summary>
+        /// Logs in a user.
+        /// </summary>
+        /// <param name="email">User's email</param>
+        /// <param name="password">User's password</param>
+        /// <returns>Authentication result containing user and JWT token</returns>
+        /// <exception cref="Exception">Thrown when the user email or password is incorrect</exception>
         public AuthenticationResult Login(string email, string password)
         {
-            // 1. Validate the user exists
+            // 1. Validate if the user exists
             if (_userRepository.GetUserByEmail(email) is not User user)
             {
-                throw new Exception("Użytkownik o podanym adresie email nie istnieje");
+                throw new Exception("A user with the provided email address does not exist");
             }
 
-            // 2. Validate the password is correct
-            if (!_validator.IsValidPassword(password, user))
+            // 2. Validate if the password is correct
+            if (!PasswordHasher.VerifyPassword(password, user.Password))
             {
-                throw new Exception("Hasło jest niepoprawne");
+                throw new Exception("The provided password is incorrect");
             }
 
-            // 3. Create Jwt Token
+            // 3. Create a JWT Token
             var token = _jwtTokenGenerator.GenerateToken(user);
             return new AuthenticationResult(user, token);
         }
-
-
     }
 }

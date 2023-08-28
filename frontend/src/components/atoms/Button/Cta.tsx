@@ -3,6 +3,7 @@ import { styled, css } from "styled-components";
 import arrow from "../../../assets/icons/arrowRight.svg";
 import arrowWhite from "../../../assets/icons/arrowRightWhite.svg";
 import { CTAInterface } from "../../../interfaces/types";
+
 const CtaButton = styled.a`
   color: ${({ theme }) => theme.highlight};
   font-weight: 600;
@@ -29,6 +30,7 @@ const Wrapper = styled.a<CTAInterface>`
       }
     `};
 `;
+
 const Img = styled.img`
   width: 15px;
 `;
@@ -38,10 +40,11 @@ export const Cta: React.FC<CTAInterface> = ({
   label,
   href,
   style,
+  onClick, // Make onClick prop optional
 }) => {
   return (
     <CtaButton style={style}>
-      <Wrapper href={href} isJobOffer={isJobOffer}>
+      <Wrapper onClick={onClick} href={href} isJobOffer={isJobOffer}>
         {label} <Img src={isJobOffer ? arrowWhite : arrow} alt="arrow" />
       </Wrapper>
     </CtaButton>
