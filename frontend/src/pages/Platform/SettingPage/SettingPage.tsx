@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
+import { UserContext } from "../../Context/UserContex";
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -54,20 +55,28 @@ export const SettingPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { userData } = useContext(UserContext);
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(
+        "https://localhost:7024/api/Authentication/user",
+        {
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Hasła nie są takie same.");
-      return;
-    }
-  };
+      const content = await response.json();
+      console.log(content);
+      console.log(document.cookie);
+    })();
+  });
 
   return (
     <PlatformLayout>
       <SettingsWrapper>
-        <SettingsTitle>Cześć (username), zmień swoje dane </SettingsTitle>
-        <Form onSubmit={handleSubmit}>
+        <SettingsTitle>Cześć {userData.email}, zmień swoje dane </SettingsTitle>
+        <Form>
           <InputLabel>Email:</InputLabel>
           <InputField
             type="email"

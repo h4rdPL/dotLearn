@@ -214,3 +214,19 @@ export interface Message {
   isUser: boolean;
   isBot?: boolean;
 }
+
+
+// REGISTER / LOGIN FORMS
+
+export interface DataInterface {
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  Password: string;
+  Role: string;
+}
+
+export interface LoginDataInterface {
+  Email: string;
+  Password: string;
+}

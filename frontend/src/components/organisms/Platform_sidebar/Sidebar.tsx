@@ -53,7 +53,25 @@ const LinkItem = styled.a`
   min-width: 100%;
   padding: 1rem 2rem;
 `;
+
 export const Sidebar = () => {
+  const handleSubmit = async () => {
+    const response = await fetch(
+      "https://localhost:7024/api/Authentication/logout",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+
+    try {
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <SidebarWrapper>
       <ListWrapper>
@@ -99,7 +117,7 @@ export const Sidebar = () => {
             </LinkItem>
           </ListItem>
         </Link>
-        <Link to="/">
+        <Link to="/" onClick={handleSubmit}>
           <ListItem>
             <LinkItem>
               <IoIosLogOut fill="#fff" style={{ fontSize: "2rem" }} />

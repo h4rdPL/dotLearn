@@ -6,6 +6,7 @@ import { Cta } from "../../components/atoms/Button/Cta";
 import { Checkbox } from "../../components/atoms/Checkbox/Checkbox";
 import { LandingPageLayout } from "../../templates/LandingPageLayout";
 import { Link } from "react-router-dom";
+import { DataInterface } from "../../interfaces/types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,13 +28,7 @@ const InnerWrapper = styled.form`
     width: 40%;
   }
 `;
-interface DataInterface {
-  FirstName: string;
-  LastName: string;
-  Email: string;
-  Password: string;
-  Role: string;
-}
+
 export const RegisterPage = () => {
   const [checkboxes, setCheckboxes] = useState([
     {
@@ -44,7 +39,7 @@ export const RegisterPage = () => {
     {
       id: 2,
       label: "Chcę zarejestrować się jako nauczyciel",
-      checked: true,
+      checked: false,
     },
   ]);
   const [formData, setFormData] = useState<DataInterface>({

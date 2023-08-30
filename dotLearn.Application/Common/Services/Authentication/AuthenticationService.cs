@@ -13,6 +13,12 @@ using System.Linq;
 using static dotLearn.Domain.Entities.Student;
 using dotLearn.Application.Helpers;
 using dotLearn.Domain.DTO;
+using System.Web.Http.Results;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotLearn.Application.Services.Authentication
 {
@@ -21,12 +27,14 @@ namespace dotLearn.Application.Services.Authentication
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IValidator _validator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator, IUserRepository userRepository)
+        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
             _validator = validator;
+            _httpContextAccessor = httpContextAccessor;
         }
         /// <summary>
         /// Registers a user, either as a Student or a Professor.
@@ -101,10 +109,12 @@ namespace dotLearn.Application.Services.Authentication
         /// <exception cref="Exception">Thrown when the user email or password is incorrect</exception>
         public AuthenticationResult Login(string email, string password)
         {
+            var user = _userRepository.GetUserByEmail(email);
+
             // 1. Validate if the user exists
-            if (_userRepository.GetUserByEmail(email) is not User user)
+            if (user is null)
             {
-                throw new Exception("A user with the provided email address does not exist");
+                throw new Exception("Invalid Credentials");
             }
 
             // 2. Validate if the password is correct
@@ -112,10 +122,27 @@ namespace dotLearn.Application.Services.Authentication
             {
                 throw new Exception("The provided password is incorrect");
             }
-
+            
             // 3. Create a JWT Token
             var token = _jwtTokenGenerator.GenerateToken(user);
+
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true
+            });
+
             return new AuthenticationResult(user, token);
         }
+
+
+
+        public User User(string token)
+        {
+
+            int userId = int.Parse(token);
+            var user = _userRepository.GetUserById(userId);
+            return user;
+        }
+
     }
 }

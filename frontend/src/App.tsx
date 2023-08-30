@@ -19,6 +19,8 @@ import { CreateTestPage } from "./pages/Platform/CreateTestPage/CreateTestPage";
 import { CreateClassPage } from "./pages/Platform/CreateClassPage/CreateClassPage";
 import { ClassPageDetail } from "./pages/Platform/ClassPageDetail/ClassPageDetail";
 import { TestPageDetail } from "./pages/Platform/TestPageDetail/TestPageDetail";
+import { useState } from "react";
+import { UserProvider } from "./pages/Context/UserContex";
 
 const router = createBrowserRouter([
   {
@@ -118,9 +120,12 @@ const router = createBrowserRouter([
   },
 ]);
 export const App = () => {
+  const [user, setUser] = useState<string>("");
   return (
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <UserProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </UserProvider>
     </>
   );
 };
