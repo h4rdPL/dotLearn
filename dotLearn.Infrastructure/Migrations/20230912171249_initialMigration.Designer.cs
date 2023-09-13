@@ -5,15 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using dotLearn.Infrastructure.Database;
 
 #nullable disable
 
 namespace dotLearn.Infrastructure.Migrations
 {
     [DbContext(typeof(DotLearnDbContext))]
-    [Migration("20230820120222_testMigration")]
-    partial class testMigration
+    [Migration("20230912171249_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,41 +46,7 @@ namespace dotLearn.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answer");
-                });
-
-            modelBuilder.Entity("dotLearn.Domain.Entities.Benefits", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DevelopmentOpportunities")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MedicalInsurance")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectWork")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SportsPackage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.ToTable("Benefits");
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.ClassEntities", b =>
@@ -92,13 +57,19 @@ namespace dotLearn.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("ClassCode")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("ActiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProfessorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Subject")
+                    b.Property<string>("TestName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Time")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -108,29 +79,7 @@ namespace dotLearn.Infrastructure.Migrations
                     b.ToTable("Classes");
                 });
 
-            modelBuilder.Entity("dotLearn.Domain.Entities.Expectations", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.ToTable("Expectations");
-                });
-
-            modelBuilder.Entity("dotLearn.Domain.Entities.FlashCard", b =>
+            modelBuilder.Entity("dotLearn.Domain.Entities.Deck", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,67 +91,42 @@ namespace dotLearn.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Decks");
+                });
+
+            modelBuilder.Entity("dotLearn.Domain.Entities.FlashCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DeckId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Definition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Meaning")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("FlashCards");
-                });
+                    b.HasIndex("DeckId");
 
-            modelBuilder.Entity("dotLearn.Domain.Entities.Job", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Currency")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Salary")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Jobs");
-                });
-
-            modelBuilder.Entity("dotLearn.Domain.Entities.Offer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.ToTable("Offer");
+                    b.ToTable("FlashCard");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Professor", b =>
@@ -244,6 +168,9 @@ namespace dotLearn.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ClassEntitiesId")
+                        .HasColumnType("int");
+
                     b.Property<string>("QuestionName")
                         .HasColumnType("nvarchar(max)");
 
@@ -252,9 +179,11 @@ namespace dotLearn.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassEntitiesId");
+
                     b.HasIndex("TestClassId");
 
-                    b.ToTable("Question");
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Student", b =>
@@ -277,9 +206,6 @@ namespace dotLearn.Infrastructure.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FlashCardId")
-                        .HasColumnType("int");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -295,8 +221,6 @@ namespace dotLearn.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClassEntitiesId");
-
-                    b.HasIndex("FlashCardId");
 
                     b.HasIndex("TestClassId");
 
@@ -318,10 +242,11 @@ namespace dotLearn.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProfessorId")
+                    b.Property<int>("ProfessorId")
                         .HasColumnType("int");
 
                     b.Property<string>("TestName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Time")
@@ -345,13 +270,6 @@ namespace dotLearn.Infrastructure.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("dotLearn.Domain.Entities.Benefits", b =>
-                {
-                    b.HasOne("dotLearn.Domain.Entities.Job", null)
-                        .WithMany("Benefits")
-                        .HasForeignKey("JobId");
-                });
-
             modelBuilder.Entity("dotLearn.Domain.Entities.ClassEntities", b =>
                 {
                     b.HasOne("dotLearn.Domain.Entities.Professor", "Professor")
@@ -363,36 +281,29 @@ namespace dotLearn.Infrastructure.Migrations
                     b.Navigation("Professor");
                 });
 
-            modelBuilder.Entity("dotLearn.Domain.Entities.Expectations", b =>
+            modelBuilder.Entity("dotLearn.Domain.Entities.FlashCard", b =>
                 {
-                    b.HasOne("dotLearn.Domain.Entities.Job", null)
-                        .WithMany("Expectations")
-                        .HasForeignKey("JobId");
-                });
-
-            modelBuilder.Entity("dotLearn.Domain.Entities.Offer", b =>
-                {
-                    b.HasOne("dotLearn.Domain.Entities.Job", null)
-                        .WithMany("Offer")
-                        .HasForeignKey("JobId");
+                    b.HasOne("dotLearn.Domain.Entities.Deck", null)
+                        .WithMany("FlashCards")
+                        .HasForeignKey("DeckId");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Question", b =>
                 {
+                    b.HasOne("dotLearn.Domain.Entities.ClassEntities", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("ClassEntitiesId");
+
                     b.HasOne("dotLearn.Domain.Entities.TestClass", null)
-                        .WithMany("Question")
+                        .WithMany("Questions")
                         .HasForeignKey("TestClassId");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Student", b =>
                 {
                     b.HasOne("dotLearn.Domain.Entities.ClassEntities", null)
-                        .WithMany("Student")
-                        .HasForeignKey("ClassEntitiesId");
-
-                    b.HasOne("dotLearn.Domain.Entities.FlashCard", null)
                         .WithMany("Students")
-                        .HasForeignKey("FlashCardId");
+                        .HasForeignKey("ClassEntitiesId");
 
                     b.HasOne("dotLearn.Domain.Entities.TestClass", null)
                         .WithMany("Students")
@@ -409,7 +320,9 @@ namespace dotLearn.Infrastructure.Migrations
 
                     b.HasOne("dotLearn.Domain.Entities.Professor", "Professor")
                         .WithMany()
-                        .HasForeignKey("ProfessorId");
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ClassEntities");
 
@@ -418,21 +331,14 @@ namespace dotLearn.Infrastructure.Migrations
 
             modelBuilder.Entity("dotLearn.Domain.Entities.ClassEntities", b =>
                 {
-                    b.Navigation("Student");
-                });
+                    b.Navigation("Questions");
 
-            modelBuilder.Entity("dotLearn.Domain.Entities.FlashCard", b =>
-                {
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("dotLearn.Domain.Entities.Job", b =>
+            modelBuilder.Entity("dotLearn.Domain.Entities.Deck", b =>
                 {
-                    b.Navigation("Benefits");
-
-                    b.Navigation("Expectations");
-
-                    b.Navigation("Offer");
+                    b.Navigation("FlashCards");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Question", b =>
@@ -442,7 +348,7 @@ namespace dotLearn.Infrastructure.Migrations
 
             modelBuilder.Entity("dotLearn.Domain.Entities.TestClass", b =>
                 {
-                    b.Navigation("Question");
+                    b.Navigation("Questions");
 
                     b.Navigation("Students");
                 });

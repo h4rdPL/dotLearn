@@ -16,6 +16,8 @@ using dotLearn.Domain.Entities;
 using dotLearn.Infrastructure.JobBoard;
 using dotLearn.Application.Common.Interfaces.FlashCards;
 using dotLearn.Infrastructure.FlashCards;
+using dotLearn.Application.Common.Interfaces.Persisence;
+using dotLearn.Infrastructure.Persistance;
 
 namespace dotLearn.Infrastructure
 {
@@ -26,6 +28,7 @@ namespace dotLearn.Infrastructure
             // Repository injection
             services.AddScoped<IJobBoardRepository, JobBoardRepository>();
             services.AddScoped<IFlashCardsRepository, FlashCardsRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();

@@ -1,4 +1,6 @@
-﻿using dotLearn.Domain.Entities;
+﻿using dotLearn.Domain.DTO;
+using dotLearn.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +11,9 @@ namespace dotLearn.Application.Services.Flashcards
 {
     public interface IFlashcardsService
     {
-        public void Create(FlashCard flashCard);
-        public bool Delete(FlashCard flashCard);
+        public void Create(DeckDTO model);
+        public bool Delete(int deckId);
         public FlashCard Update(FlashCard flashCard);
+        public List<Deck> GetDecksByUserEmail();
     }
 }

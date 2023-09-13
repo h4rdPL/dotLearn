@@ -12,35 +12,18 @@ namespace dotLearn.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "FlashCards",
+                name: "Decks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Definition = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Meaning = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FlashCards", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Jobs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Salary = table.Column<int>(type: "int", nullable: false),
-                    Currency = table.Column<int>(type: "int", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jobs", x => x.Id);
+                    table.PrimaryKey("PK_Decks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,7 +33,6 @@ namespace dotLearn.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Subject = table.Column<int>(type: "int", nullable: false),
-                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -63,66 +45,23 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Benefits",
+                name: "FlashCard",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DevelopmentOpportunities = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProjectWork = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SportsPackage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MedicalInsurance = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobId = table.Column<int>(type: "int", nullable: false)
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Definition = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeckId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Benefits", x => x.Id);
+                    table.PrimaryKey("PK_FlashCard", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Benefits_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Expectations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Expectations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Expectations_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Offer",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Offer", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Offer_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_FlashCard_Decks_DeckId",
+                        column: x => x.DeckId,
+                        principalTable: "Decks",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -131,9 +70,11 @@ namespace dotLearn.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClassCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Subject = table.Column<int>(type: "int", nullable: false),
-                    ProfessorId = table.Column<int>(type: "int", nullable: false)
+                    TestName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfessorId = table.Column<int>(type: "int", nullable: false),
+                    Time = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    ActiveDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -151,8 +92,8 @@ namespace dotLearn.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TestName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfessorId = table.Column<int>(type: "int", nullable: true),
+                    TestName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfessorId = table.Column<int>(type: "int", nullable: false),
                     ClassEntitiesId = table.Column<int>(type: "int", nullable: false),
                     Time = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -171,23 +112,30 @@ namespace dotLearn.Infrastructure.Migrations
                         name: "FK_Tests_Professors_ProfessorId",
                         column: x => x.ProfessorId,
                         principalTable: "Professors",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Question",
+                name: "Questions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClassEntitiesId = table.Column<int>(type: "int", nullable: true),
                     TestClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Question", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Question_Tests_TestClassId",
+                        name: "FK_Questions_Classes_ClassEntitiesId",
+                        column: x => x.ClassEntitiesId,
+                        principalTable: "Classes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Questions_Tests_TestClassId",
                         column: x => x.TestClassId,
                         principalTable: "Tests",
                         principalColumn: "Id");
@@ -202,7 +150,6 @@ namespace dotLearn.Infrastructure.Migrations
                     CardId = table.Column<int>(type: "int", nullable: false),
                     ClassEntitiesId = table.Column<int>(type: "int", nullable: true),
                     TestClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -225,7 +172,7 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Answer",
+                name: "Answers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -236,47 +183,18 @@ namespace dotLearn.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Answer", x => x.Id);
+                    table.PrimaryKey("PK_Answers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Answer_Question_QuestionId",
+                        name: "FK_Answers_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "FlashCardStudent",
-                columns: table => new
-                {
-                    FlashCardsId = table.Column<int>(type: "int", nullable: false),
-                    StudentsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FlashCardStudent", x => new { x.FlashCardsId, x.StudentsId });
-                    table.ForeignKey(
-                        name: "FK_FlashCardStudent_FlashCards_FlashCardsId",
-                        column: x => x.FlashCardsId,
-                        principalTable: "FlashCards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FlashCardStudent_Students_StudentsId",
-                        column: x => x.StudentsId,
-                        principalTable: "Students",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_Answer_QuestionId",
-                table: "Answer",
+                name: "IX_Answers_QuestionId",
+                table: "Answers",
                 column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Benefits_JobId",
-                table: "Benefits",
-                column: "JobId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Classes_ProfessorId",
@@ -284,23 +202,18 @@ namespace dotLearn.Infrastructure.Migrations
                 column: "ProfessorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expectations_JobId",
-                table: "Expectations",
-                column: "JobId");
+                name: "IX_FlashCard_DeckId",
+                table: "FlashCard",
+                column: "DeckId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlashCardStudent_StudentsId",
-                table: "FlashCardStudent",
-                column: "StudentsId");
+                name: "IX_Questions_ClassEntitiesId",
+                table: "Questions",
+                column: "ClassEntitiesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offer_JobId",
-                table: "Offer",
-                column: "JobId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Question_TestClassId",
-                table: "Question",
+                name: "IX_Questions_TestClassId",
+                table: "Questions",
                 column: "TestClassId");
 
             migrationBuilder.CreateIndex(
@@ -328,31 +241,19 @@ namespace dotLearn.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Answer");
+                name: "Answers");
 
             migrationBuilder.DropTable(
-                name: "Benefits");
-
-            migrationBuilder.DropTable(
-                name: "Expectations");
-
-            migrationBuilder.DropTable(
-                name: "FlashCardStudent");
-
-            migrationBuilder.DropTable(
-                name: "Offer");
-
-            migrationBuilder.DropTable(
-                name: "Question");
-
-            migrationBuilder.DropTable(
-                name: "FlashCards");
+                name: "FlashCard");
 
             migrationBuilder.DropTable(
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "Decks");
 
             migrationBuilder.DropTable(
                 name: "Tests");

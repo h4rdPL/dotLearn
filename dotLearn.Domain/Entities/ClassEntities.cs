@@ -10,10 +10,12 @@ namespace dotLearn.Domain.Entities
     public class ClassEntities
     {
         public int Id { get; set; }
-        public Guid ClassCode { get; set; }
-        public Subject Subject { get; set; }
+        public string? TestName { get; set; }
+        public List<Question>? Questions { get; set; }
+        public List<Student>? Students { get; set; }
         public Professor Professor { get; set; }
-        public List<Student>? Student { get; set; }
-
+        public int Time { get; set; }
+        public bool IsActive { get; set; } = false;
+        public DateTime ActiveDate { get; set; }
     }
 }

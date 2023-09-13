@@ -27,7 +27,7 @@ namespace dotLearn.Application.Services.Test
         /// <returns>Returns the newly created test class entity.</returns>
         public TestClass Create(TestClass testClass)
         {
-            var currentPrincipal = System.Security.Claims.ClaimsPrincipal.Current;
+            var currentPrincipal = ClaimsPrincipal.Current;
             var professorIdClaim = currentPrincipal?.FindFirst("sub");
 
             Professor loggedProfessor = null; // Declare the variable outside the if block
@@ -49,7 +49,7 @@ namespace dotLearn.Application.Services.Test
             {
                 Id = Guid.NewGuid(),
                 TestName = "New Test",
-                Question = new List<Question>(),
+                Questions = new List<Question>(),
                 IsActive = true,
                 ActiveDate = DateTime.Now,
                 Students = null,

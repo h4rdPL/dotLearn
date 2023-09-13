@@ -42,16 +42,16 @@ namespace dotLearn.Application.Services.Class
         /// <param name="classCode">The code of the class.</param>
         /// <param name="studentId">The ID of the student to be removed.</param>
         /// <returns>Returns true if the student was successfully removed, otherwise false.</returns>
-        public async Task<bool> RemoveStudentFromClass(Guid classCode, int studentId)
+        public async Task<bool> RemoveStudentFromClass(int classCode, int studentId)
         {
-            var classContainingStudent = _class.FirstOrDefault(cls => cls.ClassCode == classCode);
+            var classContainingStudent = _class.FirstOrDefault(cls => cls.Id == classCode);
 
             if (classContainingStudent != null)
             {
-                var studentToRemove = classContainingStudent.Student.FirstOrDefault(st => st.Id == studentId);
+                var studentToRemove = classContainingStudent.Students.FirstOrDefault(st => st.Id == studentId);
                 if (studentToRemove != null)
                 {
-                    classContainingStudent.Student.Remove(studentToRemove);
+                    classContainingStudent.Students.Remove(studentToRemove);
                     return true;
                 }
             }
@@ -64,9 +64,9 @@ namespace dotLearn.Application.Services.Class
         /// </summary>
         /// <param name="classId">The ID of the class to be removed.</param>
         /// <returns>Returns true if the class was successfully removed, otherwise false.</returns>
-        public async Task<bool> RemoveClass(Guid classId)
+        public async Task<bool> RemoveClass(int classId)
         {
-            var classToRemove = _class.FirstOrDefault(c => c.ClassCode == classId);
+            var classToRemove = _class.FirstOrDefault(c => c.Id == classId);
 
             if (classToRemove != null)
             {
@@ -84,13 +84,13 @@ namespace dotLearn.Application.Services.Class
         /// <param name="studentId">The ID of the student to be joined.</param>
         /// <returns>Returns the updated class entity after joining the student.</returns>
         /// <exception cref="ArgumentException">Thrown when the class does not exist.</exception>
-        public Task<ClassEntities> JoinClass(Guid classCode, Guid studentId)
+        public Task<ClassEntities> JoinClass(int classCode, Guid studentId)
         {
-            var classToJoin = _class.FirstOrDefault(c => c.ClassCode == classCode);
+            var classToJoin = _class.FirstOrDefault(c => c.Id == classCode);
             var student = _students.FirstOrDefault(s => s.Equals(studentId));
             if (classToJoin != null)
             {
-                classToJoin.Student?.Add(student);
+                classToJoin.Students?.Add(student);
             }
             else
             {
@@ -99,7 +99,7 @@ namespace dotLearn.Application.Services.Class
             return Task.FromResult(classToJoin);
         }
 
-        public Task<bool> RemoveStudentFromClass(Guid classId, Guid studentId)
+        public Task<bool> RemoveStudentFromClass(int classId, Guid studentId)
         {
             throw new NotImplementedException();
         }

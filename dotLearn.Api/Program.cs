@@ -10,7 +10,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using dotLearn.Infrastructure.Database;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
@@ -25,11 +24,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 builder.Services.AddDbContext<DotLearnDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b =>
-    {
-        b.MigrationsAssembly("dotLearn.Infrastructure");
-    });
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -37,8 +34,8 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
     opt.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString |
         JsonNumberHandling.WriteAsString;
     opt.JsonSerializerOptions.IncludeFields = true;
-});
 
+});
 var options = new JsonSerializerOptions()
 {
     NumberHandling = JsonNumberHandling.AllowReadingFromString |
@@ -51,23 +48,22 @@ builder.Services.AddControllers().
     AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidAudience = "dotLearn",
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = "dotLearn",
-            IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes("super-secret-key-from-users-secrets")),
-
-        };
-    });
+        ValidateAudience = false, // Ustawienie na false, jeœli nie chcesz weryfikowaæ odbiorcy (Audience)
+        ValidateIssuer = false, // Ustawienie na false, jeœli nie chcesz weryfikowaæ wydawcy (Issuer)
+        RequireSignedTokens = true,
+        ValidateIssuerSigningKey = true,    
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("My secret from application config")),
+        // Includ the kid validation here if needed
+    };
+});
 
 builder.Services.AddAuthorization(options =>
 {
@@ -108,7 +104,7 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "e"
+                    Id = "Bearer"
                 }
             },
             new string[] {}

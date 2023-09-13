@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 using Microsoft.AspNetCore.Authorization;
-
 namespace dotLearn.Application.Services.Authentication
 {
     public class AuthenticationService : IAuthenticationService
@@ -53,10 +52,6 @@ namespace dotLearn.Application.Services.Authentication
             {
                 throw new Exception("A user with the provided email address already exists");
             }
-            //else if (!_validator.IsValidEmail(userDTO.Email))
-            //{
-            //    throw new Exception("The provided email address is not properly formatted");
-            //}
 
             User user = null;
 
@@ -66,7 +61,7 @@ namespace dotLearn.Application.Services.Authentication
                 var cardId = cardIdGenerator.GenerateCardId();
                 user = new Student
                 {
-                    Id = userDTO.Id,
+                    // Id zostawiamy takie, jakie jest nadane przez bazę danych
                     FirstName = userDTO.FirstName,
                     LastName = userDTO.LastName,
                     Email = userDTO.Email,
@@ -79,7 +74,7 @@ namespace dotLearn.Application.Services.Authentication
             {
                 user = new Professor
                 {
-                    Id = userDTO.Id,
+                    // Tak samo, Id pozostawiamy bez zmian
                     FirstName = userDTO.FirstName,
                     LastName = userDTO.LastName,
                     Email = userDTO.Email,
@@ -88,17 +83,24 @@ namespace dotLearn.Application.Services.Authentication
                 };
             }
 
+
             if (user is null)
             {
                 throw new Exception("The provided role does not exist");
             }
 
+            // Dodaj użytkownika do bazy danych
             _userRepository.Add(user);
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 
+
+            // Wygeneruj token JWT z prawidłowym ID użytkownika
+
             return new AuthenticationResult(user, token);
         }
+
+
 
         /// <summary>
         /// Logs in a user.
@@ -118,7 +120,7 @@ namespace dotLearn.Application.Services.Authentication
             }
 
             // 2. Validate if the password is correct
-            if (!PasswordHasher.VerifyPassword(password, user.Password))
+            if (PasswordHasher.VerifyPassword(password, user.Password))
             {
                 throw new Exception("The provided password is incorrect");
             }
@@ -134,11 +136,8 @@ namespace dotLearn.Application.Services.Authentication
             return new AuthenticationResult(user, token);
         }
 
-
-
         public User User(string token)
         {
-
             int userId = int.Parse(token);
             var user = _userRepository.GetUserById(userId);
             return user;

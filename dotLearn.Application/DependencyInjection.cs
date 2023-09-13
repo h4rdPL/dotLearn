@@ -15,7 +15,6 @@ using dotLearn.Application.Services.Flashcards;
 using dotLearn.Application.Common.Services.Flashcards;
 using dotLearn.Application.Common.Services.Class;
 using dotLearn.Application.Common.Interfaces.JobBoard;
-
 namespace dotLearn.Application
 {
     public static class DependencyInjection
@@ -31,7 +30,6 @@ namespace dotLearn.Application
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IFlashcardsService, FlashcardsService>();
-            services.AddScoped<IUserRepository, UserRepository>();
 
 
             return services;

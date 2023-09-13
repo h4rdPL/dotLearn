@@ -2,10 +2,16 @@
 using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Services.Flashcards;
 using dotLearn.Application.Services.Jobs;
+using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using dotLearn.Infrastructure.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace dotLearn.Api.Controllers
 {
@@ -14,22 +20,24 @@ namespace dotLearn.Api.Controllers
     public class FlashCardController : ControllerBase
     {
         private readonly IFlashcardsService _flashCardsService;
-        private readonly IUserRepository _userRepository;
-
-        public FlashCardController(IFlashcardsService flashcardsService, IUserRepository userRepository)
+        public FlashCardController(IFlashcardsService flashcardsService)
         {
             _flashCardsService = flashcardsService;
-            _userRepository = userRepository;
         }
         /// <summary>
         /// Creates a new flash card.
         /// </summary>
         /// <returns>Returns the newly created flash card entity.</returns>
-        [HttpPost("create")]
-        public void Create(FlashCard flashCard)
-        {
 
-            _flashCardsService.Create(flashCard);
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(DeckDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _flashCardsService.Create(model);
+            return Ok(model);
         }
 
         /// <summary>
@@ -37,11 +45,28 @@ namespace dotLearn.Api.Controllers
         /// </summary>
         /// <param name="flashCard">The updated flash card entity.</param>
         /// <returns>Returns the updated flash card entity.</returns>
+
         [HttpPut("update")]
         public async Task<ActionResult<FlashCard>> Update(FlashCard flashCard)
         {
             var updatedFlashCard = _flashCardsService.Update(flashCard);
             return await Task.FromResult(Ok(updatedFlashCard));
+        }
+
+        /// <summary>
+        /// Retrieves a list of decks associated with the currently authenticated student.
+        /// </summary>
+        /// <returns>An ActionResult containing a list of decks or a NotFound response if no decks are found.</returns>
+        [HttpGet("getStudentDecks")]
+        public async Task<ActionResult<Deck>> GetFlashcards()
+        {
+            var decks = _flashCardsService.GetDecksByUserEmail();
+
+            if (decks == null)
+            {
+                return NotFound("No decks found for the user");
+            }
+            return await Task.FromResult(Ok(decks));
         }
 
     }

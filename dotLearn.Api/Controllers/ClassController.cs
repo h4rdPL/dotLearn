@@ -38,7 +38,7 @@ namespace dotLearn.Api.Controllers
         /// <param name="studentId">The ID of the student to join.</param>
         /// <returns>Returns the result of the join operation.</returns>
         [HttpPost("joinClass")]
-        public async Task<ActionResult<ClassEntities>> JoinToClass(Guid classCode, Guid studentId)
+        public async Task<ActionResult<ClassEntities>> JoinToClass(int classCode, Guid studentId)
         {
             await _classService.JoinClass(classCode, studentId);
             return Ok();
@@ -51,7 +51,7 @@ namespace dotLearn.Api.Controllers
         /// <param name="studentId">The ID of the student leaving the class.</param>
         /// <returns>Returns a boolean indicating the success of the leave operation.</returns>
         [HttpPost("leaveClass")]
-        public async Task<ActionResult<bool>> LeaveClass(Guid classCode, Guid studentId)
+        public async Task<ActionResult<bool>> LeaveClass(int classCode, Guid studentId)
         {
             await _classService?.RemoveStudentFromClass(classCode, studentId);
             return true;
@@ -63,7 +63,7 @@ namespace dotLearn.Api.Controllers
         /// <param name="classCode">The code of the class to remove.</param>
         /// <returns>Returns a boolean indicating the success of the removal operation.</returns>
         [HttpPost("removeClass")]
-        public async Task<ActionResult<bool>> RemoveClass(Guid classCode)
+        public async Task<ActionResult<bool>> RemoveClass(int classCode)
         {
             _classService.RemoveClass(classCode);
             return true;

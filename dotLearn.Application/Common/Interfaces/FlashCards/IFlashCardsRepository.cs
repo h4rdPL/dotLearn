@@ -1,4 +1,5 @@
 ﻿using dotLearn.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace dotLearn.Application.Common.Interfaces.FlashCards
 {
     public interface IFlashCardsRepository
     {
-        void Create(FlashCard flashCard);
+        Task<Deck> Create(Deck deck);
+        bool Delete (int deckId);    
+        List<Deck> GetDecksByUserId(int userId);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using dotLearn.Application.Common.Interfaces.JobBoard;
 using dotLearn.Domain.Entities;
-using dotLearn.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,8 +11,8 @@ namespace dotLearn.Infrastructure.JobBoard
 {
     public class JobBoardRepository : IJobBoardRepository
     {
+        private static List<Job> _jobs = new List<Job>();
         private readonly DotLearnDbContext _context;
-
         public JobBoardRepository(DotLearnDbContext context)
         {
             _context = context;
@@ -30,7 +29,7 @@ namespace dotLearn.Infrastructure.JobBoard
 
         public void Delete(Job job, int jobId)
         {
-            var jobOffr = _context.Jobs.FirstOrDefault(j => j.Id == jobId);
+            var jobOffr = _jobs.FirstOrDefault(j => j.Id == jobId);
             if(jobOffr != null)
             {
                 _context.Remove(jobOffr);
@@ -40,11 +39,12 @@ namespace dotLearn.Infrastructure.JobBoard
 
         public List<Job> GetAll()
         {
-            var query = _context.Jobs
-                .Include(j => j.Offer)
-                .Include(j => j.Expectations)
-                .Include(j => j.Benefits);
-            return query.ToList();     
+            //var query = _jobs
+            //    .Include(j => j.Offer)
+            //    .Include(j => j.Expectations)
+            //    .Include(j => j.Benefits);
+            //return query.ToList();     
+            throw new NotImplementedException();
         }
     }
 }
