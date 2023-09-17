@@ -6,11 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace dotLearn.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Classes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClassName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClassCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProfessorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Decks",
                 columns: table => new
@@ -65,29 +80,6 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Classes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TestName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfessorId = table.Column<int>(type: "int", nullable: false),
-                    Time = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    ActiveDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Classes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Classes_Professors_ProfessorId",
-                        column: x => x.ProfessorId,
-                        principalTable: "Professors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tests",
                 columns: table => new
                 {
@@ -123,17 +115,11 @@ namespace dotLearn.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClassEntitiesId = table.Column<int>(type: "int", nullable: true),
                     TestClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Questions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Questions_Classes_ClassEntitiesId",
-                        column: x => x.ClassEntitiesId,
-                        principalTable: "Classes",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Questions_Tests_TestClassId",
                         column: x => x.TestClassId,
@@ -148,7 +134,6 @@ namespace dotLearn.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CardId = table.Column<int>(type: "int", nullable: false),
-                    ClassEntitiesId = table.Column<int>(type: "int", nullable: true),
                     TestClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -159,11 +144,6 @@ namespace dotLearn.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_Classes_ClassEntitiesId",
-                        column: x => x.ClassEntitiesId,
-                        principalTable: "Classes",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Students_Tests_TestClassId",
                         column: x => x.TestClassId,
@@ -191,15 +171,39 @@ namespace dotLearn.Infrastructure.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ClassEntitiesStudent",
+                columns: table => new
+                {
+                    ClassesId = table.Column<int>(type: "int", nullable: false),
+                    StudentsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassEntitiesStudent", x => new { x.ClassesId, x.StudentsId });
+                    table.ForeignKey(
+                        name: "FK_ClassEntitiesStudent_Classes_ClassesId",
+                        column: x => x.ClassesId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassEntitiesStudent_Students_StudentsId",
+                        column: x => x.StudentsId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
                 table: "Answers",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Classes_ProfessorId",
-                table: "Classes",
-                column: "ProfessorId");
+                name: "IX_ClassEntitiesStudent_StudentsId",
+                table: "ClassEntitiesStudent",
+                column: "StudentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FlashCard_DeckId",
@@ -207,19 +211,9 @@ namespace dotLearn.Infrastructure.Migrations
                 column: "DeckId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_ClassEntitiesId",
-                table: "Questions",
-                column: "ClassEntitiesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Questions_TestClassId",
                 table: "Questions",
                 column: "TestClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_ClassEntitiesId",
-                table: "Students",
-                column: "ClassEntitiesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_TestClassId",
@@ -244,13 +238,16 @@ namespace dotLearn.Infrastructure.Migrations
                 name: "Answers");
 
             migrationBuilder.DropTable(
+                name: "ClassEntitiesStudent");
+
+            migrationBuilder.DropTable(
                 name: "FlashCard");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "Decks");

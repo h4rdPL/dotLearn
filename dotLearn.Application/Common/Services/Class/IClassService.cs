@@ -12,8 +12,5 @@ namespace dotLearn.Application.Common.Services.Class
     {
         Task<ClassEntities> Create(ClassEntities newClass);
         public void Delete(ClassEntities myClass);
-        Task<ClassEntities> JoinClass(int classCode, Guid studentId); // Update the method signature
-        public Task<bool> RemoveStudentFromClass(int classId, Guid studentId);
-        public Task<bool> RemoveClass(int classId);
     }
 }

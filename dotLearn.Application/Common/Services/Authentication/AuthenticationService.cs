@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 namespace dotLearn.Application.Services.Authentication
 {
-    public class AuthenticationService : IAuthenticationService
+    public partial class AuthenticationService : IAuthenticationService
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
@@ -58,7 +58,7 @@ namespace dotLearn.Application.Services.Authentication
             if (userDTO.Role == Role.Student)
             {
                 var cardIdGenerator = new CardIdGenerator();
-                var cardId = cardIdGenerator.GenerateCardId();
+                var cardId = cardIdGenerator.GenerateCardIdInt();
                 user = new Student
                 {
                     // Id zostawiamy takie, jakie jest nadane przez bazę danych
@@ -83,7 +83,6 @@ namespace dotLearn.Application.Services.Authentication
                 };
             }
 
-
             if (user is null)
             {
                 throw new Exception("The provided role does not exist");
@@ -93,7 +92,6 @@ namespace dotLearn.Application.Services.Authentication
             _userRepository.Add(user);
 
             var token = _jwtTokenGenerator.GenerateToken(user);
-
 
             // Wygeneruj token JWT z prawidłowym ID użytkownika
 

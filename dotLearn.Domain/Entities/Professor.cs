@@ -9,7 +9,6 @@ namespace dotLearn.Domain.Entities
 {
     public class Professor : User
     {
-        public int Id { get; set; }
         public Subject Subject { get; set; }
     }
 }

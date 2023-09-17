@@ -22,6 +22,8 @@ namespace dotLearn.Infrastructure.Persistance
 
         public void Add(User userDTO)
         {
+            var cardIdGenerator = new CardIdGenerator();
+            var cardId = cardIdGenerator.GenerateCardIdInt();
             if (userDTO.Role == Role.Professor)
             {
                 var professor = new Professor
@@ -47,7 +49,7 @@ namespace dotLearn.Infrastructure.Persistance
                     Email = userDTO.Email,
                     Password = PasswordHasher.EncryptPassword(userDTO.Password),
                     Role = Role.Student,
-                    CardId = 1
+                    CardId = cardId
                 };
 
                 _context.Students.Add(student);
@@ -64,7 +66,6 @@ namespace dotLearn.Infrastructure.Persistance
         public User GetUserByEmail(string email)
         {
             var user = _context.Students.SingleOrDefault(x => x.Email == email);
-
             if (user == null)
             {
                 Console.WriteLine($"Nie znaleziono użytkownika o adresie e-mail: {email}");
@@ -74,12 +75,26 @@ namespace dotLearn.Infrastructure.Persistance
                 Console.WriteLine($"Znaleziono użytkownika o adresie e-mail: {email}, Id: {user.Id}");
             }
 
-            return user;
+            // Sprawdź rolę użytkownika i zwróć go w zależności od roli
+            if (user != null && user.Role == Role.Student)
+            {
+                return user; 
+            }
+            else
+            {
+                var secondUser = _context.Professors.SingleOrDefault(x => x.Email == email);
+                if (secondUser != null)
+                {
+                    Console.WriteLine($"Znaleziono użytkownika o adresie e-mail: {email}, Id: {secondUser.Id}");
+                }
+                return secondUser; 
+            }
         }
+
 
         public int ReturnIdOfUserByEmail(string email)
         {
-            var user = _context.Students.SingleOrDefault(x => x.Email == email);
+            var user = _context.Professors.SingleOrDefault(x => x.Email == email);
 
             if (user == null)
             {
@@ -98,5 +113,9 @@ namespace dotLearn.Infrastructure.Persistance
             return _context.Students.FirstOrDefault(x => x.Id == Id);
         }
 
+        public Student GetStudentByCardId(int CardId) 
+        {
+            return _context.Students.FirstOrDefault(x => x.CardId == CardId);
+        }
     }
 }

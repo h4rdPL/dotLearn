@@ -11,12 +11,10 @@ namespace dotLearn.Api.Controllers
     public class ClassController : ControllerBase
     {
         private readonly IClassService _classService;
-        private readonly IUserRepository _userRepository;
 
-        public ClassController(IClassService classService, IUserRepository userRepository)
+        public ClassController(IClassService classService)
         {
             _classService = classService;
-            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -25,10 +23,17 @@ namespace dotLearn.Api.Controllers
         /// <param name="newClass">The class entity to be created.</param>
         /// <returns>Returns the newly created class entity.</returns>
         [HttpPost("createClass")]
-        public async Task<ActionResult<ClassEntities>> CreateClass(ClassEntities newClass)
+        public async Task<ActionResult<ClassEntities>> CreateClass([FromBody] ClassEntities newClass)
         {
-            _classService.Create(newClass);
-            return await Task.FromResult(newClass);
+            try
+            {
+                var createdClass = await _classService.Create(newClass);
+                return Ok(createdClass);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -37,12 +42,12 @@ namespace dotLearn.Api.Controllers
         /// <param name="classCode">The code of the class to join.</param>
         /// <param name="studentId">The ID of the student to join.</param>
         /// <returns>Returns the result of the join operation.</returns>
-        [HttpPost("joinClass")]
-        public async Task<ActionResult<ClassEntities>> JoinToClass(int classCode, Guid studentId)
-        {
-            await _classService.JoinClass(classCode, studentId);
-            return Ok();
-        }
+        //[HttpPost("joinClass")]
+        //public async Task<ActionResult<ClassEntities>> JoinToClass(int classCode, Guid studentId)
+        //{
+        //    await _classService.  (classCode, studentId);
+        //    return Ok();
+        //}
 
         /// <summary>
         /// Leaves a class for a student.
@@ -50,24 +55,24 @@ namespace dotLearn.Api.Controllers
         /// <param name="classCode">The code of the class to leave.</param>
         /// <param name="studentId">The ID of the student leaving the class.</param>
         /// <returns>Returns a boolean indicating the success of the leave operation.</returns>
-        [HttpPost("leaveClass")]
-        public async Task<ActionResult<bool>> LeaveClass(int classCode, Guid studentId)
-        {
-            await _classService?.RemoveStudentFromClass(classCode, studentId);
-            return true;
-        }
+        //[HttpPost("leaveClass")]
+        //public async Task<ActionResult<bool>> LeaveClass(int classCode, Guid studentId)
+        //{
+        //    await _classService.RemoveStudentFromClass(classCode, studentId);
+        //    return true;
+        //}
 
         /// <summary>
         /// Removes a class.
         /// </summary>
         /// <param name="classCode">The code of the class to remove.</param>
         /// <returns>Returns a boolean indicating the success of the removal operation.</returns>
-        [HttpPost("removeClass")]
-        public async Task<ActionResult<bool>> RemoveClass(int classCode)
-        {
-            _classService.RemoveClass(classCode);
-            return true;
-        }
+        //[HttpPost("removeClass")]
+        //public async Task<ActionResult<bool>> RemoveClass(int classCode)
+        //{
+        //    _classService.Delete(classCode);
+        //    return true;
+        //}
 
 
     }

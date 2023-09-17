@@ -13,5 +13,6 @@ namespace dotLearn.Application.Common.Interfaces.FlashCards
         Task<Deck> Create(Deck deck);
         bool Delete (int deckId);    
         List<Deck> GetDecksByUserId(int userId);
+        
     }
 }

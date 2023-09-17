@@ -31,7 +31,6 @@ namespace dotLearn.Application
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IFlashcardsService, FlashcardsService>();
 
-
             return services;
         }
     }

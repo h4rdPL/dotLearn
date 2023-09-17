@@ -27,15 +27,18 @@ builder.Services.AddDbContext<DotLearnDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
-{
-    opt.JsonSerializerOptions.PropertyNamingPolicy = null;
-    opt.JsonSerializerOptions.AllowTrailingCommas = true;
-    opt.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString |
-        JsonNumberHandling.WriteAsString;
-    opt.JsonSerializerOptions.IncludeFields = true;
 
+
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    options.JsonSerializerOptions.AllowTrailingCommas = true;
+    options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString;
+    options.JsonSerializerOptions.IncludeFields = true;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve; // Dodaj to
 });
+
 var options = new JsonSerializerOptions()
 {
     NumberHandling = JsonNumberHandling.AllowReadingFromString |

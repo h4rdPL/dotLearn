@@ -12,12 +12,13 @@ using Microsoft.Extensions.Configuration;
 using dotLearn.Application.Common.Interfaces.Validation;
 using dotLearn.Infrastructure.Validation;
 using dotLearn.Application.Common.Interfaces.JobBoard;
-using dotLearn.Domain.Entities;
 using dotLearn.Infrastructure.JobBoard;
 using dotLearn.Application.Common.Interfaces.FlashCards;
 using dotLearn.Infrastructure.FlashCards;
 using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Infrastructure.Persistance;
+using dotLearn.Application.Common.Interfaces.ClassPersistence;
+using dotLearn.Infrastructure.ClassEntitities;
 
 namespace dotLearn.Infrastructure
 {
@@ -29,6 +30,7 @@ namespace dotLearn.Infrastructure
             services.AddScoped<IJobBoardRepository, JobBoardRepository>();
             services.AddScoped<IFlashCardsRepository, FlashCardsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IClassRepository, ClassRepository>();
 
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
