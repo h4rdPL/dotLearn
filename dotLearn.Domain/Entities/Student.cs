@@ -12,5 +12,7 @@ namespace dotLearn.Domain.Entities
     {
         public int CardId { get; set; }
         public List<ClassEntities> Classes { get; set; }
+        public List<ClassEntitiesStudent> ClassEntitiesStudents { get; set; } // Relacja wiele-do-wielu z ClassEntitiesStudent
+        public List<TestClass> Tests { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using dotLearn.Application.Services.Authentication;
 using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,5 +118,18 @@ namespace dotLearn.Infrastructure.Persistance
         {
             return _context.Students.FirstOrDefault(x => x.CardId == CardId);
         }
+
+        public List<Student> GetStudentByClassId(int classId)
+        {
+            var studentsInClass = (from ce in _context.Classes
+                                   join ces in _context.ClassEntitiesStudents
+                                   on ce.Id equals ces.ClassEntitiesId
+                                   where ce.Id == classId
+                                   select ces.Student)
+                                   .ToList();
+
+            return studentsInClass;
+        }
+
     }
 }

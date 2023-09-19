@@ -9,10 +9,13 @@ namespace dotLearn.Domain.Entities
 {
     public class ClassEntities
     {
+
         public int Id { get; set; }
-        public string? ClassName { get; set; }
+        public string ClassName { get; set; }
         public Guid ClassCode { get; set; }
         public int ProfessorId { get; set; }
-        public virtual List<Student> Students { get; set; }
+        public List<Student> Students { get; set; }
+        public List<ClassEntitiesStudent> ClassEntitiesStudents { get; set; } // Relacja wiele-do-wielu z ClassEntitiesStudent
+
     }
 }

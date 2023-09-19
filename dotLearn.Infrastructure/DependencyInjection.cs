@@ -19,6 +19,8 @@ using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Infrastructure.Persistance;
 using dotLearn.Application.Common.Interfaces.ClassPersistence;
 using dotLearn.Infrastructure.ClassEntitities;
+using dotLearn.Application.Common.Interfaces.Test;
+using dotLearn.Infrastructure.Test;
 
 namespace dotLearn.Infrastructure
 {
@@ -31,6 +33,7 @@ namespace dotLearn.Infrastructure
             services.AddScoped<IFlashCardsRepository, FlashCardsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClassRepository, ClassRepository>();
+            services.AddScoped<ITestRepository, TestRepository>();
 
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();

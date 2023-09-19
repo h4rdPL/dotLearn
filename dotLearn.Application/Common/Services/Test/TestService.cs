@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
+using dotLearn.Application.Common.Interfaces.Test;
 
 namespace dotLearn.Application.Services.Test
 {
@@ -15,10 +17,11 @@ namespace dotLearn.Application.Services.Test
     {
         private static List<TestClass> _testClasses = new List<TestClass>();
         private readonly IUserRepository _userRepository;
-
-        public TestService(IUserRepository userRepository)
+        private readonly ITestRepository _testRepository;
+        public TestService(IUserRepository userRepository, ITestRepository testRepository)
         {
             _userRepository = userRepository;   
+            _testRepository = testRepository;
         }
         /// <summary>
         /// Creates a new test class and associates it with the logged-in professor.
@@ -27,41 +30,11 @@ namespace dotLearn.Application.Services.Test
         /// <returns>Returns the newly created test class entity.</returns>
         public TestClass Create(TestClass testClass)
         {
-            var currentPrincipal = ClaimsPrincipal.Current;
-            var professorIdClaim = currentPrincipal?.FindFirst("sub");
-
-            Professor loggedProfessor = null; // Declare the variable outside the if block
-
-            if (professorIdClaim != null && int.TryParse(professorIdClaim.Value, out int professorId))
-            {
-                // Retrieve the professor from the database based on the identifier
-                var professor = _userRepository.GetUserById(professorId) as Professor;
-
-                if (professor != null)
-                {
-                    loggedProfessor = professor;
-                    testClass.Professor = professor;
-                }
-            }
-
-            // Create a new test class with default values
-            TestClass newTestClass = new TestClass
-            {
-                Id = Guid.NewGuid(),
-                TestName = "New Test",
-                Questions = new List<Question>(),
-                IsActive = true,
-                ActiveDate = DateTime.Now,
-                Students = null,
-                Professor = loggedProfessor
-            };
-
-            // Add the new test class to the list
-            _testClasses.Add(newTestClass);
-
-            // Return the newly created test class entity
-            return newTestClass;
+            _testRepository.Create(testClass);
+            return testClass;
         }
+
+
 
 
     }

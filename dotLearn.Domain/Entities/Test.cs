@@ -11,11 +11,9 @@ namespace dotLearn.Domain.Entities
     {
         public Guid Id { get; set; }
         public string TestName { get; set; }
-        public List<Question> Questions { get; set; }
-        public List<Student> Students { get; set; }
-        public int ProfessorId { get; set; } 
+        public int ProfessorId { get; set; }
         public Professor Professor { get; set; }
-        public ClassEntities ClassEntities { get; set; }
+        public List<ClassEntitiesStudent> ClassEntitiesStudents { get; set; } // Relacja wiele-do-wielu z ClassEntitiesStudent
         public int Time { get; set; }
         public bool IsActive { get; set; } = false;
         public DateTime ActiveDate { get; set; }

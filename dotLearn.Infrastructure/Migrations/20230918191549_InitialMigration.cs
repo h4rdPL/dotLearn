@@ -172,24 +172,24 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClassEntitiesStudent",
+                name: "ClassEntitiesStudents",
                 columns: table => new
                 {
-                    ClassesId = table.Column<int>(type: "int", nullable: false),
-                    StudentsId = table.Column<int>(type: "int", nullable: false)
+                    ClassEntitiesId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClassEntitiesStudent", x => new { x.ClassesId, x.StudentsId });
+                    table.PrimaryKey("PK_ClassEntitiesStudents", x => new { x.ClassEntitiesId, x.StudentId });
                     table.ForeignKey(
-                        name: "FK_ClassEntitiesStudent_Classes_ClassesId",
-                        column: x => x.ClassesId,
+                        name: "FK_ClassEntitiesStudents_Classes_ClassEntitiesId",
+                        column: x => x.ClassEntitiesId,
                         principalTable: "Classes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClassEntitiesStudent_Students_StudentsId",
-                        column: x => x.StudentsId,
+                        name: "FK_ClassEntitiesStudents_Students_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -201,9 +201,9 @@ namespace dotLearn.Infrastructure.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClassEntitiesStudent_StudentsId",
-                table: "ClassEntitiesStudent",
-                column: "StudentsId");
+                name: "IX_ClassEntitiesStudents_StudentId",
+                table: "ClassEntitiesStudents",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FlashCard_DeckId",
@@ -238,7 +238,7 @@ namespace dotLearn.Infrastructure.Migrations
                 name: "Answers");
 
             migrationBuilder.DropTable(
-                name: "ClassEntitiesStudent");
+                name: "ClassEntitiesStudents");
 
             migrationBuilder.DropTable(
                 name: "FlashCard");

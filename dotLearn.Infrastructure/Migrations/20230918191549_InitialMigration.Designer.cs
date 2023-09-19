@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace dotLearn.Infrastructure.Migrations
 {
     [DbContext(typeof(DotLearnDbContext))]
-    [Migration("20230917175736_InitialMigration")]
+    [Migration("20230918191549_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -23,21 +23,6 @@ namespace dotLearn.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ClassEntitiesStudent", b =>
-                {
-                    b.Property<int>("ClassesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ClassesId", "StudentsId");
-
-                    b.HasIndex("StudentsId");
-
-                    b.ToTable("ClassEntitiesStudent");
-                });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Answer", b =>
                 {
@@ -84,6 +69,21 @@ namespace dotLearn.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Classes");
+                });
+
+            modelBuilder.Entity("dotLearn.Domain.Entities.ClassEntitiesStudent", b =>
+                {
+                    b.Property<int>("ClassEntitiesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClassEntitiesId", "StudentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("ClassEntitiesStudents");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Deck", b =>
@@ -258,21 +258,6 @@ namespace dotLearn.Infrastructure.Migrations
                     b.ToTable("Tests");
                 });
 
-            modelBuilder.Entity("ClassEntitiesStudent", b =>
-                {
-                    b.HasOne("dotLearn.Domain.Entities.ClassEntities", null)
-                        .WithMany()
-                        .HasForeignKey("ClassesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("dotLearn.Domain.Entities.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("dotLearn.Domain.Entities.Answer", b =>
                 {
                     b.HasOne("dotLearn.Domain.Entities.Question", "Question")
@@ -280,6 +265,25 @@ namespace dotLearn.Infrastructure.Migrations
                         .HasForeignKey("QuestionId");
 
                     b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("dotLearn.Domain.Entities.ClassEntitiesStudent", b =>
+                {
+                    b.HasOne("dotLearn.Domain.Entities.ClassEntities", "ClassEntities")
+                        .WithMany()
+                        .HasForeignKey("ClassEntitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotLearn.Domain.Entities.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassEntities");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.FlashCard", b =>
