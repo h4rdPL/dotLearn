@@ -12,8 +12,6 @@ namespace dotLearn.Domain.Entities
         public Student Student { get; set; }
         public int ClassEntitiesId { get; set; }
         public ClassEntities ClassEntities { get; set; }
-        public int TestClassId { get; set; }
-        public TestClass TestClass { get; set; }
     }
 
 }

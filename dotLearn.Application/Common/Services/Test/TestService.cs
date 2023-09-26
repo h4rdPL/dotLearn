@@ -10,32 +10,39 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
 using dotLearn.Application.Common.Interfaces.Test;
+using dotLearn.Domain.DTO;
 
 namespace dotLearn.Application.Services.Test
 {
     public class TestService : ITestService
     {
-        private static List<TestClass> _testClasses = new List<TestClass>();
-        private readonly IUserRepository _userRepository;
         private readonly ITestRepository _testRepository;
-        public TestService(IUserRepository userRepository, ITestRepository testRepository)
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        public TestService(ITestRepository testRepository, IJwtTokenGenerator jwtTokenGenerator)
         {
-            _userRepository = userRepository;   
             _testRepository = testRepository;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
         /// <summary>
         /// Creates a new test class and associates it with the logged-in professor.
         /// </summary>
         /// <param name="testClass">The test class entity to be created.</param>
         /// <returns>Returns the newly created test class entity.</returns>
-        public TestClass Create(TestClass testClass)
+        public void Create(TestDTO testClass)
         {
             _testRepository.Create(testClass);
-            return testClass;
         }
 
+        public List<TestDTO> GetTest()
+        {
+            var user = _jwtTokenGenerator.GetProfessorIdFromJwt();
+            var result = _testRepository.GetTest(user);
+            return result;
+        }
 
-
-
+        public void OpenTest()
+        {
+            _testRepository.OpenTestsOnActiveDateAsync();
+        }
     }
 }

@@ -58,7 +58,7 @@ namespace dotLearn.Application.Common.Services.Flashcards
                 {
                     Name = model.Name,
                     Category = model.Category,
-                    StudentId = userGetByEmail,
+                    StudentId = userGetByEmail.Id,
                     FlashCards = model.flashCards.Select(card => new FlashCard
                     {
                         Content = card.Content,
@@ -115,7 +115,7 @@ namespace dotLearn.Application.Common.Services.Flashcards
             var userGetByEmail = _userRepository.ReturnIdOfUserByEmail(studentIdClaim.ToString());
 
             // Fetch the user by email to get their ID
-            var decks = _flashCardsRepository.GetDecksByUserId(userGetByEmail);
+            var decks = _flashCardsRepository.GetDecksByUserId(userGetByEmail.Id);
 
             return decks;
         }

@@ -134,12 +134,28 @@ namespace dotLearn.Application.Services.Authentication
             return new AuthenticationResult(user, token);
         }
 
-        public User User(string token)
+        public User User()
         {
-            int userId = int.Parse(token);
-            var user = _userRepository.GetUserById(userId);
-            return user;
+            var jwt = _httpContextAccessor.HttpContext.Request.Cookies["jwt"];
+            var token = _jwtTokenGenerator.Verify(jwt);
+
+            var emailClaim = token.Claims.FirstOrDefault(claim => claim.Type == "email");
+
+            if (emailClaim != null)
+            {
+                string userEmail = emailClaim.Value;
+
+                var user = _userRepository.GetUserByEmail(userEmail);
+
+                if (user != null)
+                {
+                    return user;
+                }
+            }
+
+            return null;
         }
+
 
     }
 }

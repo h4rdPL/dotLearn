@@ -43,15 +43,22 @@ namespace dotLearn.Api.Controllers
         {
             var authResult = _authenticationService.Login(request.Email, request.Password);
             var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
+            var jwt = _jwtTokenGenerator.GenerateToken(authResult.user);
+
+            Response.Cookies.Append("jwt", jwt, new CookieOptions
+            {
+                HttpOnly = true
+            });
             return await Task.FromResult(Ok(response));
         }
+
         [HttpGet("user")]
         public IActionResult User()
         {
-            var jwt = _httpContextAccessor.HttpContext.Request.Cookies["jwt"];
-            var token = _jwtTokenGenerator.Verify(jwt);
+            var token = _httpContextAccessor.HttpContext.Request.Cookies["jwt"];
+            _jwtTokenGenerator.Verify(token);
 
-            var userResult = _authenticationService.User(token.Issuer);
+            var userResult = _authenticationService.User();
     
         if (userResult == null)
         {
@@ -60,6 +67,7 @@ namespace dotLearn.Api.Controllers
     
             return Ok(userResult);
         }
+
 
         [HttpPost("logout")] 
         public IActionResult Logout()

@@ -14,6 +14,7 @@ using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Common.Interfaces.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using dotLearn.Domain.DTO;
 
 namespace dotLearn.Application.Services.Class
 {
@@ -36,37 +37,45 @@ namespace dotLearn.Application.Services.Class
         /// </summary>
         /// <param name="newClass">The class entity to be created.</param>
         /// <returns>Returns the newly created class entity.</returns>
-        public async Task<ClassEntities> Create(ClassEntities newClass)
+        public async Task<ClassEntities> Create(ClassDTO newClass)
         {
-            var jwtToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
-            var jwtSecurityToken = _jwtTokenGenerator.Verify(jwtToken);
-            var professorEmailClaim = jwtSecurityToken.Claims.First(c => c.Type == "email").Value;
-            var professorId = _userRepository.ReturnIdOfUserByEmail(professorEmailClaim);
-
-            var myStudent = new List<Student>();
-            
-
-            var classEntities = new ClassEntities
+            try
             {
-                ClassName = newClass.ClassName,
-                ClassCode = Guid.NewGuid(),
-                ProfessorId = professorId,
-                Students = new List<Student>()
-            };
+                var professor = _jwtTokenGenerator.GetProfessorIdFromJwt();
+                var classEntities = new ClassEntities
+                {
+                    ClassName = newClass.ClassName,
+                    ClassCode = Guid.NewGuid(),
+                    ProfessorId = professor.Id,
+                    Students = new List<Student>(),
+                };
 
-            foreach (var studentData in newClass.Students)
-            {
-                var student = _userRepository.GetStudentByCardId(studentData.CardId);
-                classEntities.Students.Add(student);
+                foreach (var studentCardId in newClass.CardId)
+                {
+                    var student = _userRepository.GetStudentByCardId(studentCardId);
+                    if (student != null) // Sprawdzamy, czy udało się znaleźć studenta
+                    {
+                        classEntities.Students.Add(student);
+                        Console.WriteLine(student.CardId);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Student with CardId {studentCardId} not found.");
+                    }
+                }
+
+                // Teraz zapisujemy classEntities do bazy danych
+                _classRepository.Create(classEntities);
+
+                return classEntities;
             }
-
-            _classRepository.Create(classEntities);
-
-            // Save changes to the database (implement this part)
-
-            return classEntities;
+            catch (Exception ex)
+            {
+                // Tutaj możesz obsłużyć błąd, np. logując go
+                Console.WriteLine($"Error during class creation: {ex.Message}");
+                throw;
+            }
         }
-
 
         /// <summary>
         /// Deletes a class.
@@ -77,71 +86,14 @@ namespace dotLearn.Application.Services.Class
             _classRepository.Remove(myClass);
         }
 
-        /// <summary>
-        /// Removes a student from a class.
-        /// </summary>
-        /// <param name="classCode">The code of the class.</param>
-        /// <param name="studentId">The ID of the student to be removed.</param>
-        /// <returns>Returns true if the student was successfully removed, otherwise false.</returns>
- 
-        //public async Task<bool> RemoveStudentFromClass(int classCode, int studentId)
-        //{
-        //    var classContainingStudent = _class.FirstOrDefault(cls => cls.Id == classCode);
+        public List<StudentAndProfessorClassesDTO> GetClass()
+        {
+            var user = _jwtTokenGenerator.GetProfessorIdFromJwt();
+            var result = _classRepository.GetAll(user);
 
-        //    if (classContainingStudent != null)
-        //    {
-        //        var studentToRemove = classContainingStudent.Students.FirstOrDefault(st => st.Id == studentId);
-        //        if (studentToRemove != null)
-        //        {
-        //            classContainingStudent.Students.Remove(studentToRemove);
-        //            return true;
-        //        }
-        //    }
+            return result;
 
-        //    return false;
-        //}
-
-        /// <summary>
-        /// Removes a class.
-        /// </summary>
-        /// <param name="classId">The ID of the class to be removed.</param>
-        /// <returns>Returns true if the class was successfully removed, otherwise false.</returns>
-
-        //public async Task<bool> RemoveClass(int classId)
-        //{
-        //    var classToRemove = _class.FirstOrDefault(c => c.Id == classId);
-
-        //    if (classToRemove != null)
-        //    {
-        //        _class.Remove(classToRemove);
-        //        return await Task.FromResult(true);
-        //    }
-
-        //    return await Task.FromResult(false);
-        //}
-
-        /// <summary>
-        /// Joins a student to a class.
-        /// </summary>
-        /// <param name="classCode">The code of the class.</param>
-        /// <param name="studentId">The ID of the student to be joined.</param>
-        /// <returns>Returns the updated class entity after joining the student.</returns>
-        /// <exception cref="ArgumentException">Thrown when the class does not exist.</exception>
-  
-        //public Task<ClassEntities> JoinClass(int classCode, Guid studentId)
-        //{
-        //    var classToJoin = _class.FirstOrDefault(c => c.Id == classCode);
-        //    var student = _students.FirstOrDefault(s => s.Equals(studentId));
-        //    if (classToJoin != null)
-        //    {
-        //        classToJoin.Students?.Add(student);
-        //    }
-        //    else
-        //    {
-        //        throw new ArgumentException($"Klasa o identyfikatorze {classCode} nie istnieje.");
-        //    }
-        //    return Task.FromResult(classToJoin);
-        //}
+        }
 
         public Task<bool> RemoveStudentFromClass(int classId, Guid studentId)
         {

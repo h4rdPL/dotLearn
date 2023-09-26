@@ -15,22 +15,21 @@ using dotLearn.Application.Services.Flashcards;
 using dotLearn.Application.Common.Services.Flashcards;
 using dotLearn.Application.Common.Services.Class;
 using dotLearn.Application.Common.Interfaces.JobBoard;
+using dotLearn.Application.Common.Services;
+using Microsoft.Extensions.Hosting;
+using dotLearn.Application.Services;
+
 namespace dotLearn.Application
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-
-
-
-
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IFlashcardsService, FlashcardsService>();
-
             return services;
         }
     }

@@ -9,6 +9,7 @@ import {
   IoIosLogOut,
   IoIosBulb,
 } from "react-icons/io";
+import Cookies from "js-cookie";
 
 const SidebarWrapper = styled.nav`
   display: flex;
@@ -66,6 +67,7 @@ export const Sidebar = () => {
         credentials: "include",
       }
     );
+    Cookies.remove("jwt");
 
     try {
     } catch (err) {

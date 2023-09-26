@@ -1,6 +1,9 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
+using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.Entities;
+using dotLearn.Infrastructure.Persistance;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -17,9 +20,14 @@ namespace dotLearn.Infrastructure.Authentication
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private readonly JwtSettings _jwtSettings;
-        public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
+        private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _contextAccessor;
+
+        public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _jwtSettings = jwtSettings.Value;
+            _contextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
         }
 
         public string GenerateToken(User user)
@@ -51,9 +59,7 @@ namespace dotLearn.Infrastructure.Authentication
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
 
-
-
-        public JwtSecurityToken Verify(string jwtToken)
+        public JwtSecurityToken Verify(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("My secret from application config");
@@ -62,15 +68,14 @@ namespace dotLearn.Infrastructure.Authentication
             {
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuerSigningKey = true,
-                // Ustawienie na true, jeśli chcesz weryfikować wydawcę
                 ValidateIssuer = false,
-                // Ustawienie na true, jeśli chcesz weryfikować odbiorcę
-                ValidateAudience = false,
+                ValidateAudience = false
             };
 
             try
             {
-                var claimsPrincipal = tokenHandler.ValidateToken(jwtToken, tokenValidationParameters, out var validatedToken);
+                // err
+                var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
                 return (JwtSecurityToken)validatedToken;
             }
             catch (Exception ex)
@@ -79,6 +84,16 @@ namespace dotLearn.Infrastructure.Authentication
                 Console.WriteLine($"Błąd walidacji tokenu JWT: {ex.Message}");
                 throw; // Możesz zdecydować, jak obsłużyć błąd walidacji
             }
+        }
+
+        public User? GetProfessorIdFromJwt()
+        {
+            var jwtToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
+            var jwtSecurityToken = Verify(jwtToken);
+            var professorEmailClaim = jwtSecurityToken.Claims.First(c => c.Type == "email").Value;
+            var user = _userRepository.GetUserByEmail(professorEmailClaim);
+
+            return user;
         }
 
 

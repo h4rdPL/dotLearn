@@ -1,4 +1,5 @@
-﻿using dotLearn.Domain.Entities;
+﻿using dotLearn.Domain.DTO;
+using dotLearn.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace dotLearn.Application.Common.Interfaces.Test
 {
     public interface ITestRepository
     {
-        TestClass Create(TestClass testClass);
+        TestClass Create(TestDTO testClass);
+        List<TestDTO> GetTest(User studentId);
+        Task OpenTestsOnActiveDateAsync();
     }
 }

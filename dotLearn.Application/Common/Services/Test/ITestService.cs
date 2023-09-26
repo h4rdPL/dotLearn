@@ -1,4 +1,5 @@
-﻿using dotLearn.Domain.Entities;
+﻿using dotLearn.Domain.DTO;
+using dotLearn.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace dotLearn.Application.Services.Test
 {
     public interface ITestService
     {
-        TestClass Create(TestClass testClass);
+        void Create(TestDTO testClass);
+        List<TestDTO> GetTest();
+        void OpenTest();
+
     }
 }

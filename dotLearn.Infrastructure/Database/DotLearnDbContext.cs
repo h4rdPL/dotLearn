@@ -20,58 +20,32 @@ public class DotLearnDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Student>()
-            .HasMany(s => s.Classes)
-            .WithMany(c => c.Students)
-            .UsingEntity<ClassEntitiesStudent>(
-                j => j
-                    .HasOne(ce => ce.ClassEntities)
-                    .WithMany()
-                    .HasForeignKey(ce => ce.ClassEntitiesId),
-                j => j
-                    .HasOne(s => s.Student)
-                    .WithMany()
-                    .HasForeignKey(ce => ce.StudentId),
-                j =>
-                {
-                    j.HasKey(ce => new { ce.ClassEntitiesId, ce.StudentId });
-                    j.ToTable("ClassEntitiesStudents"); // Dodaj nazwę tabeli pośredniczącej
-                });
+        modelBuilder.Entity<Professor>()
+            .HasMany(x => x.Classes)
+            .WithOne(x => x.Professor)
+            .HasForeignKey(x => x.ProfessorId)
+            .IsRequired();
 
+        modelBuilder.Entity<ClassEntities>()
+            .HasMany(x => x.Students)
+            .WithMany(x => x.Classes)
+            .UsingEntity<ClassEntitiesStudent>();
+
+        modelBuilder.Entity<ClassEntities>()
+            .HasMany(x => x.Tests)
+            .WithOne(x => x.Class)
+            .HasForeignKey(x => x.ClassId)
+            .IsRequired();
         modelBuilder.Entity<TestClass>()
-            .HasOne(t => t.Professor)
-            .WithMany()
-            .HasForeignKey(t => t.ProfessorId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<ClassEntitiesStudent>()
-            .HasKey(ce => new { ce.ClassEntitiesId, ce.StudentId });
-
-        modelBuilder.Entity<ClassEntitiesStudent>()
-            .HasOne(ce => ce.Student)
-            .WithMany(s => s.ClassEntitiesStudents) // Zmień na właściwość w klasie Student, która przechowuje ClassEntitiesStudent
-            .HasForeignKey(ce => ce.StudentId);
-
-        modelBuilder.Entity<ClassEntitiesStudent>()
-            .HasOne(ce => ce.ClassEntities)
-            .WithMany(c => c.ClassEntitiesStudents) // Zmień na właściwość w klasie ClassEntities, która przechowuje ClassEntitiesStudent
-            .HasForeignKey(ce => ce.ClassEntitiesId);
-
-        modelBuilder.Entity<TestClass>()
-            .HasMany(t => t.ClassEntitiesStudents)
-            .WithMany()
-            .UsingEntity<ClassEntitiesStudent>(
-                j => j.HasOne(ce => ce.TestClass)
-                    .WithMany()
-                    .HasForeignKey(ce => ce.TestClassId),
-                j => j.HasOne(s => s.Student)
-                    .WithMany()
-                    .HasForeignKey(ce => ce.StudentId),
-                j =>
-                {
-                    j.Property(ce => ce.TestClassId);
-                    j.Property(ce => ce.StudentId);
-                });
+            .HasMany(x => x.Questions)
+            .WithOne(x => x.Test)
+            .HasForeignKey(x => x.TestId)
+            .IsRequired();
+        modelBuilder.Entity<Question>()
+            .HasMany(x => x.Answers)
+            .WithOne(x => x.Question)
+            .HasForeignKey(x => x.QuestionId)
+            .IsRequired();
 
         base.OnModelCreating(modelBuilder);
     }

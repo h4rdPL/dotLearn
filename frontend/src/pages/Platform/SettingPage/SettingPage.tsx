@@ -56,6 +56,7 @@ export const SettingPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { userData } = useContext(UserContext);
+  console.log(userData);
   useEffect(() => {
     (async () => {
       const response = await fetch(
@@ -65,10 +66,6 @@ export const SettingPage = () => {
           credentials: "include",
         }
       );
-
-      const content = await response.json();
-      console.log(content);
-      console.log(document.cookie);
     })();
   });
 

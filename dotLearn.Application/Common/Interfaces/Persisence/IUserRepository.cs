@@ -14,7 +14,7 @@ namespace dotLearn.Application.Common.Interfaces.Persisence
         User? GetUserById(int id);
         Student? GetStudentById(int id);
         Student GetStudentByCardId(int CardId);
-        int ReturnIdOfUserByEmail(string email);
+        User? ReturnIdOfUserByEmail(string email);
         List<Student> GetStudentByClassId(int classId);
 
     }

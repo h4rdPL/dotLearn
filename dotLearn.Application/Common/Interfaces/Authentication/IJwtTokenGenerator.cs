@@ -12,5 +12,6 @@ namespace dotLearn.Application.Common.Interfaces.Authentication
     {
         string GenerateToken(User user);
         JwtSecurityToken Verify(string jwtToken);
+        User GetProfessorIdFromJwt();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using dotLearn.Application.Services.Test;
+using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,23 @@ namespace dotLearn.Api.Controllers
         /// <param name="testClass">The test instance to be created.</param>
         /// <returns>Returns the newly created test instance.</returns>
         [HttpPost("create")]
-        public async Task<ActionResult<TestClass>> CreateTest(TestClass testClass)
+        public async Task<ActionResult<TestClass>> CreateTest(TestDTO testClass)
         {
             _testService.Create(testClass);
             return await Task.FromResult(Ok(testClass));
         }
 
+        [HttpGet("getTest")]
+        public async Task<ActionResult<TestDTO>> GetTestsForStudent()
+        {
+            var result = _testService.GetTest();
+            return await Task.FromResult(Ok(result));
+        }
+
+        //[HttpPost("sendTest")]
+        //public async Task<ActionResult<TestClass>> SendTest(UserTestSubmissionDTO userTestSubmissionDTO)
+        //{
+
+        //}
     }
 }

@@ -93,25 +93,45 @@ namespace dotLearn.Infrastructure.Persistance
         }
 
 
-        public int ReturnIdOfUserByEmail(string email)
+        public User? ReturnIdOfUserByEmail(string email)
         {
-            var user = _context.Professors.SingleOrDefault(x => x.Email == email);
-
-            if (user == null)
+            var student = _context.Students.SingleOrDefault(x => x.Email == email);
+            if (student != null)
             {
-                Console.WriteLine($"Nie znaleziono użytkownika o adresie e-mail: {email}");
-            }
-            else
-            {
-                Console.WriteLine($"Znaleziono użytkownika o adresie e-mail: {email}, Id: {user.Id}");
+                Console.WriteLine($"Znaleziono studenta o adresie e-mail: {email}, Id: {student.Id}");
+                return student;
             }
 
-            return user.Id;
+            var professor = _context.Professors.SingleOrDefault(x => x.Email == email);
+            if (professor != null)
+            {
+                Console.WriteLine($"Znaleziono profesora o adresie e-mail: {email}, Id: {professor.Id}");
+                return professor;
+            }
+
+            Console.WriteLine($"Nie znaleziono użytkownika o adresie e-mail: {email}");
+            return null;
+
         }
 
         public User? GetUserById(int Id)
         {
-            return _context.Students.FirstOrDefault(x => x.Id == Id);
+            var student = _context.Students.SingleOrDefault(x => x.Id == Id);
+            if (student != null)
+            {
+                Console.WriteLine($"Znaleziono studenta o adresie e-mail: {Id}, Id: {student.Id}");
+                return student;
+            }
+
+            var professor = _context.Professors.SingleOrDefault(x => x.Id == Id);
+            if (professor != null)
+            {
+                Console.WriteLine($"Znaleziono profesora o adresie e-mail: {Id}, Id: {professor.Id}");
+                return professor;
+            }
+
+            Console.WriteLine($"Nie znaleziono użytkownika o adresie e-mail: {Id}");
+            return null;
         }
 
         public Student GetStudentByCardId(int CardId) 

@@ -20,9 +20,6 @@ const Wrapper = styled.div`
     padding: ${({ theme }) => theme.padding.desktopPadding};
   }
 `;
-// TODO:
-
-// InnerWrapper -> Form layout
 const InnerWrapper = styled.form`
   display: flex;
   flex-direction: column;
@@ -55,6 +52,8 @@ export const LoginPage = () => {
       ...loginData,
       [name]: value,
     });
+
+    console.log(loginData);
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,6 +80,8 @@ export const LoginPage = () => {
       console.log(error);
     }
   };
+  console.log(JSON.stringify({ ...loginData }));
+
   useEffect(() => {
     localStorage.setItem("userData", JSON.stringify(userData));
 

@@ -1,4 +1,5 @@
-﻿using dotLearn.Domain.Entities;
+﻿using dotLearn.Domain.DTO;
+using dotLearn.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace dotLearn.Application.Common.Services.Class
 {
     public interface IClassService
     {
-        Task<ClassEntities> Create(ClassEntities newClass);
+        Task<ClassEntities> Create(ClassDTO newClass);
         public void Delete(ClassEntities myClass);
+        List<StudentAndProfessorClassesDTO> GetClass();
     }
 }

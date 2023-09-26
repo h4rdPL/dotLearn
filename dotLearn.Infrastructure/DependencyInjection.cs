@@ -28,7 +28,6 @@ namespace dotLearn.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
         {
-            // Repository injection
             services.AddScoped<IJobBoardRepository, JobBoardRepository>();
             services.AddScoped<IFlashCardsRepository, FlashCardsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -36,8 +35,10 @@ namespace dotLearn.Infrastructure
             services.AddScoped<ITestRepository, TestRepository>();
 
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
-            services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IValidator, Validator>();
+            services.AddHostedService<TestBackgroundService>();
+
 
             return services;
 

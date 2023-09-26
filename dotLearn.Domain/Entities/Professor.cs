@@ -10,5 +10,6 @@ namespace dotLearn.Domain.Entities
     public class Professor : User
     {
         public Subject Subject { get; set; }
+        public ICollection<ClassEntities> Classes { get; set; }
     }
 }

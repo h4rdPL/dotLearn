@@ -4,7 +4,7 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState({
-    email: '', 
+    email: ''
   });
 
   const updateUserEmail = (newEmail) => {

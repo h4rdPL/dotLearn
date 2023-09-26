@@ -15,6 +15,6 @@ namespace dotLearn.Application.Services.Authentication
     {
         AuthenticationResult Register(UserDTO userDTO);
         AuthenticationResult Login(string email, string password);
-        User User(string token); 
+        User User(); 
     }
 }
