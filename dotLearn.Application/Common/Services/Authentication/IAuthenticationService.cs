@@ -1,4 +1,5 @@
-﻿using dotLearn.Domain.Data.Enum;
+﻿using dotLearn.Contracts.Authentication;
+using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ namespace dotLearn.Application.Services.Authentication
     public interface IAuthenticationService
     {
         AuthenticationResult Register(UserDTO userDTO);
-        AuthenticationResult Login(string email, string password);
+        AuthenticationResult Login(LoginRequest request);
         User User(); 
     }
 }

@@ -19,21 +19,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 using Microsoft.AspNetCore.Authorization;
+using dotLearn.Contracts.Authentication;
+
 namespace dotLearn.Application.Services.Authentication
 {
     public partial class AuthenticationService : IAuthenticationService
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly IValidator _validator;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
+        private readonly IPasswordHasher _passwordHasher;
+        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher)
         {
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
             _validator = validator;
             _httpContextAccessor = httpContextAccessor;
+            _passwordHasher = passwordHasher;
         }
         /// <summary>
         /// Registers a user, either as a Student or a Professor.
@@ -54,6 +56,7 @@ namespace dotLearn.Application.Services.Authentication
             }
 
             User user = null;
+            var password = _passwordHasher.Hash(userDTO.Password);
 
             if (userDTO.Role == Role.Student)
             {
@@ -61,11 +64,10 @@ namespace dotLearn.Application.Services.Authentication
                 var cardId = cardIdGenerator.GenerateCardIdInt();
                 user = new Student
                 {
-                    // Id zostawiamy takie, jakie jest nadane przez bazę danych
                     FirstName = userDTO.FirstName,
                     LastName = userDTO.LastName,
                     Email = userDTO.Email,
-                    Password = PasswordHasher.EncryptPassword(userDTO.Password),
+                    Password = password, 
                     Role = Role.Student,
                     CardId = cardId
                 };
@@ -74,11 +76,10 @@ namespace dotLearn.Application.Services.Authentication
             {
                 user = new Professor
                 {
-                    // Tak samo, Id pozostawiamy bez zmian
                     FirstName = userDTO.FirstName,
                     LastName = userDTO.LastName,
                     Email = userDTO.Email,
-                    Password = PasswordHasher.EncryptPassword(userDTO.Password),
+                    Password = password, 
                     Role = Role.Professor,
                 };
             }
@@ -88,15 +89,13 @@ namespace dotLearn.Application.Services.Authentication
                 throw new Exception("The provided role does not exist");
             }
 
-            // Dodaj użytkownika do bazy danych
             _userRepository.Add(user);
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 
-            // Wygeneruj token JWT z prawidłowym ID użytkownika
-
             return new AuthenticationResult(user, token);
         }
+
 
 
 
@@ -107,23 +106,23 @@ namespace dotLearn.Application.Services.Authentication
         /// <param name="password">User's password</param>
         /// <returns>Authentication result containing user and JWT token</returns>
         /// <exception cref="Exception">Thrown when the user email or password is incorrect</exception>
-        public AuthenticationResult Login(string email, string password)
+        public AuthenticationResult Login(LoginRequest request)
         {
-            var user = _userRepository.GetUserByEmail(email);
+            var user = _userRepository.GetUserByEmail(request.Email);
 
-            // 1. Validate if the user exists
             if (user is null)
             {
                 throw new Exception("Invalid Credentials");
             }
 
-            // 2. Validate if the password is correct
-            if (PasswordHasher.VerifyPassword(password, user.Password))
+            var result = _passwordHasher.VerifyPassword(user.Password, request.Password);
+
+            if (!result)
             {
-                throw new Exception("The provided password is incorrect");
+                throw new Exception("Invalid Credentials pass");
+
             }
-            
-            // 3. Create a JWT Token
+
             var token = _jwtTokenGenerator.GenerateToken(user);
 
             _httpContextAccessor.HttpContext.Response.Cookies.Append("jwt", token, new CookieOptions
@@ -134,6 +133,10 @@ namespace dotLearn.Application.Services.Authentication
             return new AuthenticationResult(user, token);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public User User()
         {
             var jwt = _httpContextAccessor.HttpContext.Request.Cookies["jwt"];

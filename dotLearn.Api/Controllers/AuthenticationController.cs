@@ -41,14 +41,9 @@ namespace dotLearn.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)
         {
-            var authResult = _authenticationService.Login(request.Email, request.Password);
+            var authResult = _authenticationService.Login(request);
             var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
             var jwt = _jwtTokenGenerator.GenerateToken(authResult.user);
-
-            Response.Cookies.Append("jwt", jwt, new CookieOptions
-            {
-                HttpOnly = true
-            });
             return await Task.FromResult(Ok(response));
         }
 

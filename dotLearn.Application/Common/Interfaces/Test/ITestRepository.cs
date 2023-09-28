@@ -10,7 +10,7 @@ namespace dotLearn.Application.Common.Interfaces.Test
 {
     public interface ITestRepository
     {
-        TestClass Create(TestDTO testClass);
+        TestDTO Create(TestDTO testClass);
         List<TestDTO> GetTest(User studentId);
         Task OpenTestsOnActiveDateAsync();
     }

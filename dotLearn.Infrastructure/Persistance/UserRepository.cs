@@ -21,39 +21,16 @@ namespace dotLearn.Infrastructure.Persistance
             _context = context;
         }
 
-        public void Add(User userDTO)
+        public void Add(User user)
         {
-            var cardIdGenerator = new CardIdGenerator();
-            var cardId = cardIdGenerator.GenerateCardIdInt();
-            if (userDTO.Role == Role.Professor)
+            if (user.Role == Role.Professor)
             {
-                var professor = new Professor
-                {
-                    Id = userDTO.Id,
-                    FirstName = userDTO.FirstName,
-                    LastName = userDTO.LastName,
-                    Email = userDTO.Email,
-                    Password = PasswordHasher.EncryptPassword(userDTO.Password),
-                    Role = Role.Professor,
-                };
-
-                _context.Professors.Add(professor);
+                _context.Professors.Add((Professor)user);
                 _context.SaveChanges();
             }
-            else if (userDTO.Role == Role.Student)
+            else if (user.Role == Role.Student)
             {
-                // Create a Student object from the UserDTO
-                var student = new Student
-                {
-                    FirstName = userDTO.FirstName,
-                    LastName = userDTO.LastName,
-                    Email = userDTO.Email,
-                    Password = PasswordHasher.EncryptPassword(userDTO.Password),
-                    Role = Role.Student,
-                    CardId = cardId
-                };
-
-                _context.Students.Add(student);
+                _context.Students.Add((Student)user);
                 _context.SaveChanges();
             }
         }
@@ -76,7 +53,6 @@ namespace dotLearn.Infrastructure.Persistance
                 Console.WriteLine($"Znaleziono użytkownika o adresie e-mail: {email}, Id: {user.Id}");
             }
 
-            // Sprawdź rolę użytkownika i zwróć go w zależności od roli
             if (user != null && user.Role == Role.Student)
             {
                 return user; 

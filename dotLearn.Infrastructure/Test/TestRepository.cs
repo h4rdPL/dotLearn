@@ -27,7 +27,7 @@ namespace dotLearn.Infrastructure.Test
             _userRepository = userRepository;
         }
 
-        public TestClass Create(TestDTO testClass)
+        public TestDTO Create(TestDTO testClass)
         {
             var professorId = _jwtTokenGenerator.GetProfessorIdFromJwt();
             var professor = _context.Professors.FirstOrDefault(p => p.Id == professorId.Id);
@@ -38,7 +38,7 @@ namespace dotLearn.Infrastructure.Test
                 Console.WriteLine("Professor is not assigned to any class.");
             }
 
-            var test = new TestClass
+            var testEntity = new TestClass 
             {
                 TestName = testClass.TestName,
                 Time = testClass.Time,
@@ -46,41 +46,77 @@ namespace dotLearn.Infrastructure.Test
                 ActiveDate = testClass.ActiveDate,
                 ClassId = professorClass.Id,
                 Questions = testClass.Questions
-                .Select(questionDTO => new Question
-                {
-                    QuestionName = questionDTO.QuestionName,
-                    Answers = questionDTO.Answers
-                    .Select(answerDTO => new Answer
+                    .Select(questionDTO => new Question
                     {
-                        AnswerName = answerDTO.AnswerName,
-                        IsCorrect = answerDTO.IsCorrect,
-                    }).ToList(), 
-                }).ToList(), 
+                        QuestionName = questionDTO.QuestionName,
+                        TestId = questionDTO.TestId,
+                        Answers = questionDTO.Answer
+                            .Select(answerDTO => new Answer
+                            {
+                                AnswerName = answerDTO.AnswerName,
+                                IsCorrect = answerDTO.IsCorrect,
+                            }).ToList(),
+                    }).ToList(),
             };
 
-            _context.Tests.Add(test); 
+            _context.Tests.Add(testEntity);
             _context.SaveChanges();
 
-            return test;
+            // Assuming you want to return a DTO of the created entity
+            return new TestDTO
+            {
+                TestName = testEntity.TestName,
+                Time = testEntity.Time,
+                IsActive = testEntity.IsActive,
+                ActiveDate = testEntity.ActiveDate,
+                ClassId = testEntity.ClassId,
+                Questions = testEntity.Questions
+                    .Select(question => new QuestionDTO
+                    {
+                        QuestionName = question.QuestionName,
+                        TestId = question.TestId,
+                        Answer = question.Answers
+                            .Select(answer => new AnswerDTO
+                            {
+                                AnswerName = answer.AnswerName,
+                                IsCorrect = answer.IsCorrect,
+                            }).ToList(),
+                    }).ToList(),
+            };
         }
+
 
         public List<TestDTO> GetTest(User user)
         {
             var testsWithProfessors = _context.Tests
-                 .Where(test => test.Class.ProfessorId == user.Id)
-                 .Include(test => test.Class.Professor) // Załaduj profesora klasy
-                 .Select(test => new TestDTO
-                 {
-                     TestName = test.TestName,
-                     Time = test.Time,
-                     IsActive = test.IsActive,
-                     ActiveDate = test.ActiveDate,
-                     ClassId = test.ClassId,
-                     ProfessorFirstName = test.Class.Professor.FirstName, // Imię profesora klasy
-                     ProfessorLastName = test.Class.Professor.LastName,   // Nazwisko profesora klasy
-                     Questions = test.Questions
-                 })
-                 .ToList();
+                .Where(test => test.Class.ProfessorId == user.Id)
+                .Include(test => test.Class.Professor) // Załaduj profesora klasy
+                .Select(test => new TestDTO
+                {
+                    TestName = test.TestName,
+                    Time = test.Time,
+                    IsActive = test.IsActive,
+                    ActiveDate = test.ActiveDate,
+                    ClassId = test.ClassId,
+                    ProfessorFirstName = test.Class.Professor.FirstName, // Imię profesora klasy
+                    ProfessorLastName = test.Class.Professor.LastName,   // Nazwisko profesora klasy
+                    Questions = test.Questions
+                        .Select(question => new QuestionDTO
+                        {
+                            QuestionName = question.QuestionName,
+                            TestId = question.TestId,
+                            Answer = question.Answers
+                                .Select(answer => new AnswerDTO
+                                {
+                                    AnswerName = answer.AnswerName
+                                })
+                                .ToList()
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+
 
             return testsWithProfessors;
 

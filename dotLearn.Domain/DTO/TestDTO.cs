@@ -15,7 +15,7 @@ namespace dotLearn.Domain.DTO
         int ClassId,
         string ProfessorFirstName, 
         string ProfessorLastName,  
-        List<Question> Questions
+        List<QuestionDTO> Questions
     );
 
 

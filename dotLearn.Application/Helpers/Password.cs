@@ -15,6 +15,11 @@ namespace dotLearn.Application.Helpers
 
         public static bool VerifyPassword(string password, string hash)
         {
+            Console.WriteLine("hasełko");
+            Console.WriteLine(hash); // hasło z bazy
+            Console.WriteLine(EncryptPassword(password)); // hasło niehashowane
+            var pass = BCrypt.Net.BCrypt.Verify(password, hash);
+            Console.WriteLine(pass);
             return BCrypt.Net.BCrypt.Verify(password, hash);
         }
     }

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <ProjectReference Include="..\dotLearn.Contracts\dotLearn.Contracts.csproj" />
 	  <ProjectReference Include="..\dotLearn.Domain\dotLearn.Domain.csproj" />
   </ItemGroup>
 

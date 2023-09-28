@@ -33,6 +33,7 @@ namespace dotLearn.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClassRepository, ClassRepository>();
             services.AddScoped<ITestRepository, TestRepository>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
 
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
