@@ -29,11 +29,10 @@ namespace dotLearn.Application.Services.Authentication
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPasswordHasher _passwordHasher;
-        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IValidator validator, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher)
+        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher)
         {
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
-            _validator = validator;
             _httpContextAccessor = httpContextAccessor;
             _passwordHasher = passwordHasher;
         }
