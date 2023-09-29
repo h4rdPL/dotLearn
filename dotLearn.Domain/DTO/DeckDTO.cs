@@ -10,6 +10,6 @@ namespace dotLearn.Domain.DTO
     public record struct DeckDTO(
         string Name,
         string Category,
-        List<FlashCard> flashCards
+        List<FlashCardDTO> flashCards
     );
 }

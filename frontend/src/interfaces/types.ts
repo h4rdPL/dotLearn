@@ -51,7 +51,9 @@ export interface CTAInterface {
   label?: string;
   href?: string;
   style?: any;
-  onClick?: (e : SyntheticEvent) => void; // Update the signature to accept no arguments
+  to?: string;
+  as?: any;
+  onClick?: (e : SyntheticEvent) => void;
 }
 
 export interface MissionProps {

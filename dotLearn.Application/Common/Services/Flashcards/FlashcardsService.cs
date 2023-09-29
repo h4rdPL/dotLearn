@@ -103,7 +103,7 @@ namespace dotLearn.Application.Common.Services.Flashcards
         /// 
         /// </summary>
         /// <param name="email">User email</param>
-        public List<Deck> GetDecksByUserEmail()
+        public List<DeckDTO> GetDecksByUserEmail()
         {
             var jwtToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
 

@@ -66,6 +66,7 @@
     "@storybook/react-webpack5": "^7.0.12",
     "@storybook/testing-library": "^0.0.14-next.2",
     "@types/js-cookie": "^3.0.3",
+    "@types/react-slick": "^0.23.10",
     "babel-plugin-named-exports-order": "^0.0.2",
     "eslint-plugin-storybook": "^0.6.12",
     "prop-types": "^15.8.1",

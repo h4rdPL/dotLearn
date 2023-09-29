@@ -3,7 +3,6 @@ import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
-// import { FlashCards } from "../../../assets/data/flashCards"; // Update the import to match the new interface
 import Cookies from "js-cookie";
 
 const Wrapper = styled.div`
@@ -29,24 +28,22 @@ const FlashCardsListItem = styled.li`
 `;
 
 export const LearnPage: React.FC = () => {
-  const [deck, setDeck] = useState<any[]>([]); // Initialize as an empty array
+  const [deck, setDeck] = useState<any[]>([]);
 
   const getAuthTokenFromCookies = () => {
-    const token = Cookies.get("jwt"); // Replace "jwt" with your cookie name
+    const token = Cookies.get("jwt");
     return token;
   };
 
-  // Function to fetch flashcards
   const fetchFlashcards = async () => {
     try {
       const authToken = getAuthTokenFromCookies();
-      // Make an HTTP request to your API endpoint that provides flashcards
       const response = await fetch(
         `https://localhost:7024/api/FlashCard/getStudentDecks`,
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${authToken}`, // Replace with your JWT token
+            Authorization: `Bearer ${authToken}`,
           },
           credentials: "include",
         }
@@ -54,7 +51,8 @@ export const LearnPage: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setDeck(data); // Update state with the fetched flashcards
+        setDeck(data.$values); // Update state with the fetched flashcards
+        console.log(data);
       } else {
         // Handle error responses here
         console.error("Failed to fetch flashcards");
@@ -69,20 +67,20 @@ export const LearnPage: React.FC = () => {
     fetchFlashcards();
   }, []);
 
-  console.log(deck);
   return (
     <PlatformLayout>
       <Wrapper>
         <h2>Twoje fiszki:</h2>
         <FlashCardsList>
           {deck.map((flashcardSet) => (
-            <FlashCardsListItem key={flashcardSet.Id}>
-              <div key={flashcardSet.Id}>
+            <FlashCardsListItem key={flashcardSet.flashCards.$values.Id}>
+              <div key={flashcardSet.flashCards.$values.Id}>
                 Nazwa: {flashcardSet.Name} - {flashcardSet.Category}
                 <br />
                 <Cta
+                  as={Link}
+                  to={`/platform/learn/${flashcardSet.flashCards.$values[0].Id}`}
                   style={{ alignSelf: "flex-start" }}
-                  href={`/platform/learn/${flashcardSet.Id}`}
                   label="Wejdź"
                   isJobOffer
                 />

@@ -1,4 +1,5 @@
-﻿using dotLearn.Domain.Entities;
+﻿using dotLearn.Domain.DTO;
+using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace dotLearn.Application.Common.Interfaces.FlashCards
     {
         Task<Deck> Create(Deck deck);
         bool Delete (int deckId);    
-        List<Deck> GetDecksByUserId(int userId);
+        List<DeckDTO> GetDecksByUserId(int userId);
         
     }
 }

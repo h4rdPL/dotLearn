@@ -53,15 +53,29 @@ namespace dotLearn.Infrastructure.FlashCards
 
         }
 
-        public List<Deck> GetDecksByUserId(int userId)
+
+        public List<DeckDTO> GetDecksByUserId(int userId)
         {
             var decksForUser = _context.Decks
                 .Include(deck => deck.FlashCards)
                 .Where(deck => deck.StudentId == userId)
                 .ToList();
 
-            return decksForUser;
+            var deckDTOs = decksForUser.Select(deck => new DeckDTO
+            {
+                Name = deck.Name,
+                Category = deck.Category,
+                flashCards = deck.FlashCards.Select(flashCard => new FlashCardDTO
+                {
+                    Id = flashCard.Id,
+                    Content = flashCard.Content,
+                    Definition = flashCard.Definition,
+                }).ToList()
+            }).ToList();
+
+            return deckDTOs;
         }
+
 
     }
 }

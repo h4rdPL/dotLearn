@@ -14,6 +14,6 @@ namespace dotLearn.Application.Services.Flashcards
         public void Create(DeckDTO model);
         public bool Delete(int deckId);
         public FlashCard Update(FlashCard flashCard);
-        public List<Deck> GetDecksByUserEmail();
+        public List<DeckDTO> GetDecksByUserEmail();
     }
 }

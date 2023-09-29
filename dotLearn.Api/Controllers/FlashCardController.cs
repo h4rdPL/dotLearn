@@ -58,7 +58,7 @@ namespace dotLearn.Api.Controllers
         /// </summary>
         /// <returns>An ActionResult containing a list of decks or a NotFound response if no decks are found.</returns>
         [HttpGet("getStudentDecks")]
-        public async Task<ActionResult<Deck>> GetFlashcards()
+        public async Task<ActionResult<DeckDTO>> GetFlashcards()
         {
             var decks = _flashCardsService.GetDecksByUserEmail();
 

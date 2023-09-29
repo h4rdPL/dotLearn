@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import styled, { css } from "styled-components";
-import { FlashCardState } from "../../../interfaces/types";
 import { ImArrowLeft2, ImArrowRight2 } from "react-icons/im";
 import Cookies from "js-cookie";
+import { FlashCardState } from "../../../interfaces/types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -76,23 +76,6 @@ const FlashcardText = styled.p`
   color: #fff;
 `;
 
-const FlashcardList = styled.ul`
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 2rem;
-  gap: 1rem;
-`;
-
-const FlashcardListItem = styled.li`
-  background-color: ${({ theme }) => theme.purple};
-  color: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  font-size: 16px;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   gap: 1rem;
@@ -120,25 +103,56 @@ const InnerButton = styled.button`
     `}
 `;
 
-interface FlashCard {
-  Id: number;
+const FlashcardList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+`;
+
+const FlashcardListItem = styled.li`
+  background-color: ${({ theme }) => theme.purple};
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.lightPurple};
+    transform: scale(1.02);
+  }
+`;
+
+interface FlashCardValue {
+  Id: string;
   Content: string;
   Definition: string;
 }
 
 interface FlashCardSet {
+  length: any;
+  Definition: string;
   Id: number;
   Name: string;
   Category: string;
+  Content?: string;
   StudentId: number;
-  FlashCards: FlashCard[];
+  FlashCards: FlashCardValue[];
 }
 
 export const FlashCardDetails: React.FC = () => {
-  const { flashCardId } = useParams<{ flashCardId: any }>();
+  const { flashCardId } = useParams<{ flashCardId: string }>();
   const [flipped, setFlipped] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const [deck, setDeck] = useState<FlashCardSet[]>([]);
+  const [currentDeck, setCurrentDeck] = useState<FlashCardValue[]>([]);
 
   const getAuthTokenFromCookies = () => {
     const token = Cookies.get("jwt");
@@ -159,42 +173,22 @@ export const FlashCardDetails: React.FC = () => {
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        setDeck(data);
-      } else {
-        console.error("Failed to fetch flashcards");
-      }
+      const data = await response.json();
+      const myData = data.$values;
+
+      setDeck([]);
+
+      const flashCardSets = myData.map((item: any) => ({
+        Name: item.Name,
+        Category: item.Category,
+        FlashCards: item.flashCards.$values,
+      }));
+
+      setDeck(flashCardSets);
+      console.log("Fetched deck:", deck);
     } catch (error) {
       console.error("Error fetching flashcards:", error);
     }
-  };
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (deck.length > 0) {
-      const currentFlashCardSet = deck.find((set) => set.Id === flashCardId);
-      if (currentFlashCardSet) {
-        if (event.key === "ArrowLeft" && currentCard > 0) {
-          handleCardSwitch(currentCard - 1);
-        } else if (
-          event.key === "ArrowRight" &&
-          currentCard < currentFlashCardSet.FlashCards.length - 1
-        ) {
-          handleCardSwitch(currentCard + 1);
-        } else if (event.key === " ") {
-          handleCardFlip();
-        }
-      }
-    }
-  };
-
-  const handleCardSwitch = (nextCard: number) => {
-    setCurrentCard(nextCard);
-    setFlipped(false);
-  };
-
-  const handleCardFlip = () => {
-    setFlipped(!flipped);
   };
 
   useEffect(() => {
@@ -202,75 +196,67 @@ export const FlashCardDetails: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [currentCard, flipped, deck]);
+    if (deck.length > 0 && flashCardId) {
+      const selectedDeckIndex = parseInt(flashCardId, 10) - 1;
+      if (selectedDeckIndex >= 0 && selectedDeckIndex < deck.length) {
+        const selectedDeck = deck[selectedDeckIndex];
+        if (selectedDeck && selectedDeck.FlashCards) {
+          setCurrentDeck(selectedDeck.FlashCards);
+          setCurrentCard(0);
+          setFlipped(false);
+        }
+      }
+    }
+  }, [deck, flashCardId]);
 
   return (
     <PlatformLayout>
       <Wrapper>
-        {deck.length > 0 ? (
-          <FlashcardContainer>
-            <Flashcard
-              key={currentCard}
-              flipped={flipped}
-              onClick={handleCardFlip}
-            >
+        <FlashcardContainer>
+          {currentDeck.length > 0 && (
+            <Flashcard flipped={flipped} onClick={() => setFlipped(!flipped)}>
               <FlashcardFront>
                 <FlashcardText>
-                  {
-                    deck.find((set) => set.Id === flashCardId)?.FlashCards[
-                      currentCard
-                    ].Content
-                  }
+                  {currentDeck[currentCard].Content}
                 </FlashcardText>
               </FlashcardFront>
               <FlashcardBack>
                 <FlashcardText>
-                  {
-                    deck.find((set) => set.Id === flashCardId)?.FlashCards[
-                      currentCard
-                    ].Definition
-                  }
+                  {currentDeck[currentCard].Definition}
                 </FlashcardText>
               </FlashcardBack>
             </Flashcard>
-            <ButtonContainer>
-              <InnerButton
-                onClick={() => handleCardSwitch(currentCard - 1)}
-                disabled={currentCard === 0}
-              >
-                <ImArrowLeft2 />
-                Previous Card
-              </InnerButton>
-              <InnerButton
-                onClick={() => handleCardSwitch(currentCard + 1)}
-                disabled={
-                  currentCard ===
-                  (deck.find((set) => set.Id === flashCardId)?.FlashCards
-                    .length ?? 0) -
-                    1
-                }
-              >
-                Next Card
-                <ImArrowRight2 />
-              </InnerButton>
-            </ButtonContainer>
-          </FlashcardContainer>
-        ) : (
-          <p>Flashcard set not found</p>
-        )}
+          )}
+
+          <ButtonContainer>
+            <InnerButton
+              onClick={() => setCurrentCard(Math.max(currentCard - 1, 0))}
+              disabled={currentCard === 0}
+            >
+              <ImArrowLeft2 />
+              Previous Card
+            </InnerButton>
+            <InnerButton
+              onClick={() =>
+                setCurrentCard(
+                  Math.min(currentCard + 1, currentDeck.length - 1)
+                )
+              }
+              disabled={currentCard === currentDeck.length - 1}
+            >
+              Next Card
+              <ImArrowRight2 />
+            </InnerButton>
+          </ButtonContainer>
+        </FlashcardContainer>
       </Wrapper>
+
       <FlashcardList>
-        {deck
-          .find((set) => set.Id === flashCardId)
-          ?.FlashCards.map((flashcard, index) => (
-            <FlashcardListItem key={index}>
-              {flashcard.Content} - {flashcard.Definition}
-            </FlashcardListItem>
-          ))}
+        {currentDeck.map((flashCard, cardIndex) => (
+          <FlashcardListItem key={cardIndex}>
+            {flashCard.Content} - {flashCard.Definition}
+          </FlashcardListItem>
+        ))}
       </FlashcardList>
     </PlatformLayout>
   );
