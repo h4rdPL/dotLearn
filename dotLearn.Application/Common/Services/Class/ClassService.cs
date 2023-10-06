@@ -15,6 +15,7 @@ using dotLearn.Application.Common.Interfaces.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using dotLearn.Domain.DTO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace dotLearn.Application.Services.Class
 {
@@ -32,6 +33,18 @@ namespace dotLearn.Application.Services.Class
             _contextAccessor = contextAccessor;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="professorId"></param>
+        /// <param name="formFile"></param>
+        /// <returns></returns>
+        public async Task<ClassPdfFile> AddPDFFile(int professorId, IFormFile formFile)
+        {
+            return await _classRepository.AddPDFFIle(professorId, formFile);
+        }
+
+
         /// <summary>
         /// Creates a new class.
         /// </summary>
@@ -95,9 +108,20 @@ namespace dotLearn.Application.Services.Class
 
         }
 
+        public async Task<List<PdfFile>> GetClassPDFFiles(int userId)
+        {
+            return await _classRepository.GetClassPDFFiles(userId);
+        }
+
+        public PdfFile GetPdfFileContent(int userId, string fileName)
+        {
+            return _classRepository.GetPdfFileContent(userId, fileName);
+        }
+
         public Task<bool> RemoveStudentFromClass(int classId, Guid studentId)
         {
             throw new NotImplementedException();
         }
+
     }
 }

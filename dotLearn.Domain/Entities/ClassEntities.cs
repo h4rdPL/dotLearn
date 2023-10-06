@@ -17,5 +17,6 @@ namespace dotLearn.Domain.Entities
         public List<Student> Students { get; set; }
         public List<ClassEntitiesStudent> ClassEntitiesStudents { get; set; }
         public List<TestClass> Tests { get; set; }
+        public List<PdfFile> PdfFiles { get; set; }
     }
 }

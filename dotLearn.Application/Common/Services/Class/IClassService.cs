@@ -1,5 +1,7 @@
 ﻿using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +16,8 @@ namespace dotLearn.Application.Common.Services.Class
         Task<ClassEntities> Create(ClassDTO newClass);
         public void Delete(ClassEntities myClass);
         List<StudentAndProfessorClassesDTO> GetClass();
+        Task<ClassPdfFile> AddPDFFile(int professorId, IFormFile formFile);
+        Task<List<PdfFile>> GetClassPDFFiles(int uesrId);
+        PdfFile GetPdfFileContent(int userId,string fileName);
     }
 }

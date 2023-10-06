@@ -68,6 +68,7 @@ export const TestPage: React.FC<TestInterface> = () => {
                 />
                 <span style={{ fontSize: "14px" }}>
                   <p>Data rozpoczęcia: {data.ActiveDate}</p>
+                  <p>Czas: {data.Time} minut</p>
                 </span>
               </div>
               <Cta

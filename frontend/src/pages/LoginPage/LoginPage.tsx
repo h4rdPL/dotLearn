@@ -43,8 +43,7 @@ export const LoginPage = () => {
   });
   const [loggedIn, setLoggedIn] = useState(false);
   let navigate = useNavigate();
-  const { userData, updateUserEmail, updateUserToken } =
-    useContext(UserContext);
+  const { userData, updateUserEmail } = useContext(UserContext);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

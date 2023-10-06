@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 namespace dotLearn.Domain.DTO
 {
     public record struct StudentAndProfessorClassesDTO(
+        int Id,
         string? ClassName,
         string? FirstName,
-        string LastName
-        );
+        string LastName,
+        List<PdfFile> PdfFiles 
+    );
+
 }

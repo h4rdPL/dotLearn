@@ -54,7 +54,7 @@ export const ClassPage: React.FC = () => {
   useEffect(() => {
     fetchUserClasses();
   }, []);
-
+  console.log(classes);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -77,7 +77,8 @@ export const ClassPage: React.FC = () => {
                 <p>Ilość osób: {myClass.numberOfPeople}</p>
               </span>
               <Cta
-                href={`/platform/class/${myClass.id}`}
+                as={Link}
+                to={`/platform/class/${myClass.Id}`}
                 style={{ alignSelf: "flex-start" }}
                 label="Wejdź"
                 isJobOffer

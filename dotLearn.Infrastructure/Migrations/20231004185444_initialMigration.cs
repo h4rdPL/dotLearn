@@ -27,6 +27,20 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PdfFile",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PdfFile", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Professors",
                 columns: table => new
                 {
@@ -104,6 +118,30 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClassEntitiesPdfFile",
+                columns: table => new
+                {
+                    ClassesId = table.Column<int>(type: "int", nullable: false),
+                    PdfFilesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassEntitiesPdfFile", x => new { x.ClassesId, x.PdfFilesId });
+                    table.ForeignKey(
+                        name: "FK_ClassEntitiesPdfFile_Classes_ClassesId",
+                        column: x => x.ClassesId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassEntitiesPdfFile_PdfFile_PdfFilesId",
+                        column: x => x.PdfFilesId,
+                        principalTable: "PdfFile",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClassEntitiesStudents",
                 columns: table => new
                 {
@@ -123,6 +161,32 @@ namespace dotLearn.Infrastructure.Migrations
                         name: "FK_ClassEntitiesStudents_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClassPdfFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClassId = table.Column<int>(type: "int", nullable: false),
+                    PdfFileId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassPdfFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassPdfFiles_Classes_ClassId",
+                        column: x => x.ClassId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassPdfFiles_PdfFile_PdfFileId",
+                        column: x => x.PdfFileId,
+                        principalTable: "PdfFile",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -197,6 +261,11 @@ namespace dotLearn.Infrastructure.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClassEntitiesPdfFile_PdfFilesId",
+                table: "ClassEntitiesPdfFile",
+                column: "PdfFilesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClassEntitiesStudents_StudentId",
                 table: "ClassEntitiesStudents",
                 column: "StudentId");
@@ -205,6 +274,16 @@ namespace dotLearn.Infrastructure.Migrations
                 name: "IX_Classes_ProfessorId",
                 table: "Classes",
                 column: "ProfessorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassPdfFiles_ClassId",
+                table: "ClassPdfFiles",
+                column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassPdfFiles_PdfFileId",
+                table: "ClassPdfFiles",
+                column: "PdfFileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FlashCard_DeckId",
@@ -229,7 +308,13 @@ namespace dotLearn.Infrastructure.Migrations
                 name: "Answers");
 
             migrationBuilder.DropTable(
+                name: "ClassEntitiesPdfFile");
+
+            migrationBuilder.DropTable(
                 name: "ClassEntitiesStudents");
+
+            migrationBuilder.DropTable(
+                name: "ClassPdfFiles");
 
             migrationBuilder.DropTable(
                 name: "FlashCard");
@@ -239,6 +324,9 @@ namespace dotLearn.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "PdfFile");
 
             migrationBuilder.DropTable(
                 name: "Decks");

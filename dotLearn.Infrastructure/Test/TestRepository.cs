@@ -89,8 +89,11 @@ namespace dotLearn.Infrastructure.Test
         public List<TestDTO> GetTest(User user)
         {
             var testsWithProfessors = _context.Tests
-                .Where(test => test.Class.ProfessorId == user.Id)
-                .Include(test => test.Class.Professor) // Załaduj profesora klasy
+                .Where(test =>
+                    test.Class.ProfessorId == user.Id ||
+                    test.Class.Students.Any(student => student.Id == user.Id)
+                )
+                .Include(test => test.Class.Professor)
                 .Select(test => new TestDTO
                 {
                     TestName = test.TestName,
@@ -98,8 +101,8 @@ namespace dotLearn.Infrastructure.Test
                     IsActive = test.IsActive,
                     ActiveDate = test.ActiveDate,
                     ClassId = test.ClassId,
-                    ProfessorFirstName = test.Class.Professor.FirstName, // Imię profesora klasy
-                    ProfessorLastName = test.Class.Professor.LastName,   // Nazwisko profesora klasy
+                    ProfessorFirstName = test.Class.Professor.FirstName,
+                    ProfessorLastName = test.Class.Professor.LastName,
                     Questions = test.Questions
                         .Select(question => new QuestionDTO
                         {
@@ -116,40 +119,9 @@ namespace dotLearn.Infrastructure.Test
                 })
                 .ToList();
 
-
-
             return testsWithProfessors;
-
-            //var testsWithProfessors = (
-            //    from ces in _context.ClassEntitiesStudents
-            //    where ces.StudentId == user.Id
-            //    join ce in _context.Classes
-            //        on ces.ClassEntitiesId equals ce.Id
-            //    join test in _context.Tests
-            //        on ce.Id equals test.ClassId
-            //    select new
-            //    {
-            //        Test = test,
-            //        Professors = ce.Professor
-            //    }
-            //)
-            //.Include(item => item.Test.Questions)
-            //.ThenInclude(question => question.Answers)
-            //.ToList();
-
-            //// Możesz przekształcić wynik na odpowiednią strukturę, np. List<TestClass>
-            //var testList = testsWithProfessors.Select(item => new TestClass
-            //{
-            //    Class = item.Test.Class, // Przypisz odpowiednie dane z testu
-            //    Questions = item.Test.Questions,
-            //    TestName = item.Test.TestName
-            //}).ToList();
-
-
-            //return testList;
-
-
         }
+
 
         public async Task OpenTestsOnActiveDateAsync()
         {

@@ -72,21 +72,27 @@ export const LearnPage: React.FC = () => {
       <Wrapper>
         <h2>Twoje fiszki:</h2>
         <FlashCardsList>
-          {deck.map((flashcardSet) => (
-            <FlashCardsListItem key={flashcardSet.flashCards.$values.Id}>
-              <div key={flashcardSet.flashCards.$values.Id}>
-                Nazwa: {flashcardSet.Name} - {flashcardSet.Category}
-                <br />
-                <Cta
-                  as={Link}
-                  to={`/platform/learn/${flashcardSet.flashCards.$values[0].Id}`}
-                  style={{ alignSelf: "flex-start" }}
-                  label="Wejdź"
-                  isJobOffer
-                />
-              </div>
-            </FlashCardsListItem>
-          ))}
+          {deck.length > 0 ? (
+            deck.map((flashcardSet) => (
+              <FlashCardsListItem key={flashcardSet.flashCards.$values.Id}>
+                <div key={flashcardSet.flashCards.$values.Id}>
+                  Nazwa: {flashcardSet.Name} - {flashcardSet.Category}
+                  <br />
+                  <Cta
+                    as={Link}
+                    to={`/platform/learn/${flashcardSet.flashCards.$values[0].Id}`}
+                    style={{ alignSelf: "flex-start" }}
+                    label="Wejdź"
+                    isJobOffer
+                  />
+                </div>
+              </FlashCardsListItem>
+            ))
+          ) : (
+            <center>
+              <p>W tym momencie nie posiadasz fiszek. Stwórz nową!</p>
+            </center>
+          )}
         </FlashCardsList>
         <Link to="/platform/learn/create">
           <Cta

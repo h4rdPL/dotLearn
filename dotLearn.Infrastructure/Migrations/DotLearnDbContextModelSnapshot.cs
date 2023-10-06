@@ -21,6 +21,21 @@ namespace dotLearn.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ClassEntitiesPdfFile", b =>
+                {
+                    b.Property<int>("ClassesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PdfFilesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClassesId", "PdfFilesId");
+
+                    b.HasIndex("PdfFilesId");
+
+                    b.ToTable("ClassEntitiesPdfFile");
+                });
+
             modelBuilder.Entity("dotLearn.Domain.Entities.Answer", b =>
                 {
                     b.Property<int>("Id")
@@ -86,6 +101,29 @@ namespace dotLearn.Infrastructure.Migrations
                     b.ToTable("ClassEntitiesStudents");
                 });
 
+            modelBuilder.Entity("dotLearn.Domain.Entities.ClassPdfFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PdfFileId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("PdfFileId");
+
+                    b.ToTable("ClassPdfFiles");
+                });
+
             modelBuilder.Entity("dotLearn.Domain.Entities.Deck", b =>
                 {
                     b.Property<int>("Id")
@@ -134,6 +172,27 @@ namespace dotLearn.Infrastructure.Migrations
                     b.HasIndex("DeckId");
 
                     b.ToTable("FlashCard");
+                });
+
+            modelBuilder.Entity("dotLearn.Domain.Entities.PdfFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("FileContent")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PdfFile");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.Professor", b =>
@@ -250,6 +309,21 @@ namespace dotLearn.Infrastructure.Migrations
                     b.ToTable("Tests");
                 });
 
+            modelBuilder.Entity("ClassEntitiesPdfFile", b =>
+                {
+                    b.HasOne("dotLearn.Domain.Entities.ClassEntities", null)
+                        .WithMany()
+                        .HasForeignKey("ClassesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotLearn.Domain.Entities.PdfFile", null)
+                        .WithMany()
+                        .HasForeignKey("PdfFilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("dotLearn.Domain.Entities.Answer", b =>
                 {
                     b.HasOne("dotLearn.Domain.Entities.Question", "Question")
@@ -289,6 +363,25 @@ namespace dotLearn.Infrastructure.Migrations
                     b.Navigation("ClassEntities");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("dotLearn.Domain.Entities.ClassPdfFile", b =>
+                {
+                    b.HasOne("dotLearn.Domain.Entities.ClassEntities", "Class")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotLearn.Domain.Entities.PdfFile", "PdfFile")
+                        .WithMany()
+                        .HasForeignKey("PdfFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("PdfFile");
                 });
 
             modelBuilder.Entity("dotLearn.Domain.Entities.FlashCard", b =>
