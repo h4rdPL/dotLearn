@@ -27,7 +27,6 @@ namespace dotLearn.Infrastructure.ClassEntitities
         {
             try
             {
-                // Pobierz ID klasy, do której należy profesor o podanym professorId.
                 var classId = await _context.Classes
                     .Where(c => c.ProfessorId == professorId)
                     .Select(c => c.Id)
@@ -38,15 +37,12 @@ namespace dotLearn.Infrastructure.ClassEntitities
                     throw new Exception("Error while returning class");
                 }
 
-                // Konwertuj zawartość przesłanego pliku do tablicy bajtów (byte array).
                 byte[] fileBytes;
                 using (var stream = new MemoryStream())
                 {
                     await fileUploadDTO.CopyToAsync(stream);
                     fileBytes = stream.ToArray();
                 }
-
-                // Utwórz nowy obiekt klasy ClassPdfFile, który reprezentuje powiązanie między klasą a plikiem PDF.
                 var classPdfFile = new ClassPdfFile
                 {
                     ClassId = classId,
@@ -57,18 +53,14 @@ namespace dotLearn.Infrastructure.ClassEntitities
                     }
                 };
 
-                // Dodaj nowy obiekt ClassPdfFile do kontekstu bazy danych.
                 _context.ClassPdfFiles.Add(classPdfFile);
 
-                // Zapisz zmiany w bazie danych.
                 await _context.SaveChangesAsync();
 
-                // Zwróć odpowiedni wynik, np. potwierdzenie dodania pliku PDF do klasy.
                 return classPdfFile;
             }
             catch (Exception ex)
             {
-                // Obsłuż błędy, np. logując je lub rzucając wyjątek.
                 throw ex;
             }
         }
@@ -125,7 +117,6 @@ namespace dotLearn.Infrastructure.ClassEntitities
                     throw new Exception("Error while finding the class for the logged-in professor.");
                 }
 
-                // Pobierz pliki PDF przypisane do znalezionej klasy.
                 var pdfFiles = await _context.ClassPdfFiles
                     .Where(cp => cp.ClassId == classEntity.Id)
                     .Select(cp => cp.PdfFile)
@@ -143,17 +134,16 @@ namespace dotLearn.Infrastructure.ClassEntitities
         public PdfFile GetPdfFileContent(int userId, string fileName)
         {
             var userClass = _context.ClassEntitiesStudents
-                .Include(ce => ce.Student) // Zakładam, że istnieje relacja ClassEntitiesStudents -> Student.
-                .SingleOrDefault(ce => ce.Student.Id == userId); // Znajdź klasę, do której należy użytkownik.
+                .Include(ce => ce.Student)
+                .SingleOrDefault(ce => ce.Student.Id == userId);
 
 
             var pdfFile = _context.ClassPdfFiles
-                .Include(cp => cp.PdfFile) // Include the PdfFile navigation property
+                .Include(cp => cp.PdfFile) 
                 .FirstOrDefault(cp => cp.ClassId == userClass.ClassEntitiesId && cp.PdfFile.Name == fileName);
 
             if (pdfFile == null)
             {
-                // Handle the case where the file is not found, e.g., return null or throw an exception.
                 throw new FileNotFoundException("PDF file not found.");
             }
 
