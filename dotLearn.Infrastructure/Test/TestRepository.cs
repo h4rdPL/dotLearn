@@ -96,6 +96,7 @@ namespace dotLearn.Infrastructure.Test
                 .Include(test => test.Class.Professor)
                 .Select(test => new TestDTO
                 {
+                    Id = test.Id,
                     TestName = test.TestName,
                     Time = test.Time,
                     IsActive = test.IsActive,
@@ -111,7 +112,8 @@ namespace dotLearn.Infrastructure.Test
                             Answer = question.Answers
                                 .Select(answer => new AnswerDTO
                                 {
-                                    AnswerName = answer.AnswerName
+                                    AnswerName = answer.AnswerName,
+                                    IsCorrect = answer.IsCorrect
                                 })
                                 .ToList()
                         })

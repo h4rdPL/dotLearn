@@ -3,11 +3,11 @@ import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { Span } from "../../../components/atoms/Span/Span";
 import { TestInterface } from "../../../interfaces/types";
-import { testData } from "../../../assets/data/testData";
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/atoms/Button/Button";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -19,10 +19,6 @@ const ClassHeading = styled.h2``;
 export const TestPage: React.FC<TestInterface> = () => {
   const [test, setTest] = useState<any>();
 
-  const getAuthTokenFromCookies = () => {
-    const token = Cookies.get("jwt");
-    return token;
-  };
   const fetchUserClasses = async () => {
     try {
       const authToken = getAuthTokenFromCookies();
@@ -58,27 +54,35 @@ export const TestPage: React.FC<TestInterface> = () => {
           <ClassHeading>Twoje testy:</ClassHeading>
         </span>
         {test &&
-          test.map((data: any) => (
-            <>
-              <div>
+          test.map((data: any) => {
+            const originalDate = new Date(data.ActiveDate);
+
+            const formattedDate = `${originalDate.getFullYear()}-${
+              originalDate.getMonth() + 1
+            }-${originalDate.getDate()} | ${originalDate.getHours()}:${originalDate.getMinutes()}`;
+            console.log(data);
+            return (
+              <div key={data.id}>
                 <Span
                   titleLabel={`${data.TestName}`}
                   label={`${data.ProfessorFirstName} ${data.ProfessorLastName}`}
                   isGrade={false}
                 />
                 <span style={{ fontSize: "14px" }}>
-                  <p>Data rozpoczęcia: {data.ActiveDate}</p>
+                  <p>Data rozpoczęcia: {formattedDate}</p>
                   <p>Czas: {data.Time} minut</p>
                 </span>
+                <Cta
+                  as={Link}
+                  to={`${data.Id}`}
+                  style={{ alignSelf: "flex-start" }}
+                  label="Wejdź"
+                  isJobOffer
+                />
               </div>
-              <Cta
-                href={`test/${data.id}`}
-                style={{ alignSelf: "flex-start" }}
-                label="Wejdź"
-                isJobOffer
-              />
-            </>
-          ))}
+            );
+          })}
+
         <Link to={"/platform/test/create"}>
           <Button label="Stwórz test" />
         </Link>

@@ -3,7 +3,7 @@ import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
+import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,11 +30,6 @@ const FlashCardsListItem = styled.li`
 export const LearnPage: React.FC = () => {
   const [deck, setDeck] = useState<any[]>([]);
 
-  const getAuthTokenFromCookies = () => {
-    const token = Cookies.get("jwt");
-    return token;
-  };
-
   const fetchFlashcards = async () => {
     try {
       const authToken = getAuthTokenFromCookies();
@@ -51,10 +46,8 @@ export const LearnPage: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setDeck(data.$values); // Update state with the fetched flashcards
-        console.log(data);
+        setDeck(data.$values);
       } else {
-        // Handle error responses here
         console.error("Failed to fetch flashcards");
       }
       console.log(authToken);

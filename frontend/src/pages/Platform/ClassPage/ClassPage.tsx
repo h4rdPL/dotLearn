@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { classData } from "../../../assets/data/classes";
 import Cookies from "js-cookie";
 import { convertToObject } from "typescript";
+import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,11 +19,6 @@ const ClassHeading = styled.h2``;
 
 export const ClassPage: React.FC = () => {
   const [classes, setClasses] = useState<any>();
-
-  const getAuthTokenFromCookies = () => {
-    const token = Cookies.get("jwt");
-    return token;
-  };
 
   const fetchUserClasses = async () => {
     try {
@@ -41,8 +37,6 @@ export const ClassPage: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         setClasses(data.$values);
-        console.log("dane");
-        console.log(data);
       } else {
         console.error("Failed to fetch classes");
       }
@@ -54,7 +48,6 @@ export const ClassPage: React.FC = () => {
   useEffect(() => {
     fetchUserClasses();
   }, []);
-  console.log(classes);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -86,27 +79,6 @@ export const ClassPage: React.FC = () => {
             </div>
           ))}
 
-        {/* {classData.map((myClass: any) => (
-          <>
-            <div>
-              <Span
-                titleLabel={`${myClass.subject}`}
-                label={`${myClass.professor.firstName} ${myClass.professor.lastName}`}
-                isGrade={false}
-              />
-              <span style={{ fontSize: "14px" }}>
-                <p>Ilość osób: 20</p>
-              </span>
-            </div>
-
-            <Cta
-              href={`/platform/class/${myClass.id}`}
-              style={{ alignSelf: "flex-start" }}
-              label="Wejdź"
-              isJobOffer
-            />
-          </>
-        ))} */}
         <Link to={"/platform/class/create"}>
           <Button label="Stwórz klasę" />
         </Link>

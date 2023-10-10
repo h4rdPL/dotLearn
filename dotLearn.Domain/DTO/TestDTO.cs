@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace dotLearn.Domain.DTO
 {
     public record struct TestDTO(
+        int Id,
         string? TestName,
         int Time,
         bool IsActive,

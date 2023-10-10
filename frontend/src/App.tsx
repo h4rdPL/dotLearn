@@ -19,7 +19,7 @@ import { CreateTestPage } from "./pages/Platform/CreateTestPage/CreateTestPage";
 import { CreateClassPage } from "./pages/Platform/CreateClassPage/CreateClassPage";
 import { ClassPageDetail } from "./pages/Platform/ClassPageDetail/ClassPageDetail";
 import { TestPageDetail } from "./pages/Platform/TestPageDetail/TestPageDetail";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { UserProvider } from "./pages/Context/UserContex";
 
 const router = createBrowserRouter([
@@ -70,7 +70,22 @@ const router = createBrowserRouter([
   },
   {
     path: "/platform/test",
-    element: <TestPage />,
+    element: (
+      <TestPage
+        Id={""}
+        TestName={""}
+        Time={""}
+        IsActive={false}
+        ActiveDate={""}
+        ProfessorFirstName={""}
+        ProfessorLastName={""}
+        Questions={[]}
+        $values={""}
+        map={function (arg0: (question: any) => any): ReactNode {
+          throw new Error("Function not implemented.");
+        }}
+      />
+    ),
     errorElement: <ErrorPage />,
   },
   {

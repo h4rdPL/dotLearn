@@ -2,8 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
-import { TestInterface } from "../../../interfaces/types";
-import { testData } from "../../../assets/data/testData";
+import Cookies from "js-cookie";
+import {
+  AnswerInterface,
+  QuestionInterface,
+  TestInterface,
+} from "../../../interfaces/types";
+import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 
 const TestPageWrapper = styled.div`
   display: flex;
@@ -67,20 +72,12 @@ const SubmitButton = styled.button`
     background-color: ${({ theme }) => theme.darkPurple};
   }
 `;
+
 const RadioInput = styled.input.attrs({ type: "radio" })`
   opacity: 0;
   width: 0;
   height: 0;
   position: absolute;
-`;
-
-const RadioLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  font-size: 16px;
-  margin: 0.5rem 0;
 `;
 
 const RadioCustomButton = styled.span<{ checked: boolean }>`
@@ -94,36 +91,69 @@ const RadioCustomButton = styled.span<{ checked: boolean }>`
 `;
 
 export const TestPageDetail = () => {
-  const { testId } = useParams<{ testId: string }>();
+  const { testId } = useParams<{ testId: any }>();
+  const [testResults, setTestResults] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<string, number>
   >({});
   const [isTestAvailable, setIsTestAvailable] = useState(true);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
-
-  const test = testData.find((t) => t.id === testId) as TestInterface;
+  const [test, setTest] = useState<any>(null);
 
   useEffect(() => {
-    const startTime = new Date();
-    const testDurationMinutes = 60;
-    const endTime = new Date(startTime.getTime() + testDurationMinutes * 60000);
+    const fetchTest = async () => {
+      try {
+        const authToken = getAuthTokenFromCookies();
 
-    const interval = setInterval(() => {
-      const currentTime = new Date();
-      const timeDiff = endTime.getTime() - currentTime.getTime();
-      if (timeDiff <= 0) {
-        clearInterval(interval);
-        setIsTestAvailable(false);
-        handleSubmitTest();
-      } else {
-        setRemainingTime(Math.floor(timeDiff / 1000));
+        const response = await fetch(
+          `https://localhost:7024/api/Test/getTest`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          const data: any = await response.json();
+          setTest(data.$values[testId - 1]);
+        } else {
+          console.error("Failed to fetch test");
+        }
+      } catch (error) {
+        console.error("Error fetching test:", error);
       }
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
     };
-  }, []);
+
+    fetchTest();
+  }, [testId]);
+
+  useEffect(() => {
+    if (test) {
+      const startTime = new Date();
+      const testDurationMinutes = parseInt(test.Time, 10);
+      const endTime = new Date(
+        startTime.getTime() + testDurationMinutes * 60000
+      );
+
+      const interval = setInterval(() => {
+        const currentTime = new Date();
+        const timeDiff = endTime.getTime() - currentTime.getTime();
+        if (timeDiff <= 0) {
+          clearInterval(interval);
+          setIsTestAvailable(false);
+          handleSubmitTest();
+        } else {
+          setRemainingTime(Math.floor(timeDiff / 1000));
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [test]);
 
   const handleAnswerSelect = (questionId: number, id: number) => {
     setSelectedAnswers((prevSelectedAnswers) => ({
@@ -132,65 +162,126 @@ export const TestPageDetail = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log(selectedAnswers);
-  }, [selectedAnswers]);
-  const handleSubmitTest = () => {
-    console.log("Selected Answers:", selectedAnswers);
+  const handleSubmitTest = async () => {
+    try {
+      const authToken = getAuthTokenFromCookies();
+
+      const resultsToSend: any[] = [];
+      let totalPoints = 0;
+
+      for (const questionId in selectedAnswers) {
+        const selectedAnswerIndex = selectedAnswers[questionId];
+        const question = test.Questions.$values[questionId];
+
+        if (
+          selectedAnswerIndex !== undefined &&
+          selectedAnswerIndex >= 0 &&
+          selectedAnswerIndex < question.Answer.$values.length
+        ) {
+          if (question.Answer.$values[selectedAnswerIndex].IsCorrect) {
+            totalPoints += 1;
+          }
+        }
+
+        resultsToSend.push({
+          QuestionId: parseInt(questionId, 10),
+          Score: totalPoints,
+        });
+      }
+
+      setTestResults(totalPoints);
+
+      const response = await fetch(
+        `https://localhost:7024/api/Test/submitTestResults/${testId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(resultsToSend),
+        }
+      );
+      if (response.ok) {
+        console.log("Wyniki testu zostały wysłane i zapisane w bazie danych.");
+      } else {
+        console.error("Błąd podczas wysyłania wyników testu.");
+      }
+    } catch (error) {
+      console.error("Błąd podczas wysyłania wyników testu:", error);
+    }
   };
 
   return (
     <PlatformLayout>
       <TestPageWrapper>
         <TestHeader>
-          <TestTitle>{test.testName} </TestTitle>
+          <TestTitle>{test?.TestName} </TestTitle>
         </TestHeader>
         <TestInfo>
-          <TestInfoItem>{`Professor: ${test.professor?.firstName} ${test.professor?.lastName}`}</TestInfoItem>
+          <TestInfoItem>
+            {`Profesor: ${test?.ProfessorFirstName} ${test?.ProfessorLastName}`}
+          </TestInfoItem>
         </TestInfo>
-        {test.question?.map((question) => (
-          <TestQuestion key={question.id}>
-            <h3>Question {question.id}</h3>
-            <p>{question.questionName}</p>
-            <ul>
-              {question.answers.map((answer) => (
-                <li key={answer.id}>
-                  <AnswerOption>
-                    <RadioLabel>
-                      <RadioInput
-                        type="radio"
-                        name={`question-${question.id}`}
-                        checked={
-                          selectedAnswers[`${question.id}`] === answer.id
-                        }
-                        onChange={() =>
-                          handleAnswerSelect(question.id, answer.id)
-                        }
-                      />
-                      <RadioCustomButton
-                        checked={
-                          selectedAnswers[`${question.id}`] === answer.id
-                        }
-                      />
-                      {answer.answerName}
-                    </RadioLabel>
-                  </AnswerOption>
-                </li>
+        <div>
+          <div>
+            {test &&
+              test.Questions?.$values?.map((question: any, index: any) => (
+                <TestQuestion key={index}>
+                  <div>
+                    Pytanie {index + 1}: {question?.QuestionName}
+                  </div>
+                  <ul>
+                    {question.Answer.$values?.map(
+                      (answer: any, answerIndex: any) => (
+                        <AnswerOption key={answerIndex}>
+                          <label>
+                            <RadioInput
+                              type="radio"
+                              name={`question-${index}`}
+                              checked={
+                                selectedAnswers[`${index}`] === answerIndex
+                              }
+                              onChange={() =>
+                                handleAnswerSelect(index, answerIndex)
+                              }
+                            />
+                            <RadioCustomButton
+                              checked={
+                                selectedAnswers[`${index}`] === answerIndex
+                              }
+                            />
+                            {answer?.AnswerName}
+                          </label>
+                        </AnswerOption>
+                      )
+                    )}
+                  </ul>
+                </TestQuestion>
               ))}
-            </ul>
-          </TestQuestion>
-        ))}
+          </div>
+        </div>
+
         {isTestAvailable ? (
-          <SubmitButton onClick={handleSubmitTest}>Zakończ test</SubmitButton>
+          <SubmitButton
+            onClick={() => {
+              handleSubmitTest();
+            }}
+          >
+            Zakończ test
+          </SubmitButton>
         ) : (
-          <p>Test is no longer available.</p>
+          <p>Test już nie jest dostępny.</p>
         )}
+
         {remainingTime !== null && (
           <p>
             Pozostały czas: {Math.floor(remainingTime / 60)}:
             {remainingTime % 60}
           </p>
         )}
+        <p>Suma punktów: {testResults}</p>
       </TestPageWrapper>
     </PlatformLayout>
   );

@@ -1,5 +1,3 @@
-// TODO: RENAME INTERFACE
-
 import { SyntheticEvent } from "react";
 
 export interface ButtonProps {
@@ -96,7 +94,6 @@ export interface JobInterface {
   benefits?: string[];
 }
 
-// platform
 
 export interface SpanInterface {
   label: string;
@@ -154,57 +151,31 @@ export interface ClassData {
 }
 
 
+
 export interface TestInterface {
-  id?: string;
-  testName?: string;
-  question?: Question[];
-  students?: Student[];
-  professor?: Professor;
-  classEntities?: ClassEntity;
-  time?: number;
-  isActive?: boolean;
-  activeDate?: string;
+  map(arg0: (question: any) => any): import("react").ReactNode;
+  $values: any;
+  Id: string;
+  TestName: string;
+  Time: string;
+  IsActive: boolean;
+  ActiveDate: string;
+  ProfessorFirstName: string;
+  ProfessorLastName: string;
+  Questions: QuestionInterface[];
 }
 
-interface Question {
+export interface QuestionInterface {
+  $values: string;
   id: number;
   questionName: string;
-  answers: Answer[];
+  answers: AnswerInterface[];
 }
 
-interface Answer {
+export interface AnswerInterface {
   id: number;
   answerName: string;
   isCorrect: boolean;
-}
-
-interface Student {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  role: number;
-  id: number;
-  cardId: number;
-}
-
-interface Professor {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  role: number;
-  id: string;
-  subject: string;
-}
-
-
-interface ClassEntity {
-  id: number;
-  classCode: string;
-  subject: string;
-  professor: Professor;
-  student: Student[];
 }
 
 export interface FlashCardState {
@@ -217,8 +188,23 @@ export interface Message {
   isBot?: boolean;
 }
 
+export interface FlashCardValue {
+  Id: string;
+  Content: string;
+  Definition: string;
+}
 
-// REGISTER / LOGIN FORMS
+export interface FlashCardSet {
+  length: any;
+  Definition: string;
+  Id: number;
+  Name: string;
+  Category: string;
+  Content?: string;
+  StudentId: number;
+  FlashCards: FlashCardValue[];
+}
+
 
 export interface DataInterface {
   FirstName: string;

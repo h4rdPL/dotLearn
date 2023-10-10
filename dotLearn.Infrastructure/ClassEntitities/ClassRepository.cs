@@ -109,16 +109,8 @@ namespace dotLearn.Infrastructure.ClassEntitities
         {
             try
             {
-                var classEntity = await _context.Classes
-                    .FirstOrDefaultAsync(c => c.ProfessorId == userId);
-
-                if (classEntity == null)
-                {
-                    throw new Exception("Error while finding the class for the logged-in professor.");
-                }
-
                 var pdfFiles = await _context.ClassPdfFiles
-                    .Where(cp => cp.ClassId == classEntity.Id)
+                    .Where(cp => cp.Class.ProfessorId == userId)
                     .Select(cp => cp.PdfFile)
                     .ToListAsync();
 
@@ -129,6 +121,7 @@ namespace dotLearn.Infrastructure.ClassEntitities
                 throw ex;
             }
         }
+
 
 
         public PdfFile GetPdfFileContent(int userId, string fileName)

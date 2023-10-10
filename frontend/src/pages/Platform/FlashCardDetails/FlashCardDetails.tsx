@@ -3,8 +3,12 @@ import { useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import styled, { css } from "styled-components";
 import { ImArrowLeft2, ImArrowRight2 } from "react-icons/im";
-import Cookies from "js-cookie";
-import { FlashCardState } from "../../../interfaces/types";
+import {
+  FlashCardSet,
+  FlashCardState,
+  FlashCardValue,
+} from "../../../interfaces/types";
+import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 
 const Wrapper = styled.div`
   display: flex;
@@ -130,34 +134,12 @@ const FlashcardListItem = styled.li`
   }
 `;
 
-interface FlashCardValue {
-  Id: string;
-  Content: string;
-  Definition: string;
-}
-
-interface FlashCardSet {
-  length: any;
-  Definition: string;
-  Id: number;
-  Name: string;
-  Category: string;
-  Content?: string;
-  StudentId: number;
-  FlashCards: FlashCardValue[];
-}
-
 export const FlashCardDetails: React.FC = () => {
   const { flashCardId } = useParams<{ flashCardId: string }>();
   const [flipped, setFlipped] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const [deck, setDeck] = useState<FlashCardSet[]>([]);
   const [currentDeck, setCurrentDeck] = useState<FlashCardValue[]>([]);
-
-  const getAuthTokenFromCookies = () => {
-    const token = Cookies.get("jwt");
-    return token;
-  };
 
   const fetchFlashcards = async () => {
     try {
