@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
-import Cookies from "js-cookie";
-import {
-  AnswerInterface,
-  QuestionInterface,
-  TestInterface,
-} from "../../../interfaces/types";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 
 const TestPageWrapper = styled.div`
@@ -99,61 +93,10 @@ export const TestPageDetail = () => {
   const [isTestAvailable, setIsTestAvailable] = useState(true);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
   const [test, setTest] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchTest = async () => {
-      try {
-        const authToken = getAuthTokenFromCookies();
-
-        const response = await fetch(
-          `https://localhost:7024/api/Test/getTest`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-            credentials: "include",
-          }
-        );
-        if (response.ok) {
-          const data: any = await response.json();
-          setTest(data.$values[testId - 1]);
-        } else {
-          console.error("Failed to fetch test");
-        }
-      } catch (error) {
-        console.error("Error fetching test:", error);
-      }
-    };
-
-    fetchTest();
-  }, [testId]);
-
-  useEffect(() => {
-    if (test) {
-      const startTime = new Date();
-      const testDurationMinutes = parseInt(test.Time, 10);
-      const endTime = new Date(
-        startTime.getTime() + testDurationMinutes * 60000
-      );
-
-      const interval = setInterval(() => {
-        const currentTime = new Date();
-        const timeDiff = endTime.getTime() - currentTime.getTime();
-        if (timeDiff <= 0) {
-          clearInterval(interval);
-          setIsTestAvailable(false);
-          handleSubmitTest();
-        } else {
-          setRemainingTime(Math.floor(timeDiff / 1000));
-        }
-      }, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  }, [test]);
+  const [totalPoints, setTotalPoints] = useState<number>(0);
+  const [finishedTestScore, setFinishedTestScore] = useState<any>(0);
+  const [resultsToSend, setResultsToSend] = useState<any[]>([]);
+  const [testSubmitted, setTestSubmitted] = useState(false);
 
   const handleAnswerSelect = (questionId: number, id: number) => {
     setSelectedAnswers((prevSelectedAnswers) => ({
@@ -162,11 +105,8 @@ export const TestPageDetail = () => {
     }));
   };
 
-  const handleSubmitTest = async () => {
+  const handleEndTest = async () => {
     try {
-      const authToken = getAuthTokenFromCookies();
-
-      const resultsToSend: any[] = [];
       let totalPoints = 0;
 
       for (const questionId in selectedAnswers) {
@@ -191,8 +131,21 @@ export const TestPageDetail = () => {
 
       setTestResults(totalPoints);
 
+      const totalMaxPoints = test.Questions?.$values?.length;
+
+      const newFinishedTestScore = totalPoints / totalMaxPoints;
+      setFinishedTestScore(newFinishedTestScore);
+    } catch (error) {
+      console.error("Błąd podczas wysyłania wyników testu:", error);
+    }
+  };
+  const handleSubmitTest = async () => {
+    const authToken = getAuthTokenFromCookies();
+    const roundedScore = parseFloat(finishedTestScore).toFixed(2);
+    setIsTestAvailable(!isTestAvailable);
+    try {
       const response = await fetch(
-        `https://localhost:7024/api/Test/submitTestResults/${testId}`,
+        `https://localhost:7024/api/Test/SubmitTestResults/${testId}?score=${roundedScore}`,
         {
           method: "POST",
           headers: {
@@ -200,18 +153,75 @@ export const TestPageDetail = () => {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify(resultsToSend),
         }
       );
+
       if (response.ok) {
-        console.log("Wyniki testu zostały wysłane i zapisane w bazie danych.");
+        console.log("Wynik testu został wysłany i zapisany w bazie danych.");
       } else {
-        console.error("Błąd podczas wysyłania wyników testu.");
+        console.error("Błąd podczas wysyłania wyniku testu.");
       }
-    } catch (error) {
-      console.error("Błąd podczas wysyłania wyników testu:", error);
+    } catch (err) {
+      console.log(err);
     }
   };
+
+  const fetchTest = async () => {
+    try {
+      const authToken = getAuthTokenFromCookies();
+
+      const response = await fetch(`https://localhost:7024/api/Test/getTest`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data: any = await response.json();
+        setTest(data.$values[testId - 1]);
+      } else {
+        console.error("Failed to fetch test");
+      }
+    } catch (error) {
+      console.error("Error fetching test:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTest();
+  }, [testId]);
+
+  useEffect(() => {
+    if (test) {
+      const startTime = new Date();
+      const testDurationMinutes = parseInt(test.Time, 10);
+      const endTime = new Date(
+        startTime.getTime() + testDurationMinutes * 60000
+      );
+
+      const interval = setInterval(() => {
+        const currentTime = new Date();
+        const timeDiff = endTime.getTime() - currentTime.getTime();
+        if (timeDiff <= 0) {
+          clearInterval(interval);
+          setIsTestAvailable(false);
+          handleEndTest();
+          handleSubmitTest();
+        } else {
+          setRemainingTime(Math.floor(timeDiff / 1000));
+        }
+      }, 1000);
+
+      const totalMaxPoints = test.Questions?.$values?.length;
+      setTotalPoints(totalMaxPoints);
+      setTestSubmitted(true);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [test]);
 
   return (
     <PlatformLayout>
@@ -227,6 +237,7 @@ export const TestPageDetail = () => {
         <div>
           <div>
             {test &&
+              testSubmitted &&
               test.Questions?.$values?.map((question: any, index: any) => (
                 <TestQuestion key={index}>
                   <div>
@@ -236,7 +247,13 @@ export const TestPageDetail = () => {
                     {question.Answer.$values?.map(
                       (answer: any, answerIndex: any) => (
                         <AnswerOption key={answerIndex}>
-                          <label>
+                          <label
+                            style={{
+                              display: "flex",
+                              gap: ".5rem",
+                              alignItems: "center",
+                            }}
+                          >
                             <RadioInput
                               type="radio"
                               name={`question-${index}`}
@@ -263,14 +280,23 @@ export const TestPageDetail = () => {
           </div>
         </div>
 
-        {isTestAvailable ? (
-          <SubmitButton
-            onClick={() => {
-              handleSubmitTest();
-            }}
-          >
-            Zakończ test
-          </SubmitButton>
+        {testSubmitted ? (
+          <>
+            <SubmitButton
+              onClick={() => {
+                handleEndTest();
+              }}
+            >
+              Zakończ test
+            </SubmitButton>
+            <SubmitButton
+              onClick={() => {
+                handleSubmitTest();
+              }}
+            >
+              Wyślij test
+            </SubmitButton>
+          </>
         ) : (
           <p>Test już nie jest dostępny.</p>
         )}
@@ -281,7 +307,8 @@ export const TestPageDetail = () => {
             {remainingTime % 60}
           </p>
         )}
-        <p>Suma punktów: {testResults}</p>
+        <p>Maksymalna ilość punktów: {totalPoints}</p>
+        <p>Poprawne odpowiedzi: {(finishedTestScore * 100).toFixed(2)}%</p>
       </TestPageWrapper>
     </PlatformLayout>
   );

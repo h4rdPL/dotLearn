@@ -2,6 +2,7 @@
 using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Common.Interfaces.Test;
 using dotLearn.Application.Helpers;
+using dotLearn.Application.Services.Test;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -19,13 +20,27 @@ namespace dotLearn.Infrastructure.Test
     {
         private readonly DotLearnDbContext _context;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly IUserRepository _userRepository;
-        public TestRepository(DotLearnDbContext context, IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+        public TestRepository(DotLearnDbContext context, IJwtTokenGenerator jwtTokenGenerator)
         {
             _context = context;
             _jwtTokenGenerator = jwtTokenGenerator;
-            _userRepository = userRepository;
         }
+
+        public void AddGrade(int testId, double score, int studentId)
+        {
+            int grade = CalculateGrade.GradeCalculator(score);
+
+            var studentScore = new StudentScore
+            {
+                StudentId = studentId,
+                TestId = testId,
+                Grade = grade,
+            };
+
+            _context.StudentScores.Add(studentScore);
+            _context.SaveChanges();
+        }
+
 
         public TestDTO Create(TestDTO testClass)
         {
@@ -42,7 +57,6 @@ namespace dotLearn.Infrastructure.Test
             {
                 TestName = testClass.TestName,
                 Time = testClass.Time,
-                IsActive = testClass.IsActive,
                 ActiveDate = testClass.ActiveDate,
                 ClassId = professorClass.Id,
                 Questions = testClass.Questions
@@ -62,12 +76,10 @@ namespace dotLearn.Infrastructure.Test
             _context.Tests.Add(testEntity);
             _context.SaveChanges();
 
-            // Assuming you want to return a DTO of the created entity
             return new TestDTO
             {
                 TestName = testEntity.TestName,
                 Time = testEntity.Time,
-                IsActive = testEntity.IsActive,
                 ActiveDate = testEntity.ActiveDate,
                 ClassId = testEntity.ClassId,
                 Questions = testEntity.Questions
@@ -99,7 +111,6 @@ namespace dotLearn.Infrastructure.Test
                     Id = test.Id,
                     TestName = test.TestName,
                     Time = test.Time,
-                    IsActive = test.IsActive,
                     ActiveDate = test.ActiveDate,
                     ClassId = test.ClassId,
                     ProfessorFirstName = test.Class.Professor.FirstName,
@@ -128,16 +139,6 @@ namespace dotLearn.Infrastructure.Test
         public async Task OpenTestsOnActiveDateAsync()
         {
                 var currentDate = DateTime.UtcNow;
-
-                var testsToOpen = _context.Tests
-                    .Where(test => test.ActiveDate <= currentDate && !test.IsActive)
-                    .ToList();
-
-                foreach (var test in testsToOpen)
-                {
-                    test.IsActive = true;
-                }
-
                 await _context.SaveChangesAsync();
         }
     }

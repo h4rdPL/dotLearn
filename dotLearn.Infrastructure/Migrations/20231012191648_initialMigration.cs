@@ -27,6 +27,20 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Grade",
+                columns: table => new
+                {
+                    GradeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GradeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MinimumScore = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Grade", x => x.GradeId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PdfFile",
                 columns: table => new
                 {
@@ -199,7 +213,6 @@ namespace dotLearn.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TestName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Time = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     ActiveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -228,6 +241,95 @@ namespace dotLearn.Infrastructure.Migrations
                     table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Questions_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentResult",
+                columns: table => new
+                {
+                    StudentResultId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TestId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    Score = table.Column<int>(type: "int", nullable: false),
+                    GradeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentResult", x => x.StudentResultId);
+                    table.ForeignKey(
+                        name: "FK_StudentResult_Grade_GradeId",
+                        column: x => x.GradeId,
+                        principalTable: "Grade",
+                        principalColumn: "GradeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentResult_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentResult_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentScores",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    TestId = table.Column<int>(type: "int", nullable: false),
+                    Grade = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentScores", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentScores_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentScores_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TestId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTest", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserTest_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserTest_Tests_TestId",
                         column: x => x.TestId,
                         principalTable: "Tests",
                         principalColumn: "Id",
@@ -296,9 +398,44 @@ namespace dotLearn.Infrastructure.Migrations
                 column: "TestId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StudentResult_GradeId",
+                table: "StudentResult",
+                column: "GradeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentResult_StudentId",
+                table: "StudentResult",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentResult_TestId",
+                table: "StudentResult",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentScores_StudentId",
+                table: "StudentScores",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentScores_TestId",
+                table: "StudentScores",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tests_ClassId",
                 table: "Tests",
                 column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTest_StudentId",
+                table: "UserTest",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTest_TestId",
+                table: "UserTest",
+                column: "TestId");
         }
 
         /// <inheritdoc />
@@ -320,16 +457,28 @@ namespace dotLearn.Infrastructure.Migrations
                 name: "FlashCard");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "StudentResult");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "StudentScores");
+
+            migrationBuilder.DropTable(
+                name: "UserTest");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "PdfFile");
 
             migrationBuilder.DropTable(
                 name: "Decks");
+
+            migrationBuilder.DropTable(
+                name: "Grade");
+
+            migrationBuilder.DropTable(
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "Tests");

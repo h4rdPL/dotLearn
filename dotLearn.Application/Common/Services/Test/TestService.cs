@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
 using dotLearn.Application.Common.Interfaces.Test;
 using dotLearn.Domain.DTO;
+using System.Web.Http;
 
 namespace dotLearn.Application.Services.Test
 {
@@ -23,6 +24,14 @@ namespace dotLearn.Application.Services.Test
             _testRepository = testRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
+
+        public void AssignScoreToStudent(int testId, double score)
+        {
+            var studentId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
+
+            _testRepository.AddGrade(testId, score, studentId);
+        }
+
         /// <summary>
         /// Creates a new test class and associates it with the logged-in professor.
         /// </summary>

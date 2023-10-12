@@ -13,6 +13,7 @@ namespace dotLearn.Application.Services.Test
         void Create(TestDTO testClass);
         List<TestDTO> GetTest();
         void OpenTest();
+        void AssignScoreToStudent(int testId, double score);
 
     }
 }

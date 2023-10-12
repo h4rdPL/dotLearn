@@ -17,6 +17,8 @@ public class DotLearnDbContext : DbContext
     public DbSet<Deck> Decks { get; set; }
     public DbSet<ClassEntitiesStudent> ClassEntitiesStudents { get; set; }
     public DbSet<ClassPdfFile> ClassPdfFiles { get; set; }
+    public DbSet<StudentScore> StudentScores { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +38,7 @@ public class DotLearnDbContext : DbContext
             .WithOne(x => x.Class)
             .HasForeignKey(x => x.ClassId)
             .IsRequired();
+
         modelBuilder.Entity<TestClass>()
             .HasMany(x => x.Questions)
             .WithOne(x => x.Test)
@@ -49,8 +52,6 @@ public class DotLearnDbContext : DbContext
         modelBuilder.Entity<ClassEntities>()
             .HasMany(x => x.PdfFiles)
             .WithMany(x => x.Classes);
-            
-
 
 
         base.OnModelCreating(modelBuilder);

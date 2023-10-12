@@ -12,7 +12,7 @@ namespace dotLearn.Domain.Entities
         public int Id { get; set; }
         public string TestName { get; set; }
         public int Time { get; set; }
-        public bool IsActive { get; set; } = false;
+
         private DateTime activeDate;
 
         public DateTime ActiveDate
@@ -28,6 +28,9 @@ namespace dotLearn.Domain.Entities
         public int ClassId { get; set; }
         public ClassEntities Class { get; set; }
         public List<Question> Questions { get; set; }
+        public List<UserTest> UserTests { get; set; } 
+
     }
+
 
 }

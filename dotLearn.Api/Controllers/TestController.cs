@@ -34,10 +34,12 @@ namespace dotLearn.Api.Controllers
             return await Task.FromResult(Ok(result));
         }
 
-        //[HttpPost("sendTest")]
-        //public async Task<ActionResult<TestClass>> SendTest(UserTestSubmissionDTO userTestSubmissionDTO)
-        //{
+        [HttpPost("SubmitTestResults/{testId}")]
+        public void SubmitTestResults(int testId, double score)
+        {
+                _testService.AssignScoreToStudent(testId, score);
+        }
 
-        //}
+
     }
 }

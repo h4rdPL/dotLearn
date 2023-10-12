@@ -36,13 +36,8 @@ public class TestBackgroundService : IHostedService, IDisposable
             var currentDate = DateTime.UtcNow;
 
             var testsToOpen = context.Tests
-                .Where(test => test.ActiveDate <= currentDate && !test.IsActive)
+                .Where(test => test.ActiveDate <= currentDate)
                 .ToList();
-
-            foreach (var test in testsToOpen)
-            {
-                test.IsActive = true;
-            }
 
             var count = Interlocked.Increment(ref executionCount);
 
