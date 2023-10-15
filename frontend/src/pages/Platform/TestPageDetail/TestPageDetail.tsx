@@ -155,7 +155,6 @@ export const TestPageDetail = () => {
           credentials: "include",
         }
       );
-
       if (response.ok) {
         console.log("Wynik testu został wysłany i zapisany w bazie danych.");
       } else {
@@ -179,7 +178,8 @@ export const TestPageDetail = () => {
       });
       if (response.ok) {
         const data: any = await response.json();
-        setTest(data.$values[testId - 1]);
+        setTest(data.$values[0]);
+        console.log(data.$values);
       } else {
         console.error("Failed to fetch test");
       }

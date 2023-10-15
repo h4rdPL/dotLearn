@@ -9,7 +9,6 @@ namespace dotLearn.Domain.Entities
     public class UserTest
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
         public int TestId { get; set; }
         public bool IsActive { get; set; }
         public TestClass Test { get; set; }

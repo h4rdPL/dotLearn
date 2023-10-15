@@ -400,16 +400,13 @@ namespace dotLearn.Infrastructure.Migrations
                     b.Property<int>("TestId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("UserTest");
+                    b.ToTable("UserTests");
                 });
 
             modelBuilder.Entity("ClassEntitiesPdfFile", b =>

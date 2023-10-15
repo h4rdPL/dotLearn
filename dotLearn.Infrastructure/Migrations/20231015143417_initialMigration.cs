@@ -309,27 +309,26 @@ namespace dotLearn.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserTest",
+                name: "UserTests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
                     TestId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTest", x => x.Id);
+                    table.PrimaryKey("PK_UserTests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserTest_Students_StudentId",
+                        name: "FK_UserTests_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserTest_Tests_TestId",
+                        name: "FK_UserTests_Tests_TestId",
                         column: x => x.TestId,
                         principalTable: "Tests",
                         principalColumn: "Id",
@@ -428,13 +427,13 @@ namespace dotLearn.Infrastructure.Migrations
                 column: "ClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserTest_StudentId",
-                table: "UserTest",
+                name: "IX_UserTests_StudentId",
+                table: "UserTests",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserTest_TestId",
-                table: "UserTest",
+                name: "IX_UserTests_TestId",
+                table: "UserTests",
                 column: "TestId");
         }
 
@@ -463,7 +462,7 @@ namespace dotLearn.Infrastructure.Migrations
                 name: "StudentScores");
 
             migrationBuilder.DropTable(
-                name: "UserTest");
+                name: "UserTests");
 
             migrationBuilder.DropTable(
                 name: "Questions");

@@ -36,11 +36,9 @@ namespace dotLearn.Infrastructure.Test
                 TestId = testId,
                 Grade = grade,
             };
-
             _context.StudentScores.Add(studentScore);
             _context.SaveChanges();
         }
-
 
         public TestDTO Create(TestDTO testClass)
         {
@@ -53,7 +51,7 @@ namespace dotLearn.Infrastructure.Test
                 Console.WriteLine("Professor is not assigned to any class.");
             }
 
-            var testEntity = new TestClass 
+            var testEntity = new TestClass
             {
                 TestName = testClass.TestName,
                 Time = testClass.Time,
@@ -74,6 +72,29 @@ namespace dotLearn.Infrastructure.Test
             };
 
             _context.Tests.Add(testEntity);
+
+            _context.SaveChanges();
+
+            var currentDateTime = DateTime.Now;
+
+            var studentsInClass = _context.Students
+                .Where(s => s.ClassEntitiesStudents.Any(ce => ce.ClassEntitiesId == professorClass.Id))
+                .ToList();
+
+            foreach (var student in studentsInClass)
+            {
+                var isActive = false;
+
+                var userTestEntity = new UserTest
+                {
+                    Student = student,
+                    Test = testEntity,
+                    IsActive = isActive,
+                };
+
+                _context.UserTests.Add(userTestEntity);
+            }
+
             _context.SaveChanges();
 
             return new TestDTO

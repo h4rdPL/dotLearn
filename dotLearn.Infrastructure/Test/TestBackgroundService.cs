@@ -33,19 +33,24 @@ public class TestBackgroundService : IHostedService, IDisposable
             var scopedServices = scope.ServiceProvider;
             var context = scopedServices.GetRequiredService<DotLearnDbContext>();
 
-            var currentDate = DateTime.UtcNow;
+            var currentDate = DateTime.Now;
 
-            var testsToOpen = context.Tests
-                .Where(test => test.ActiveDate <= currentDate)
+            var userTestsToOpen = context.UserTests
+                .Where(ut => ut.Test != null && ut.Test.ActiveDate <= currentDate)
                 .ToList();
 
-            var count = Interlocked.Increment(ref executionCount);
+
+            foreach (var userTest in userTestsToOpen)
+            {
+                    userTest.IsActive = true;
+            }
 
             context.SaveChanges();
-
-            //_logger.LogInformation("Timed Hosted Service is working. Count: {Count}", count);
         }
     }
+
+
+
 
     public Task StopAsync(CancellationToken cancellationToken)
     {

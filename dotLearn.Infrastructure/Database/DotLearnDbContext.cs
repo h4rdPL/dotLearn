@@ -18,7 +18,7 @@ public class DotLearnDbContext : DbContext
     public DbSet<ClassEntitiesStudent> ClassEntitiesStudents { get; set; }
     public DbSet<ClassPdfFile> ClassPdfFiles { get; set; }
     public DbSet<StudentScore> StudentScores { get; set; }
-
+    public DbSet<UserTest> UserTests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
