@@ -42,7 +42,8 @@ export const Cta: React.FC<CTAInterface> = ({
   style,
   to,
   as,
-  onClick, // Make onClick prop optional
+  onClick,
+  disabled,
 }) => {
   return (
     <CtaButton style={style}>
@@ -52,6 +53,7 @@ export const Cta: React.FC<CTAInterface> = ({
         isJobOffer={isJobOffer}
         to={to}
         as={as}
+        disabled={disabled}
       >
         {label} <Img src={isJobOffer ? arrowWhite : arrow} alt="arrow" />
       </Wrapper>

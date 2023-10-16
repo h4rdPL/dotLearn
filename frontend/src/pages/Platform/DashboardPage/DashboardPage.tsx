@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -7,6 +7,7 @@ import { Span } from "../../../components/atoms/Span/Span";
 import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import { CalendarInterface } from "../../../interfaces/types";
 import Calendar from "../../../components/organisms/Calendar/Calendar";
+import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 
 const Wrapper = styled.div`
   display: grid;
@@ -60,6 +61,65 @@ const IconWrapper = styled.span`
 `;
 
 export const DashboardPage: React.FC<CalendarInterface> = () => {
+  const [grades, setGrades] = useState<any>();
+  const [tests, setTests] = useState<any>();
+  const fetchData = async () => {
+    try {
+      const authToken = getAuthTokenFromCookies();
+      const response = await fetch(
+        `https://localhost:7024/api/Test/GetTestResult`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        const data: any = await response.json();
+        setGrades(data.$values);
+        console.log("dane");
+        console.log(data.$values);
+      } else {
+        console.error("Failed to fetch classes");
+      }
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
+  };
+
+  const fetchTestAPI = async () => {
+    try {
+      const authToken = getAuthTokenFromCookies();
+      const response = await fetch(
+        `https://localhost:7024/api/Test/GetNextTest`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        const data: any = await response.json();
+        setTests(data.$values);
+        console.log("dane");
+        console.log(data.$values);
+      } else {
+        console.error("Failed to fetch classes");
+      }
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchTestAPI();
+  }, []);
+  console.log(grades);
   const percentage = 4;
   return (
     <PlatformLayout>
@@ -99,48 +159,33 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
           </span>
           <InnerWrapper>
             <TestWrapper>
-              <span>
-                <Span
-                  titleLabel="Język angielski /"
-                  label="Czas Present perfect"
-                  isGrade={false}
-                />
-                <IconWrapper>
-                  <AiOutlineCalendar style={{ fontSize: "1.5rem" }} /> 15.00 /
-                  20.02.2023 r
-                </IconWrapper>
-                <IconWrapper>
-                  <AiOutlineClockCircle style={{ fontSize: "1.5rem" }} /> 60:00
-                </IconWrapper>
-              </span>
-              <span>
-                <Span
-                  titleLabel="Język angielski /"
-                  label="Czas Present perfect"
-                  isGrade={false}
-                />
-                <IconWrapper>
-                  <AiOutlineCalendar style={{ fontSize: "1.5rem" }} /> 15.00 /
-                  20.02.2023 r
-                </IconWrapper>
-                <IconWrapper>
-                  <AiOutlineClockCircle style={{ fontSize: "1.5rem" }} /> 60:00
-                </IconWrapper>
-              </span>
-              <span>
-                <Span
-                  titleLabel="Język angielski /"
-                  label="Czas Present perfect"
-                  isGrade={false}
-                />
-                <IconWrapper>
-                  <AiOutlineCalendar style={{ fontSize: "1.5rem" }} /> 15.00 /
-                  20.02.2023 r
-                </IconWrapper>
-                <IconWrapper>
-                  <AiOutlineClockCircle style={{ fontSize: "1.5rem" }} /> 60:00
-                </IconWrapper>
-              </span>
+              {tests &&
+                tests.map((test: any) => {
+                  const originalDate = new Date(test.ActiveDate);
+                  const formattedDate = `${originalDate.getFullYear()}-${
+                    originalDate.getMonth() + 1
+                  }-${originalDate.getDate()} | ${originalDate.getHours()}:${originalDate.getMinutes()}`;
+
+                  return (
+                    <span>
+                      <Span
+                        titleLabel={`${test.ClassName} /`}
+                        label={`${test.TestName}`}
+                        isGrade={false}
+                      />
+                      {}
+                      <IconWrapper>
+                        <AiOutlineCalendar style={{ fontSize: "1.5rem" }} />{" "}
+                        {formattedDate}
+                      </IconWrapper>
+
+                      <IconWrapper>
+                        <AiOutlineClockCircle style={{ fontSize: "1.5rem" }} />{" "}
+                        {parseFloat(test.Time).toFixed(2)}
+                      </IconWrapper>
+                    </span>
+                  );
+                })}
             </TestWrapper>
           </InnerWrapper>
         </Boxes>
@@ -151,24 +196,17 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
           </span>
           <InnerWrapper>
             <GradeWrapper>
-              <Span
-                titleLabel="Język angielski /"
-                label="Czasowniki nieregularne "
-                gradeLabel="4"
-                isGrade
-              />
-              <Span
-                titleLabel="Język angielski /"
-                label="Czas Present simple "
-                gradeLabel="2"
-                isGrade
-              />
-              <Span
-                titleLabel="Język angielski /"
-                label="Czas Present perfect"
-                gradeLabel="4"
-                isGrade
-              />
+              {grades &&
+                grades.map((grade: any) => (
+                  <>
+                    <Span
+                      titleLabel={`${grade.ClassName} /`}
+                      label={`${grade.TestName}`}
+                      gradeLabel={`${grade.Grade}`}
+                      isGrade
+                    />
+                  </>
+                ))}
             </GradeWrapper>
           </InnerWrapper>
         </Boxes>

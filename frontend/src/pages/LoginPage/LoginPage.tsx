@@ -51,8 +51,6 @@ export const LoginPage = () => {
       ...loginData,
       [name]: value,
     });
-
-    console.log(loginData);
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +67,6 @@ export const LoginPage = () => {
         }
       );
       const content = await response.json();
-      console.log(content);
       updateUserEmail(content.Email);
       Cookies.set("jwt", content.Token);
 
@@ -85,7 +82,7 @@ export const LoginPage = () => {
     localStorage.setItem("userData", JSON.stringify(userData));
 
     if (loggedIn) {
-      return navigate("/platform/settings");
+      return navigate("/platform/dashboard");
     }
   }, [loggedIn]);
 

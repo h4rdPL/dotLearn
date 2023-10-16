@@ -42,12 +42,24 @@ namespace dotLearn.Application.Services.Test
             _testRepository.Create(testClass);
         }
 
+        public async Task<List<TestListDTO>> GetNextTests()
+        {
+            return await _testRepository.GetNextTests(); 
+        }
+
         public List<TestDTO> GetTest()
         {
             var user = _jwtTokenGenerator.GetProfessorIdFromJwt();
             var result = _testRepository.GetTest(user);
             return result;
         }
+
+        public async Task<List<TestResultDTO>> GetTestResult()
+        {
+            var result = await _testRepository.GetTestResult();
+            return result;
+        }
+
 
         public void OpenTest()
         {

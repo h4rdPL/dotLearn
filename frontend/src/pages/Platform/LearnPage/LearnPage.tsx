@@ -50,7 +50,6 @@ export const LearnPage: React.FC = () => {
       } else {
         console.error("Failed to fetch flashcards");
       }
-      console.log(authToken);
     } catch (error) {
       console.error("Error fetching flashcards:", error);
     }

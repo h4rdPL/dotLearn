@@ -14,5 +14,7 @@ namespace dotLearn.Application.Common.Interfaces.Test
         List<TestDTO> GetTest(User studentId);
         Task OpenTestsOnActiveDateAsync();
         void AddGrade(int testId, double score, int studentId);
+        Task<List<TestResultDTO>> GetTestResult();
+        Task<List<TestListDTO>> GetNextTests();
     }
 }

@@ -39,6 +39,19 @@ namespace dotLearn.Api.Controllers
         {
                 _testService.AssignScoreToStudent(testId, score);
         }
+        [HttpGet("GetTestResult")]
+        public async Task<List<TestResultDTO>> GetTestResult()
+        {
+            var result = await _testService.GetTestResult();
+            return result;
+        }
+
+        [HttpGet("GetNextTest")]
+        public async Task<List<TestListDTO>> GetNextTests()
+        {
+            var result = await _testService.GetNextTests();
+            return result;
+        }
 
 
     }

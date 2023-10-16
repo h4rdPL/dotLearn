@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
@@ -97,6 +97,7 @@ export const TestPageDetail = () => {
   const [finishedTestScore, setFinishedTestScore] = useState<any>(0);
   const [resultsToSend, setResultsToSend] = useState<any[]>([]);
   const [testSubmitted, setTestSubmitted] = useState(false);
+  let navigate = useNavigate();
 
   const handleAnswerSelect = (questionId: number, id: number) => {
     setSelectedAnswers((prevSelectedAnswers) => ({
@@ -157,6 +158,7 @@ export const TestPageDetail = () => {
       );
       if (response.ok) {
         console.log("Wynik testu został wysłany i zapisany w bazie danych.");
+        return navigate("/platform/test");
       } else {
         console.error("Błąd podczas wysyłania wyniku testu.");
       }
@@ -178,8 +180,7 @@ export const TestPageDetail = () => {
       });
       if (response.ok) {
         const data: any = await response.json();
-        setTest(data.$values[0]);
-        console.log(data.$values);
+        setTest(data.$values[testId - 1]);
       } else {
         console.error("Failed to fetch test");
       }
@@ -222,22 +223,23 @@ export const TestPageDetail = () => {
       };
     }
   }, [test]);
-
   return (
     <PlatformLayout>
       <TestPageWrapper>
         <TestHeader>
-          <TestTitle>{test?.TestName} </TestTitle>
+          <TestTitle>
+            {test?.TestName} /{" "}
+            <TestInfoItem>
+              {`Profesor: ${test?.ProfessorFirstName} ${test?.ProfessorLastName}`}
+            </TestInfoItem>{" "}
+          </TestTitle>
         </TestHeader>
-        <TestInfo>
-          <TestInfoItem>
-            {`Profesor: ${test?.ProfessorFirstName} ${test?.ProfessorLastName}`}
-          </TestInfoItem>
-        </TestInfo>
+        <TestInfo></TestInfo>
         <div>
           <div>
             {test &&
-              testSubmitted &&
+              test.UserTestData?.IsFinished === false &&
+              test.UserTestData?.IsActive === true &&
               test.Questions?.$values?.map((question: any, index: any) => (
                 <TestQuestion key={index}>
                   <div>
@@ -280,7 +282,9 @@ export const TestPageDetail = () => {
           </div>
         </div>
 
-        {testSubmitted ? (
+        {test &&
+        test.UserTestData?.IsFinished === false &&
+        test.UserTestData?.IsActive === true ? (
           <>
             <SubmitButton
               onClick={() => {
@@ -301,12 +305,15 @@ export const TestPageDetail = () => {
           <p>Test już nie jest dostępny.</p>
         )}
 
-        {remainingTime !== null && (
-          <p>
-            Pozostały czas: {Math.floor(remainingTime / 60)}:
-            {remainingTime % 60}
-          </p>
-        )}
+        {remainingTime !== null &&
+          test &&
+          test.UserTestData?.IsFinished === false &&
+          test.UserTestData?.IsActive === true && (
+            <p>
+              Pozostały czas: {Math.floor(remainingTime / 60)}:
+              {remainingTime % 60}
+            </p>
+          )}
         <p>Maksymalna ilość punktów: {totalPoints}</p>
         <p>Poprawne odpowiedzi: {(finishedTestScore * 100).toFixed(2)}%</p>
       </TestPageWrapper>

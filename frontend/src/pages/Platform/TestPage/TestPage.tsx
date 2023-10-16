@@ -18,11 +18,9 @@ const ClassHeading = styled.h2``;
 
 export const TestPage: React.FC<TestInterface> = () => {
   const [test, setTest] = useState<any>();
-
   const fetchUserClasses = async () => {
     try {
       const authToken = getAuthTokenFromCookies();
-      console.log("token" + authToken);
       const response = await fetch(`https://localhost:7024/api/Test/getTest`, {
         method: "GET",
         headers: {
@@ -34,7 +32,6 @@ export const TestPage: React.FC<TestInterface> = () => {
         const data = await response.json();
         setTest(data.$values);
         console.log("dane");
-        console.log(data);
       } else {
         console.error("Failed to fetch classes");
       }
@@ -46,7 +43,7 @@ export const TestPage: React.FC<TestInterface> = () => {
   useEffect(() => {
     fetchUserClasses();
   }, []);
-
+  console.log(test);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -56,15 +53,17 @@ export const TestPage: React.FC<TestInterface> = () => {
         {test &&
           test.map((data: any) => {
             const originalDate = new Date(data.ActiveDate);
-
             const formattedDate = `${originalDate.getFullYear()}-${
               originalDate.getMonth() + 1
             }-${originalDate.getDate()} | ${originalDate.getHours()}:${originalDate.getMinutes()}`;
-            console.log(data);
+            const isTestActive =
+              data.UserTestData?.IsActive === true &&
+              data.UserTestData?.IsFinished === false;
+
             return (
-              <div key={data.id}>
+              <div key={data.Id}>
                 <Span
-                  titleLabel={`${data.TestName}`}
+                  titleLabel={data.TestName}
                   label={`${data.ProfessorFirstName} ${data.ProfessorLastName}`}
                   isGrade={false}
                 />
@@ -74,10 +73,11 @@ export const TestPage: React.FC<TestInterface> = () => {
                 </span>
                 <Cta
                   as={Link}
-                  to={`${data.Id}`}
+                  to={isTestActive ? `${data.Id}` : `#`}
                   style={{ alignSelf: "flex-start" }}
-                  label="Wejdź"
+                  label={isTestActive ? "Wejdź" : "Test niedostępny"}
                   isJobOffer
+                  disabled={!isTestActive}
                 />
               </div>
             );

@@ -52,6 +52,7 @@ export interface CTAInterface {
   to?: string;
   as?: any;
   onClick?: (e : SyntheticEvent) => void;
+  disabled?: any;
 }
 
 export interface MissionProps {

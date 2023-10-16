@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace dotLearn.Infrastructure.Migrations
 {
     [DbContext(typeof(DotLearnDbContext))]
-    [Migration("20231015143417_initialMigration")]
+    [Migration("20231016101618_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -395,6 +395,9 @@ namespace dotLearn.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFinished")
                         .HasColumnType("bit");
 
                     b.Property<int>("StudentId")

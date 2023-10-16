@@ -14,6 +14,8 @@ namespace dotLearn.Application.Services.Test
         List<TestDTO> GetTest();
         void OpenTest();
         void AssignScoreToStudent(int testId, double score);
+        Task<List<TestResultDTO>> GetTestResult();
+        Task<List<TestListDTO>> GetNextTests();
 
     }
 }

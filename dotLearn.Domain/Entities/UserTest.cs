@@ -11,6 +11,7 @@ namespace dotLearn.Domain.Entities
         public int Id { get; set; }
         public int TestId { get; set; }
         public bool IsActive { get; set; }
+        public bool IsFinished { get; set; }
         public TestClass Test { get; set; }
         public Student Student { get; set; }
     }

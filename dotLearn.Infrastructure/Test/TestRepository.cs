@@ -1,4 +1,5 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
+using dotLearn.Application.Common.Interfaces.ClassPersistence;
 using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Common.Interfaces.Test;
 using dotLearn.Application.Helpers;
@@ -6,6 +7,7 @@ using dotLearn.Application.Services.Test;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,6 +31,13 @@ namespace dotLearn.Infrastructure.Test
         public void AddGrade(int testId, double score, int studentId)
         {
             int grade = CalculateGrade.GradeCalculator(score);
+            int userId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
+            
+            var userTest = _context.UserTests.FirstOrDefault(x => x.TestId == testId && x.Student.Id == userId);
+            if (userTest != null)
+            {
+                userTest.IsFinished = true;
+            }
 
             var studentScore = new StudentScore
             {
@@ -36,6 +45,7 @@ namespace dotLearn.Infrastructure.Test
                 TestId = testId,
                 Grade = grade,
             };
+
             _context.StudentScores.Add(studentScore);
             _context.SaveChanges();
         }
@@ -87,6 +97,7 @@ namespace dotLearn.Infrastructure.Test
 
                 var userTestEntity = new UserTest
                 {
+                    IsFinished = false,
                     Student = student,
                     Test = testEntity,
                     IsActive = isActive,
@@ -116,6 +127,30 @@ namespace dotLearn.Infrastructure.Test
                             }).ToList(),
                     }).ToList(),
             };
+        }
+
+
+
+        public async Task<List<TestListDTO>> GetNextTests()
+        {
+            var userId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
+
+            var currentDateTime = DateTime.Now;
+
+            var nextTests = await _context.Tests
+                .Where(test => test.ActiveDate > currentDateTime) 
+                .OrderBy(test => test.ActiveDate) 
+                .Take(3) 
+                .Select(test => new TestListDTO
+                {
+                    ClassName = test.Class.ClassName,
+                    TestName = test.TestName,
+                    ActiveDate = test.ActiveDate,
+                    Time = test.Time
+                })
+                .ToListAsync();
+
+            return nextTests;
         }
 
 
@@ -149,14 +184,50 @@ namespace dotLearn.Infrastructure.Test
                                 })
                                 .ToList()
                         })
-                        .ToList()
+                        .ToList(),
+                    UserTestData = _context.UserTests
+                        .Where(ut => ut.TestId == test.Id && ut.Student.Id == user.Id)
+                        .Select(ut => new UserTestDTO
+                        {
+                            IsActive = ut.IsActive,
+                            IsFinished = ut.IsFinished
+                        })
+                        .FirstOrDefault()
                 })
                 .ToList();
+
 
             return testsWithProfessors;
         }
 
+        public async Task<List<TestResultDTO>> GetTestResult()
+        {
+            var userId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
 
+            try
+            {
+                var testResults = await _context.StudentScores
+                    .Include(score => score.Test)
+                    .Include(score => score.Student)
+                    .Where(score => score.StudentId == userId)
+                    .OrderByDescending(score => score.Id)
+                    .Take(3)
+                    .Select(score => new TestResultDTO
+                    {
+                        TestName = score.Test.TestName,
+                        ClassName = score.Test.Class.ClassName,
+                        Grade = score.Grade
+                    })
+                    .ToListAsync();
+
+                return testResults;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
         public async Task OpenTestsOnActiveDateAsync()
         {
                 var currentDate = DateTime.UtcNow;

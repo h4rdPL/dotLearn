@@ -11,12 +11,12 @@ namespace dotLearn.Domain.DTO
         int Id,
         string? TestName,
         int Time,
-        bool IsActive,
         DateTime ActiveDate,
         int ClassId,
         string ProfessorFirstName, 
         string ProfessorLastName,  
-        List<QuestionDTO> Questions
+        List<QuestionDTO> Questions,
+        UserTestDTO UserTestData
     );
 
 
