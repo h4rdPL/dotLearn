@@ -216,7 +216,8 @@ namespace dotLearn.Infrastructure.Test
                     {
                         TestName = score.Test.TestName,
                         ClassName = score.Test.Class.ClassName,
-                        Grade = score.Grade
+                        Grade = score.Grade,
+                        ActiveDate = score.Test.ActiveDate
                     })
                     .ToListAsync();
 

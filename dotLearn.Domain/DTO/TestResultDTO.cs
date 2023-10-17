@@ -9,6 +9,7 @@ namespace dotLearn.Domain.DTO
     public record struct TestResultDTO(
         string TestName,
         string ClassName,
-        int Grade
+        int Grade,
+        DateTime ActiveDate
         );
 }

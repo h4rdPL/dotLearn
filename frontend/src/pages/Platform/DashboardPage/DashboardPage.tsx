@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import styled from "styled-components";
 import { Span } from "../../../components/atoms/Span/Span";
@@ -31,10 +30,6 @@ const Boxes = styled.span`
   flex-direction: column;
   font-size: 1rem;
   height: 100%;
-`;
-
-const ProgressWrapper = styled.div`
-  width: 150px;
 `;
 
 const InnerWrapper = styled.div<CalendarInterface>`
@@ -105,8 +100,6 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
       if (response.ok) {
         const data: any = await response.json();
         setTests(data.$values);
-        console.log("dane");
-        console.log(data.$values);
       } else {
         console.error("Failed to fetch classes");
       }
@@ -120,31 +113,9 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
     fetchTestAPI();
   }, []);
   console.log(grades);
-  const percentage = 4;
   return (
     <PlatformLayout>
       <Wrapper>
-        <Boxes>
-          <span style={{ fontSize: "14px" }}>
-            <h2>Twój progres</h2>
-          </span>
-          <InnerWrapper>
-            <ProgressWrapper>
-              <CircularProgressbar
-                value={65}
-                text={`${percentage} lvl`}
-                styles={buildStyles({
-                  strokeLinecap: "butt",
-                  textSize: "16px",
-                  pathTransitionDuration: 0.5,
-                  pathColor: `#FFFA8B`,
-                  textColor: "#fff",
-                  trailColor: "#fff",
-                })}
-              />
-            </ProgressWrapper>
-          </InnerWrapper>
-        </Boxes>
         <Boxes>
           <span style={{ fontSize: "14px" }}>
             <h2>Kalendarz</h2>
@@ -169,11 +140,10 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
                   return (
                     <span>
                       <Span
-                        titleLabel={`${test.ClassName} /`}
-                        label={`${test.TestName}`}
+                        titleLabel={`${test.ClassName}  /`}
+                        label={`${test.TestName} /`}
                         isGrade={false}
                       />
-                      {}
                       <IconWrapper>
                         <AiOutlineCalendar style={{ fontSize: "1.5rem" }} />{" "}
                         {formattedDate}
@@ -205,6 +175,7 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
                       gradeLabel={`${grade.Grade}`}
                       isGrade
                     />
+                    {grade.ActiveDate}
                   </>
                 ))}
             </GradeWrapper>
