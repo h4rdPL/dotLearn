@@ -50,7 +50,7 @@ namespace dotLearn.Infrastructure.Test
             _context.SaveChanges();
         }
 
-        public TestDTO Create(TestDTO testClass)
+        public TestDTO Create(CreateTestDTO testClass)
         {
             var professorId = _jwtTokenGenerator.GetProfessorIdFromJwt();
             var professor = _context.Professors.FirstOrDefault(p => p.Id == professorId.Id);
@@ -128,8 +128,6 @@ namespace dotLearn.Infrastructure.Test
                     }).ToList(),
             };
         }
-
-
 
         public async Task<List<TestListDTO>> GetNextTests()
         {

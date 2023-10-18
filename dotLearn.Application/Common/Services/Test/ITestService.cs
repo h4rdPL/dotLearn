@@ -10,7 +10,7 @@ namespace dotLearn.Application.Services.Test
 {
     public interface ITestService
     {
-        void Create(TestDTO testClass);
+        void Create(CreateTestDTO testClass);
         List<TestDTO> GetTest();
         void OpenTest();
         void AssignScoreToStudent(int testId, double score);

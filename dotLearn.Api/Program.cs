@@ -80,7 +80,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build => {
-    build.WithOrigins("http://localhost:3000")
+    build.WithOrigins("http://localhost:3000", "http://localhost:3000/*")
     .AllowAnyMethod()
     .AllowAnyHeader()
     .AllowCredentials();

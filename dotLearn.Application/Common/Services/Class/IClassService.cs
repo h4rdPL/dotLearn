@@ -16,7 +16,7 @@ namespace dotLearn.Application.Common.Services.Class
         Task<ClassEntities> Create(ClassDTO newClass);
         public void Delete(ClassEntities myClass);
         List<StudentAndProfessorClassesDTO> GetClass();
-        Task<ClassPdfFile> AddPDFFile(int professorId, IFormFile formFile);
+        Task<ClassPdfFile> AddPDFFile(int professorId, IFormFile formFile, int ClassId);
         Task<List<PdfFile>> GetClassPDFFiles(int uesrId);
         PdfFile GetPdfFileContent(int userId,string fileName);
     }

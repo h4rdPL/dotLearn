@@ -23,12 +23,12 @@ namespace dotLearn.Infrastructure.ClassEntitities
         {
             _context = context;
         }
-        public async Task<ClassPdfFile> AddPDFFIle(int professorId, IFormFile fileUploadDTO)
+        public async Task<ClassPdfFile> AddPDFFIle(int professorId, IFormFile fileUploadDTO, int ClassId)
         {
             try
             {
                 var classId = await _context.Classes
-                    .Where(c => c.ProfessorId == professorId)
+                    .Where(c => c.ProfessorId == professorId && c.Id == ClassId)
                     .Select(c => c.Id)
                     .FirstOrDefaultAsync();
 

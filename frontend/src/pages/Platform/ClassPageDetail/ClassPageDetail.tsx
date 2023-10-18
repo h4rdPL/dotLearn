@@ -4,6 +4,7 @@ import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { ImFilePdf } from "react-icons/im";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { any } from "prop-types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,11 +42,63 @@ const PdfLinkText = styled.span`
   margin-left: 10px;
 `;
 
-export const ClassPageDetail: React.FC = () => {
-  const { classId } = useParams<{ classId: any }>();
+const FileWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+`;
+
+interface PDFFileInterface {
+  id: string;
+  formFile: File | string;
+}
+
+export const ClassPageDetail = () => {
   const [selectedClass, setSelectedClass] = useState<any>();
   const [pdfFiles, setPdfFiles] = useState<any>();
   const [loading, setLoading] = useState(true);
+  const { classId } = useParams<{ classId: string }>();
+  const [data, setData] = useState<PDFFileInterface>({
+    id: classId || "",
+    formFile: "",
+  });
+
+  const handleFileChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement & {
+      files: FileList;
+    };
+    setData({
+      id: classId || "",
+      formFile: target.files[0],
+    });
+  };
+
+  const handleFileUpload = async () => {
+    const formData = new FormData();
+
+    formData.append("formFile", data.formFile);
+    formData.append("id", data.id);
+
+    try {
+      const authToken = getAuthTokenFromCookies();
+
+      const response = await fetch(
+        `https://localhost:7024/api/Class/upload-pdf?id=${data.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: "include",
+          body: formData,
+        }
+      ).then((r) => r.json());
+      console.log(response);
+    } catch (err) {
+      console.error("error:", err);
+    }
+  };
 
   const fetchUserClasses = async () => {
     try {
@@ -63,8 +116,15 @@ export const ClassPageDetail: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         const myData = data.$values;
+
         setSelectedClass(myData);
-        setPdfFiles(myData[classId - 1]);
+
+        for (const item of data.$values) {
+          if (item.Id === classId) {
+            setPdfFiles(item);
+            break;
+          }
+        }
         setLoading(false);
       } else {
         console.error("Failed to fetch classes");
@@ -73,7 +133,6 @@ export const ClassPageDetail: React.FC = () => {
       console.error("Error fetching classes:", error);
     }
   };
-  console.log(pdfFiles);
 
   useEffect(() => {
     fetchUserClasses();
@@ -88,29 +147,33 @@ export const ClassPageDetail: React.FC = () => {
           ) : (
             <>
               <MaterialHeading>
-                {selectedClass[classId - 1].ClassName} - materiały
+                {pdfFiles.ClassName} - materiały
               </MaterialHeading>
               <div>
                 <div>
-                  {pdfFiles?.PdfFiles &&
-                    pdfFiles?.PdfFiles.$values.map((pdfFile: any) => (
-                      <>
-                        <PdfLink
-                          key={pdfFile.Id}
-                          href={`data:application/pdf;base64,${pdfFile.FileContent}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          download={pdfFile.Name}
-                        >
-                          <ImFilePdf size={20} />
-                          <PdfLinkText>
-                            Pobierz plik PDF: {pdfFile.Name}
-                          </PdfLinkText>
-                        </PdfLink>
-                      </>
-                    ))}
+                  {pdfFiles.PdfFiles.$values.map((pdfFile: any) => (
+                    <>
+                      <PdfLink
+                        key={pdfFile.Id}
+                        href={`data:application/pdf;base64,${pdfFile.FileContent}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download={pdfFile.Name}
+                      >
+                        <ImFilePdf size={20} />
+                        <PdfLinkText>
+                          Pobierz plik PDF: {pdfFile.Name}
+                        </PdfLinkText>
+                      </PdfLink>
+                    </>
+                  ))}
                 </div>
               </div>
+              <FileWrapper>
+                <p>Dodaj materiały</p>
+                <input type="file" onChange={handleFileChange} />
+                <button onClick={handleFileUpload}>Wyślij plik</button>
+              </FileWrapper>
             </>
           )}
         </MaterialsContainer>

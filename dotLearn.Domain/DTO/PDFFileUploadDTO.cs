@@ -1,5 +1,4 @@
-﻿using dotLearn.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace dotLearn.Domain.DTO
 {
-    public record struct ClassDTO(
-        string ClassName,
-        List<int> CardId
+    public record struct PDFFileUploadDTO(
+            string Name,
+            byte[] FileContent
         );
 }

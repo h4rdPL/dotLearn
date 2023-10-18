@@ -37,7 +37,7 @@ namespace dotLearn.Application.Services.Test
         /// </summary>
         /// <param name="testClass">The test class entity to be created.</param>
         /// <returns>Returns the newly created test class entity.</returns>
-        public void Create(TestDTO testClass)
+        public void Create(CreateTestDTO testClass)
         {
             _testRepository.Create(testClass);
         }

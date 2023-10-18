@@ -13,7 +13,7 @@ namespace dotLearn.Application.Common.Interfaces.ClassPersistence
     public interface IClassRepository
     {
         Task<ClassEntities> Create(ClassEntities classEntity);
-        Task<ClassPdfFile> AddPDFFIle(int professorId, IFormFile fileUploadDTO);
+        Task<ClassPdfFile> AddPDFFIle(int professorId, IFormFile fileUploadDTO, int classId);
         List<StudentAndProfessorClassesDTO> GetAll(User user);
         void Remove(ClassEntities classEntity);
         Task<List<PdfFile>> GetClassPDFFiles(int userId);

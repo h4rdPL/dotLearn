@@ -5,9 +5,6 @@ import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { Button } from "../../../components/atoms/Button/Button";
 import { Link } from "react-router-dom";
-import { classData } from "../../../assets/data/classes";
-import Cookies from "js-cookie";
-import { convertToObject } from "typescript";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 const Wrapper = styled.div`
   display: flex;
@@ -48,6 +45,7 @@ export const ClassPage: React.FC = () => {
   useEffect(() => {
     fetchUserClasses();
   }, []);
+  console.log(classes);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -56,7 +54,7 @@ export const ClassPage: React.FC = () => {
         </span>
         {classes &&
           classes.map((myClass: any) => (
-            <div key={myClass.id}>
+            <div key={myClass.Id}>
               <Span
                 titleLabel={myClass.ClassName}
                 label={

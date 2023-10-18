@@ -69,8 +69,9 @@ namespace dotLearn.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("ClassCode")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ClassCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClassName")
                         .IsRequired()

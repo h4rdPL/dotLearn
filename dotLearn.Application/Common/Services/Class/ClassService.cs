@@ -23,14 +23,12 @@ namespace dotLearn.Application.Services.Class
     {
         private readonly IClassRepository _classRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public ClassService(IClassRepository classRepository, IUserRepository userRepository, IHttpContextAccessor contextAccessor, IJwtTokenGenerator jwtTokenGenerator)
+        public ClassService(IClassRepository classRepository, IUserRepository userRepository, IJwtTokenGenerator jwtTokenGenerator)
         {
             _classRepository = classRepository;
             _userRepository = userRepository;
-            _contextAccessor = contextAccessor;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
         /// <summary>
@@ -39,9 +37,9 @@ namespace dotLearn.Application.Services.Class
         /// <param name="professorId"></param>
         /// <param name="formFile"></param>
         /// <returns></returns>
-        public async Task<ClassPdfFile> AddPDFFile(int professorId, IFormFile formFile)
+        public async Task<ClassPdfFile> AddPDFFile(int professorId, IFormFile formFile, int classId)
         {
-            return await _classRepository.AddPDFFIle(professorId, formFile);
+            return await _classRepository.AddPDFFIle(professorId, formFile, classId);
         }
 
 
@@ -55,10 +53,12 @@ namespace dotLearn.Application.Services.Class
             try
             {
                 var professor = _jwtTokenGenerator.GetProfessorIdFromJwt();
+                var guid = Guid.NewGuid();
+                var shortGuid = BitConverter.ToString(guid.ToByteArray()).Replace("-", "").Substring(0, 8);
                 var classEntities = new ClassEntities
                 {
                     ClassName = newClass.ClassName,
-                    ClassCode = Guid.NewGuid(),
+                    ClassCode = shortGuid,
                     ProfessorId = professor.Id,
                     Students = new List<Student>(),
                 };
@@ -66,7 +66,7 @@ namespace dotLearn.Application.Services.Class
                 foreach (var studentCardId in newClass.CardId)
                 {
                     var student = _userRepository.GetStudentByCardId(studentCardId);
-                    if (student != null) // Sprawdzamy, czy udało się znaleźć studenta
+                    if (student != null)
                     {
                         classEntities.Students.Add(student);
                         Console.WriteLine(student.CardId);
@@ -77,7 +77,6 @@ namespace dotLearn.Application.Services.Class
                     }
                 }
 
-                // Teraz zapisujemy classEntities do bazy danych
                 _classRepository.Create(classEntities);
 
                 return classEntities;

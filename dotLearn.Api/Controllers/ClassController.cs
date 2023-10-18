@@ -49,10 +49,11 @@ namespace dotLearn.Api.Controllers
         }
 
         [HttpPost("upload-pdf")]
-        public async Task<IActionResult> UploadPdf(IFormFile formFile)
+        public async Task<IActionResult> UploadPdf(string id, IFormFile formFile)
         {
+            var classId = int.Parse(id);
             var professorId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
-            var result = await _classService.AddPDFFile(professorId, formFile);
+            var result = await _classService.AddPDFFile(professorId, formFile, classId);
             return Ok(result);
         }
 
@@ -67,7 +68,7 @@ namespace dotLearn.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Możesz również zwrócić odpowiedni status błędu
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -81,14 +82,12 @@ namespace dotLearn.Api.Controllers
 
             if (pdfFileContent == null)
             {
-                return NotFound(); // Zwróć NotFound, jeśli plik nie został znaleziony
+                return NotFound(); 
             }
 
-            // Ustaw odpowiednie nagłówki dla odpowiedzi HTTP
             Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
             Response.Headers.Add("Content-Type", "application/pdf");
 
-            // Zwróć plik PDF jako strumień
             return File(pdfFileContent.FileContent, "application/pdf");
         }
 
