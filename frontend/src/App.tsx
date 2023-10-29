@@ -21,6 +21,7 @@ import { ClassPageDetail } from "./pages/Platform/ClassPageDetail/ClassPageDetai
 import { TestPageDetail } from "./pages/Platform/TestPageDetail/TestPageDetail";
 import { ReactNode, useState } from "react";
 import { UserProvider } from "./pages/Context/UserContex";
+import { AddToClassPage } from "./pages/Platform/AddToClassPage/AddToClassPage";
 
 const router = createBrowserRouter([
   {
@@ -118,6 +119,7 @@ const router = createBrowserRouter([
     element: <CreateTestPage />,
     errorElement: <ErrorPage />,
   },
+
   {
     path: "/platform/test/:testId",
     element: <TestPageDetail />,
@@ -126,6 +128,11 @@ const router = createBrowserRouter([
   {
     path: "/platform/class/create",
     element: <CreateClassPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/platform/class/addToClass",
+    element: <AddToClassPage />,
     errorElement: <ErrorPage />,
   },
   {

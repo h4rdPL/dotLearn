@@ -43,17 +43,13 @@ namespace dotLearn.Application.Common.Services.Flashcards
         {
             try
             {
-                // Get the JWT token from the "Authorization" header
                 var jwtToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
 
-                // Verify the JWT token
                 var jwtSecurityToken = _jwtTokenGenerator.Verify(jwtToken);
 
-                // Extract student ID from the token
                 var studentIdClaim = jwtSecurityToken.Claims.First(c => c.Type == "email").Value;
                 var userGetByEmail = _userRepository.ReturnIdOfUserByEmail(studentIdClaim.ToString());
 
-                // Create a new Deck
                 var deck = new Deck
                 {
                     Name = model.Name,
@@ -107,14 +103,11 @@ namespace dotLearn.Application.Common.Services.Flashcards
         {
             var jwtToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
 
-            // Verify the JWT token
             var jwtSecurityToken = _jwtTokenGenerator.Verify(jwtToken);
 
-            // Extract student ID from the token
             var studentIdClaim = jwtSecurityToken.Claims.First(c => c.Type == "email").Value;
             var userGetByEmail = _userRepository.ReturnIdOfUserByEmail(studentIdClaim.ToString());
 
-            // Fetch the user by email to get their ID
             var decks = _flashCardsRepository.GetDecksByUserId(userGetByEmail.Id);
 
             return decks;

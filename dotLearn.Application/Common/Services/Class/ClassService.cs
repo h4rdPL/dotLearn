@@ -112,9 +112,20 @@ namespace dotLearn.Application.Services.Class
             return await _classRepository.GetClassPDFFiles(userId);
         }
 
+        public async Task<int> GetNumberOfStudents(int classId)
+        {
+
+            return await _classRepository.GetNumberOfStudents(classId);
+        }
+
         public PdfFile GetPdfFileContent(int userId, string fileName)
         {
             return _classRepository.GetPdfFileContent(userId, fileName);
+        }
+
+        public Task<ClassEntitiesStudent> JoinToClassByCode(int userId, string classCode)
+        {
+            return _classRepository.JoinToClassByCode(userId, classCode);
         }
 
         public Task<bool> RemoveStudentFromClass(int classId, Guid studentId)

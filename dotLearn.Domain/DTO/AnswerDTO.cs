@@ -3,5 +3,6 @@
     public record struct AnswerDTO(
         string AnswerName,
         bool IsCorrect
+
         );
 }

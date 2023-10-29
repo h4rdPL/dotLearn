@@ -37,17 +37,16 @@ namespace dotLearn.Infrastructure.Authentication
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
             var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256, "dsasdadsaa");
 
-            // Tutaj dodaj "kid" (key identifier) do nagłówka
             var header = new JwtHeader(credentials);
             header.Add("kid", "your_key_identifier_here");
 
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim("id", user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("Id", user.Id.ToString()),
+                new Claim("role", user.Role.ToString()),
             };
 
             var payload = new JwtPayload(user.Id.ToString(), null, claims, null, DateTime.Today.AddDays(1));
@@ -74,15 +73,13 @@ namespace dotLearn.Infrastructure.Authentication
 
             try
             {
-                // err
                 var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
                 return (JwtSecurityToken)validatedToken;
             }
             catch (Exception ex)
             {
-                // Tutaj możesz obsłużyć błędy walidacji tokena, np. logując je
                 Console.WriteLine($"Błąd walidacji tokenu JWT: {ex.Message}");
-                throw; // Możesz zdecydować, jak obsłużyć błąd walidacji
+                throw; 
             }
         }
 

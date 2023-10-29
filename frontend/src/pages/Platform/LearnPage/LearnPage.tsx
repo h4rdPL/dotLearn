@@ -58,7 +58,6 @@ export const LearnPage: React.FC = () => {
   useEffect(() => {
     fetchFlashcards();
   }, []);
-
   return (
     <PlatformLayout>
       <Wrapper>

@@ -12,19 +12,8 @@ namespace dotLearn.Domain.Entities
         public int Id { get; set; }
         public string TestName { get; set; }
         public int Time { get; set; }
-
-        private DateTime activeDate;
-
-        public DateTime ActiveDate
-        {
-            get => activeDate;
-            set => activeDate = value;
-        }
-
-        public string FormattedActiveDate
-        {
-            get => activeDate.ToString("yyyy-MM-dd HH:mm").Replace("T", "");
-        }
+        public DateTime ActiveDate{ get; set; }
+        public DateTime TestEndDate { get; set; }
         public int ClassId { get; set; }
         public ClassEntities Class { get; set; }
         public List<Question> Questions { get; set; }

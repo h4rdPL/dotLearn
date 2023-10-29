@@ -1,5 +1,3 @@
-import { SyntheticEvent } from "react";
-
 export interface ButtonProps {
   label: string;
   secondary?: boolean;
@@ -51,7 +49,7 @@ export interface CTAInterface {
   style?: any;
   to?: string;
   as?: any;
-  onClick?: (e : SyntheticEvent) => void;
+  onClick?: (e : any) => void;
   disabled?: any;
 }
 

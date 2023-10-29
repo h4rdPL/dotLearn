@@ -25,10 +25,8 @@ namespace dotLearn.Application.Services.Test
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public void AssignScoreToStudent(int testId, double score)
+        public void AssignScoreToStudent(int testId, double score, int studentId)
         {
-            var studentId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
-
             _testRepository.AddGrade(testId, score, studentId);
         }
 

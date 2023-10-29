@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -18,5 +19,7 @@ namespace dotLearn.Application.Common.Interfaces.ClassPersistence
         void Remove(ClassEntities classEntity);
         Task<List<PdfFile>> GetClassPDFFiles(int userId);
         PdfFile GetPdfFileContent(int classId, string fileName);
+        Task<ClassEntitiesStudent> JoinToClassByCode(int userId, string classCode);
+        Task<int> GetNumberOfStudents(int classId);
     }
 }

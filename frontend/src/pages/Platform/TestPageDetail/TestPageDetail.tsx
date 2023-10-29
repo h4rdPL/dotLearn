@@ -107,9 +107,9 @@ export const TestPageDetail = () => {
   };
 
   const handleEndTest = async () => {
+    setIsTestAvailable(!isTestAvailable);
     try {
       let totalPoints = 0;
-
       for (const questionId in selectedAnswers) {
         const selectedAnswerIndex = selectedAnswers[questionId];
         const question = test.Questions.$values[questionId];
@@ -180,7 +180,18 @@ export const TestPageDetail = () => {
       });
       if (response.ok) {
         const data: any = await response.json();
-        setTest(data.$values[testId - 1]);
+        let foundTest = null;
+        for (const item of data.$values) {
+          if (item.Id === testId) {
+            foundTest = item;
+            break;
+          }
+        }
+        if (foundTest) {
+          setTest(foundTest);
+        } else {
+          console.error("Test not found");
+        }
       } else {
         console.error("Failed to fetch test");
       }
@@ -223,6 +234,8 @@ export const TestPageDetail = () => {
       };
     }
   }, [test]);
+  console.log("test");
+  console.log(test);
   return (
     <PlatformLayout>
       <TestPageWrapper>
@@ -238,8 +251,8 @@ export const TestPageDetail = () => {
         <div>
           <div>
             {test &&
-              test.UserTestData?.IsFinished === false &&
-              test.UserTestData?.IsActive === true &&
+              // test.UserTestData?.IsFinished === false &&
+              // test.UserTestData?.IsActive === true &&
               test.Questions?.$values?.map((question: any, index: any) => (
                 <TestQuestion key={index}>
                   <div>
@@ -302,12 +315,11 @@ export const TestPageDetail = () => {
             </SubmitButton>
           </>
         ) : (
-          <p>Test już nie jest dostępny.</p>
+          <p>Test nie jest dostępny. :((</p>
         )}
 
         {remainingTime !== null &&
           test &&
-          test.UserTestData?.IsFinished === false &&
           test.UserTestData?.IsActive === true && (
             <p>
               Pozostały czas: {Math.floor(remainingTime / 60)}:

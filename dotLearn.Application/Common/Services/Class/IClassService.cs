@@ -19,5 +19,7 @@ namespace dotLearn.Application.Common.Services.Class
         Task<ClassPdfFile> AddPDFFile(int professorId, IFormFile formFile, int ClassId);
         Task<List<PdfFile>> GetClassPDFFiles(int uesrId);
         PdfFile GetPdfFileContent(int userId,string fileName);
+        Task<ClassEntitiesStudent> JoinToClassByCode(int userId, string classCode);
+        Task<int> GetNumberOfStudents(int classId);
     }
 }

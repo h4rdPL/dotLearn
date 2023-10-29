@@ -36,7 +36,6 @@ const InnerWrapper = styled.form`
 `;
 
 export const LoginPage = () => {
-  const [name, setName] = useState<string>("");
   const [loginData, setLoginData] = useState<LoginDataInterface>({
     Email: "",
     Password: "",
@@ -70,13 +69,11 @@ export const LoginPage = () => {
       updateUserEmail(content.Email);
       Cookies.set("jwt", content.Token);
 
-      setName(content.Email);
       setLoggedIn(true);
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(JSON.stringify({ ...loginData }));
 
   useEffect(() => {
     localStorage.setItem("userData", JSON.stringify(userData));

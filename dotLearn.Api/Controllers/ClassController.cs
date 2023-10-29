@@ -91,9 +91,26 @@ namespace dotLearn.Api.Controllers
             return File(pdfFileContent.FileContent, "application/pdf");
         }
 
+        [HttpPost("JoinToClassByCode")]
+        public async Task<ClassEntitiesStudent> JoinToClassByCode(string classCode)
+        {
+            try
+            {
+                var userId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
+                var result = await _classService.JoinToClassByCode(userId, classCode);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
-
-
-
+        [HttpGet("getStudentsList")] 
+        public async Task<int> GetNumberOfStudents(int classId)
+        {
+            var result = await _classService.GetNumberOfStudents(classId);
+            return result;
+        }
     }
 }

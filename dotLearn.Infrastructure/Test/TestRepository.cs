@@ -31,9 +31,8 @@ namespace dotLearn.Infrastructure.Test
         public void AddGrade(int testId, double score, int studentId)
         {
             int grade = CalculateGrade.GradeCalculator(score);
-            int userId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
             
-            var userTest = _context.UserTests.FirstOrDefault(x => x.TestId == testId && x.Student.Id == userId);
+            var userTest = _context.UserTests.FirstOrDefault(x => x.TestId == testId && x.Student.Id == studentId);
             if (userTest != null)
             {
                 userTest.IsFinished = true;
@@ -61,11 +60,12 @@ namespace dotLearn.Infrastructure.Test
                 Console.WriteLine("Professor is not assigned to any class.");
             }
 
+
             var testEntity = new TestClass
             {
                 TestName = testClass.TestName,
                 Time = testClass.Time,
-                ActiveDate = testClass.ActiveDate,
+                ActiveDate = testClass.ActiveDate.ToLocalTime(),
                 ClassId = professorClass.Id,
                 Questions = testClass.Questions
                     .Select(questionDTO => new Question
@@ -82,10 +82,7 @@ namespace dotLearn.Infrastructure.Test
             };
 
             _context.Tests.Add(testEntity);
-
             _context.SaveChanges();
-
-            var currentDateTime = DateTime.Now;
 
             var studentsInClass = _context.Students
                 .Where(s => s.ClassEntitiesStudents.Any(ce => ce.ClassEntitiesId == professorClass.Id))
@@ -101,6 +98,7 @@ namespace dotLearn.Infrastructure.Test
                     Student = student,
                     Test = testEntity,
                     IsActive = isActive,
+                    
                 };
 
                 _context.UserTests.Add(userTestEntity);
@@ -112,7 +110,7 @@ namespace dotLearn.Infrastructure.Test
             {
                 TestName = testEntity.TestName,
                 Time = testEntity.Time,
-                ActiveDate = testEntity.ActiveDate,
+                ActiveDate = testClass.ActiveDate.ToLocalTime(),
                 ClassId = testEntity.ClassId,
                 Questions = testEntity.Questions
                     .Select(question => new QuestionDTO
@@ -212,6 +210,7 @@ namespace dotLearn.Infrastructure.Test
                     .Take(3)
                     .Select(score => new TestResultDTO
                     {
+                        ClassId = score.Test.Class.Id,
                         TestName = score.Test.TestName,
                         ClassName = score.Test.Class.ClassName,
                         Grade = score.Grade,
@@ -227,6 +226,7 @@ namespace dotLearn.Infrastructure.Test
                 return null;
             }
         }
+
         public async Task OpenTestsOnActiveDateAsync()
         {
                 var currentDate = DateTime.UtcNow;

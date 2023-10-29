@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace dotLearn.Domain.DTO
 {
     public record struct TestResultDTO(
+        int ClassId,
         string TestName,
         string ClassName,
         int Grade,

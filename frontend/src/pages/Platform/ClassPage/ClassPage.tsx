@@ -6,6 +6,8 @@ import { Cta } from "../../../components/atoms/Button/Cta";
 import { Button } from "../../../components/atoms/Button/Button";
 import { Link } from "react-router-dom";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { getUserRole } from "../../../utils/GetUserRole";
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,11 +18,14 @@ const ClassHeading = styled.h2``;
 
 export const ClassPage: React.FC = () => {
   const [classes, setClasses] = useState<any>();
+  const [role, setRole] = useState<string | undefined>();
 
   const fetchUserClasses = async () => {
     try {
       const authToken = getAuthTokenFromCookies();
-      console.log("token" + authToken);
+      if (typeof authToken === "undefined") return;
+      setRole(getUserRole(authToken));
+
       const response = await fetch(
         `https://localhost:7024/api/Class/GetClass`,
         {
@@ -33,6 +38,7 @@ export const ClassPage: React.FC = () => {
       );
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setClasses(data.$values);
       } else {
         console.error("Failed to fetch classes");
@@ -45,7 +51,6 @@ export const ClassPage: React.FC = () => {
   useEffect(() => {
     fetchUserClasses();
   }, []);
-  console.log(classes);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -65,7 +70,7 @@ export const ClassPage: React.FC = () => {
                 isGrade={false}
               />
               <span style={{ fontSize: "14px" }}>
-                <p>Ilość osób: {myClass.numberOfPeople}</p>
+                <p>Ilość osób: {myClass.StudentNumbers}</p>
               </span>
               <Cta
                 as={Link}
@@ -76,13 +81,15 @@ export const ClassPage: React.FC = () => {
               />
             </div>
           ))}
-
-        <Link to={"/platform/class/create"}>
-          <Button label="Stwórz klasę" />
-        </Link>
-        <Link to={"/platform/class/create"}>
-          <Button label="Dołącz do klasy" />
-        </Link>
+        {role === "Professor" ? (
+          <Link to={"/platform/class/create"}>
+            <Button label="Stwórz klasę" />
+          </Link>
+        ) : (
+          <Link to={"/platform/class/addToClass"}>
+            <Button label="Dołącz do klasy" />
+          </Link>
+        )}
       </Wrapper>
     </PlatformLayout>
   );

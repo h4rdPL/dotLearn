@@ -7,6 +7,7 @@ import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import { CalendarInterface } from "../../../interfaces/types";
 import Calendar from "../../../components/organisms/Calendar/Calendar";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { dateConverter } from "../../../utils/DateConverter";
 
 const Wrapper = styled.div`
   display: grid;
@@ -74,8 +75,6 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
       if (response.ok) {
         const data: any = await response.json();
         setGrades(data.$values);
-        console.log("dane");
-        console.log(data.$values);
       } else {
         console.error("Failed to fetch classes");
       }
@@ -132,21 +131,18 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
             <TestWrapper>
               {tests &&
                 tests.map((test: any) => {
-                  const originalDate = new Date(test.ActiveDate);
-                  const formattedDate = `${originalDate.getFullYear()}-${
-                    originalDate.getMonth() + 1
-                  }-${originalDate.getDate()} | ${originalDate.getHours()}:${originalDate.getMinutes()}`;
+                  const originalDate = dateConverter(test.ActiveDate);
 
                   return (
                     <span>
                       <Span
                         titleLabel={`${test.ClassName}  /`}
-                        label={`${test.TestName} /`}
+                        label={`${test.TestName} `}
                         isGrade={false}
                       />
                       <IconWrapper>
                         <AiOutlineCalendar style={{ fontSize: "1.5rem" }} />{" "}
-                        {formattedDate}
+                        {originalDate}
                       </IconWrapper>
 
                       <IconWrapper>
@@ -175,7 +171,7 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
                       gradeLabel={`${grade.Grade}`}
                       isGrade
                     />
-                    {grade.ActiveDate}
+                    {dateConverter(grade.ActiveDate)}
                   </>
                 ))}
             </GradeWrapper>

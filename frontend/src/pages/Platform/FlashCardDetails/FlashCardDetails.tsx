@@ -157,8 +157,7 @@ export const FlashCardDetails: React.FC = () => {
 
       const data = await response.json();
       const myData = data.$values;
-
-      setDeck([]);
+      setDeck(myData);
 
       const flashCardSets = myData.map((item: any) => ({
         Name: item.Name,
@@ -167,7 +166,6 @@ export const FlashCardDetails: React.FC = () => {
       }));
 
       setDeck(flashCardSets);
-      console.log("Fetched deck:", deck);
     } catch (error) {
       console.error("Error fetching flashcards:", error);
     }
@@ -176,17 +174,16 @@ export const FlashCardDetails: React.FC = () => {
   useEffect(() => {
     fetchFlashcards();
   }, []);
-
   useEffect(() => {
-    if (deck.length > 0 && flashCardId) {
-      const selectedDeckIndex = parseInt(flashCardId, 10) - 1;
-      if (selectedDeckIndex >= 0 && selectedDeckIndex < deck.length) {
-        const selectedDeck = deck[selectedDeckIndex];
-        if (selectedDeck && selectedDeck.FlashCards) {
-          setCurrentDeck(selectedDeck.FlashCards);
-          setCurrentCard(0);
-          setFlipped(false);
-        }
+    if (deck.length > 0 && typeof flashCardId !== "undefined") {
+      const selectedFlashCard = deck.find(
+        (flashcardSet) => flashcardSet?.FlashCards[0].Id === flashCardId
+      );
+
+      if (selectedFlashCard) {
+        setCurrentDeck(selectedFlashCard.FlashCards);
+        setCurrentCard(0);
+        setFlipped(false);
       }
     }
   }, [deck, flashCardId]);

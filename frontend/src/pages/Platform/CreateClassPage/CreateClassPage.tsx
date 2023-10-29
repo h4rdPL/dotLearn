@@ -3,6 +3,8 @@ import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { ClassInput } from "../../../components/atoms/Input/ClassInput";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,22 +14,8 @@ const Wrapper = styled.div`
   justify-content: flex-start;
 `;
 
-const ClassInput = styled.input`
-  padding: 1rem;
-  border: none;
-  border-bottom: 1px solid #fff;
-  background-color: transparent;
-  color: #fff;
-  outline: none;
-  margin-bottom: 1rem;
-  width: 50%;
-
-  &::placeholder {
-    color: #ffffff99;
-  }
-`;
-
 export const CreateClassPage = () => {
+  const navigate = useNavigate();
   const [classData, setClassData] = useState<any>({
     ClassName: "",
     CardId: [],
@@ -76,7 +64,8 @@ export const CreateClassPage = () => {
       );
 
       if (response.ok) {
-        console.log("Klasa została utworzona pomyślnie!");
+        console.log(response);
+        return navigate("/platform/class");
       } else {
         const errorMessage = await response.text();
         console.error("Błąd serwera:", errorMessage);

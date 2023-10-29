@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace dotLearn.Infrastructure.Migrations
 {
     [DbContext(typeof(DotLearnDbContext))]
-    [Migration("20231017110928_initialMigration")]
-    partial class initialMigration
+    [Migration("20231029142648_updateTestTable")]
+    partial class updateTestTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -372,6 +372,9 @@ namespace dotLearn.Infrastructure.Migrations
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("TestEndDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TestName")
                         .IsRequired()

@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
-import { ImFilePdf } from "react-icons/im";
+import { ImFilePdf, ImFileText, ImFileWord } from "react-icons/im";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
-import { any } from "prop-types";
+import { Cta } from "../../../components/atoms/Button/Cta";
+import { getUserRole } from "../../../utils/GetUserRole";
+import { Span } from "../../../components/atoms/Span/Span";
+import { dateConverter } from "../../../utils/DateConverter";
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,12 +52,21 @@ const FileWrapper = styled.div`
   margin-top: 1rem;
 `;
 
+const GradeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+`;
+
 interface PDFFileInterface {
   id: string;
   formFile: File | string;
 }
 
 export const ClassPageDetail = () => {
+  const [role, setRole] = useState<string | undefined>();
+  const [grades, setGrades] = useState<any[]>();
+
   const [selectedClass, setSelectedClass] = useState<any>();
   const [pdfFiles, setPdfFiles] = useState<any>();
   const [loading, setLoading] = useState(true);
@@ -73,6 +85,35 @@ export const ClassPageDetail = () => {
       formFile: target.files[0],
     });
   };
+  const fetchGrades = async () => {
+    try {
+      const authToken = getAuthTokenFromCookies();
+      const response = await fetch(
+        `https://localhost:7024/api/Test/GetTestResult`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        const data: any = await response.json();
+        const filteredGrades = data.$values.filter(
+          (grade: any) => grade.ClassId === classId
+        );
+        setGrades(filteredGrades);
+
+        console.log("dane");
+        console.log(data.$values);
+      } else {
+        console.error("Failed to fetch classes");
+      }
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
+  };
 
   const handleFileUpload = async () => {
     const formData = new FormData();
@@ -82,7 +123,6 @@ export const ClassPageDetail = () => {
 
     try {
       const authToken = getAuthTokenFromCookies();
-
       const response = await fetch(
         `https://localhost:7024/api/Class/upload-pdf?id=${data.id}`,
         {
@@ -95,6 +135,7 @@ export const ClassPageDetail = () => {
         }
       ).then((r) => r.json());
       console.log(response);
+      window.location.reload();
     } catch (err) {
       console.error("error:", err);
     }
@@ -103,6 +144,9 @@ export const ClassPageDetail = () => {
   const fetchUserClasses = async () => {
     try {
       const authToken = getAuthTokenFromCookies();
+      if (typeof authToken === "undefined") return;
+      setRole(getUserRole(authToken));
+
       const response = await fetch(
         `https://localhost:7024/api/Class/GetClass`,
         {
@@ -116,7 +160,8 @@ export const ClassPageDetail = () => {
       if (response.ok) {
         const data = await response.json();
         const myData = data.$values;
-
+        console.log("myData");
+        console.log(myData);
         setSelectedClass(myData);
 
         for (const item of data.$values) {
@@ -136,8 +181,9 @@ export const ClassPageDetail = () => {
 
   useEffect(() => {
     fetchUserClasses();
+    fetchGrades();
   }, []);
-
+  console.log(grades);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -151,28 +197,73 @@ export const ClassPageDetail = () => {
               </MaterialHeading>
               <div>
                 <div>
-                  {pdfFiles.PdfFiles.$values.map((pdfFile: any) => (
-                    <>
-                      <PdfLink
-                        key={pdfFile.Id}
-                        href={`data:application/pdf;base64,${pdfFile.FileContent}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        download={pdfFile.Name}
-                      >
-                        <ImFilePdf size={20} />
-                        <PdfLinkText>
-                          Pobierz plik PDF: {pdfFile.Name}
-                        </PdfLinkText>
-                      </PdfLink>
-                    </>
-                  ))}
+                  {pdfFiles.PdfFiles.$values.map((pdfFile: any) => {
+                    const fileExtension = pdfFile.Name.split(".").pop();
+
+                    const getIconForExtension = (extension: string) => {
+                      switch (extension) {
+                        case "pdf":
+                          return <ImFilePdf size={20} />;
+                        case "docx":
+                          return <ImFileWord size={20} />;
+                        case "odt":
+                          return <ImFileWord size={20} />;
+                        case "txt":
+                          return <ImFileText size={20} />;
+                        default:
+                          return <ImFilePdf size={20} />;
+                      }
+                    };
+
+                    return (
+                      <>
+                        <PdfLink
+                          key={pdfFile.Id}
+                          href={`data:application/pdf;base64,${pdfFile.FileContent}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download={pdfFile.Name}
+                        >
+                          {getIconForExtension(fileExtension)}
+                          <PdfLinkText>
+                            Pobierz plik {fileExtension.toUpperCase()}:{" "}
+                            {pdfFile.Name}
+                          </PdfLinkText>
+                        </PdfLink>
+                      </>
+                    );
+                  })}
                 </div>
               </div>
+              <MaterialHeading>Twoje oceny</MaterialHeading>
+              <GradeWrapper>
+                {grades &&
+                  grades.map((grade: any) => (
+                    <div key={grade.Id}>
+                      <Span
+                        titleLabel={`${grade.ClassName} /`}
+                        label={`${grade.TestName}`}
+                        gradeLabel={`${grade.Grade}`}
+                        isGrade
+                      />
+                      {dateConverter(grade.ActiveDate)}
+                    </div>
+                  ))}
+              </GradeWrapper>
+
               <FileWrapper>
-                <p>Dodaj materiały</p>
-                <input type="file" onChange={handleFileChange} />
-                <button onClick={handleFileUpload}>Wyślij plik</button>
+                {role === "Professor" && (
+                  <>
+                    <p>Dodaj materiały:</p>
+                    <input type="file" onChange={handleFileChange} multiple />
+                    <Cta
+                      style={{ alignSelf: "flex-start" }}
+                      label="Wyślij plik"
+                      onClick={handleFileUpload}
+                      isJobOffer
+                    />
+                  </>
+                )}
               </FileWrapper>
             </>
           )}

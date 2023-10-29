@@ -1,4 +1,5 @@
-﻿using dotLearn.Application.Services.Test;
+﻿using dotLearn.Application.Common.Interfaces.Authentication;
+using dotLearn.Application.Services.Test;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -11,9 +12,11 @@ namespace dotLearn.Api.Controllers
     public class TestController : ControllerBase
     {
         private readonly ITestService _testService;
-        public TestController(ITestService testService)
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        public TestController(ITestService testService, IJwtTokenGenerator jwtTokenGenerator)
         {
             _testService = testService;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
         /// <summary>
         /// Creates a new test.
@@ -37,7 +40,8 @@ namespace dotLearn.Api.Controllers
         [HttpPost("SubmitTestResults/{testId}")]
         public void SubmitTestResults(int testId, double score)
         {
-                _testService.AssignScoreToStudent(testId, score);
+            var studentId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
+            _testService.AssignScoreToStudent(testId, score, studentId);
         }
         [HttpGet("GetTestResult")]
         public async Task<List<TestResultDTO>> GetTestResult()

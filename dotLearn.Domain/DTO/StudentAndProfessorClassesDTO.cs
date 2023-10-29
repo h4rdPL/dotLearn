@@ -12,7 +12,8 @@ namespace dotLearn.Domain.DTO
         string? ClassName,
         string? FirstName,
         string LastName,
-        List<PdfFile> PdfFiles 
+        List<PdfFile> PdfFiles,
+        int StudentNumbers
     );
 
 }

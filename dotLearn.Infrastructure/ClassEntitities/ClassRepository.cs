@@ -81,28 +81,30 @@ namespace dotLearn.Infrastructure.ClassEntitities
 
         public List<StudentAndProfessorClassesDTO> GetAll(User user)
         {
-            var classesWithProfessorsAndPDFs = _context.ClassEntitiesStudents
-                .Where(ces => ces.StudentId == user.Id)
-                .SelectMany(ces =>
-                    _context.Classes
-                        .Include(ce => ce.Professor)
-                        .Where(ce => ce.Id == ces.ClassEntitiesId)
-                        .Select(ce => new StudentAndProfessorClassesDTO
-                        {
-                            Id = ce.Id,
-                            ClassName = ce.ClassName,
-                            FirstName = ce.Professor.FirstName,
-                            LastName = ce.Professor.LastName,
-                            PdfFiles = _context.ClassPdfFiles
-                                .Where(cp => cp.ClassId == ce.Id)
-                                .Select(cp => cp.PdfFile)
-                                .ToList()
-                        })
-                )
+            var classesWithProfessorsAndPDFs = _context.Classes
+                .Where(ce => _context.ClassEntitiesStudents
+                    .Any(ces => ces.ClassEntitiesId == ce.Id && ces.StudentId == user.Id) || ce.ProfessorId == user.Id)
+                .Select(ce => new StudentAndProfessorClassesDTO
+                {
+                    Id = ce.Id,
+                    ClassName = ce.ClassName,
+                    FirstName = ce.Professor.FirstName,
+                    LastName = ce.Professor.LastName,
+                    PdfFiles = _context.ClassPdfFiles
+                        .Where(cp => cp.ClassId == ce.Id)
+                        .Select(cp => cp.PdfFile)
+                        .ToList(),
+                    StudentNumbers = _context.ClassEntitiesStudents
+                        .Where(ces => ces.ClassEntitiesId == ce.Id)
+                        .Select(ces => ces.StudentId)
+                        .Distinct()
+                        .Count()
+                })
                 .ToList();
 
             return classesWithProfessorsAndPDFs;
         }
+
 
 
         public async Task<List<PdfFile>> GetClassPDFFiles(int userId)
@@ -122,7 +124,22 @@ namespace dotLearn.Infrastructure.ClassEntitities
             }
         }
 
-
+        public async Task<int> GetNumberOfStudents(int classId)
+        {
+            try
+            {
+                var numberOfStudents = await _context.ClassEntitiesStudents
+                    .Where(s => s.ClassEntitiesId == classId)
+                    .Select(s => s.StudentId)
+                    .Distinct()
+                    .CountAsync();
+                return numberOfStudents;
+            }
+            catch (Exception err)
+            {
+                throw new Exception(err.Message);
+            }
+        }
 
         public PdfFile GetPdfFileContent(int userId, string fileName)
         {
@@ -148,8 +165,36 @@ namespace dotLearn.Infrastructure.ClassEntitities
 
             return pdfFileResponse;
         }
+        
+        public async Task<ClassEntitiesStudent> JoinToClassByCode(int userId, string classCode)
+        {
+            try
+            {
+                var classId = _context.Classes.FirstOrDefault(x => x.ClassCode == classCode);
 
-            public void Remove(ClassEntities classEntity)
+                var existingRelation = _context.ClassEntitiesStudents
+                .FirstOrDefault(r => r.StudentId == userId && r.ClassEntitiesId == classId.Id);
+                if(existingRelation is not null)
+                {
+                    throw new Exception("Student już należy do danej klasy");
+                }
+                var classStudent = new ClassEntitiesStudent
+                {
+                    StudentId = userId,
+                    ClassEntitiesId = classId.Id
+                };
+
+                _context.ClassEntitiesStudents.Add(classStudent);
+                await _context.SaveChangesAsync();
+                return classStudent;
+            } catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+        public void Remove(ClassEntities classEntity)
         {
             throw new NotImplementedException();
         }
