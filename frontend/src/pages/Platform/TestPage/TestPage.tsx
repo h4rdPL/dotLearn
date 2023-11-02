@@ -49,6 +49,7 @@ export const TestPage: React.FC<TestInterface> = () => {
   useEffect(() => {
     fetchUserClasses();
   }, []);
+  console.log(test);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -169,7 +170,6 @@ export const TestPage: React.FC<TestInterface> = () => {
             }
             return null;
           })}
-
         {!test && (
           <center>
             <p>Aktualnie nie posiadasz żadnych testów</p>

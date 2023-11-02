@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { getUserRole } from "../../../utils/GetUserRole";
 
 const TestPageWrapper = styled.div`
   display: flex;
@@ -85,6 +86,7 @@ const RadioCustomButton = styled.span<{ checked: boolean }>`
 `;
 
 export const TestPageDetail = () => {
+  const [role, setRole] = useState<string | undefined>();
   const { testId } = useParams<{ testId: any }>();
   const [testResults, setTestResults] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<
@@ -113,7 +115,6 @@ export const TestPageDetail = () => {
       for (const questionId in selectedAnswers) {
         const selectedAnswerIndex = selectedAnswers[questionId];
         const question = test.Questions.$values[questionId];
-
         if (
           selectedAnswerIndex !== undefined &&
           selectedAnswerIndex >= 0 &&
@@ -170,7 +171,9 @@ export const TestPageDetail = () => {
   const fetchTest = async () => {
     try {
       const authToken = getAuthTokenFromCookies();
+      if (typeof authToken === "undefined") return;
 
+      setRole(getUserRole(authToken));
       const response = await fetch(`https://localhost:7024/api/Test/getTest`, {
         method: "GET",
         headers: {
@@ -234,8 +237,6 @@ export const TestPageDetail = () => {
       };
     }
   }, [test]);
-  console.log("test");
-  console.log(test);
   return (
     <PlatformLayout>
       <TestPageWrapper>
@@ -251,8 +252,9 @@ export const TestPageDetail = () => {
         <div>
           <div>
             {test &&
-              // test.UserTestData?.IsFinished === false &&
-              // test.UserTestData?.IsActive === true &&
+            // test.UserTestData?.IsFinished === false &&
+            // test.UserTestData?.IsActive === true &&
+            role === "Student" ? (
               test.Questions?.$values?.map((question: any, index: any) => (
                 <TestQuestion key={index}>
                   <div>
@@ -291,7 +293,12 @@ export const TestPageDetail = () => {
                     )}
                   </ul>
                 </TestQuestion>
-              ))}
+              ))
+            ) : (
+              <>
+                <h1>Wyniki testu</h1>
+              </>
+            )}
           </div>
         </div>
 

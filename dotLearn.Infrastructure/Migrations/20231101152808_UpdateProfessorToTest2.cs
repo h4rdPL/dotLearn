@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace dotLearn.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class UpdateProfessorToTest2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -214,6 +214,7 @@ namespace dotLearn.Infrastructure.Migrations
                     TestName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Time = table.Column<int>(type: "int", nullable: false),
                     ActiveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TestEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

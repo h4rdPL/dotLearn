@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace dotLearn.Infrastructure.Migrations
 {
     [DbContext(typeof(DotLearnDbContext))]
-    [Migration("20231029142648_updateTestTable")]
-    partial class updateTestTable
+    [Migration("20231101152808_UpdateProfessorToTest2")]
+    partial class UpdateProfessorToTest2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

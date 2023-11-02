@@ -7,6 +7,7 @@ import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { useNavigate } from "react-router-dom";
 
 const TestInput = styled.input`
   padding: 1rem;
@@ -80,6 +81,7 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export const CreateTestPage = () => {
+  const navigate = useNavigate();
   const [testName, setTestName] = useState("");
   const [classId, setClassId] = useState(0);
   const [testTime, setTestTime] = useState<number>(0);
@@ -96,7 +98,7 @@ export const CreateTestPage = () => {
   ]);
   const [startDate, setStartDate] = useState<Value | null>();
   const [endDate, setEndDate] = useState<Date | null>(new Date());
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(false);
   const [isFinished, setIsFinished] = useState(true);
   const [classData, setClassData] = useState<any>();
 
@@ -207,6 +209,7 @@ export const CreateTestPage = () => {
 
       if (response.ok) {
         console.log("Test created successfully");
+        return navigate("/platform/test");
       } else {
         const errorMessage = await response.text();
         console.error("Server Error:", errorMessage);

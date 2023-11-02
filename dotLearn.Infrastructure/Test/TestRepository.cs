@@ -66,6 +66,7 @@ namespace dotLearn.Infrastructure.Test
                 TestName = testClass.TestName,
                 Time = testClass.Time,
                 ActiveDate = testClass.ActiveDate.ToLocalTime(),
+                TestEndDate = testClass.EndDate.ToLocalTime(),
                 ClassId = professorClass.Id,
                 Questions = testClass.Questions
                     .Select(questionDTO => new Question
@@ -111,6 +112,7 @@ namespace dotLearn.Infrastructure.Test
                 TestName = testEntity.TestName,
                 Time = testEntity.Time,
                 ActiveDate = testClass.ActiveDate.ToLocalTime(),
+                EndDate = testEntity.TestEndDate.ToLocalTime(),
                 ClassId = testEntity.ClassId,
                 Questions = testEntity.Questions
                     .Select(question => new QuestionDTO

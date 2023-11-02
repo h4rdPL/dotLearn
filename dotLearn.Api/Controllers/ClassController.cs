@@ -112,5 +112,6 @@ namespace dotLearn.Api.Controllers
             var result = await _classService.GetNumberOfStudents(classId);
             return result;
         }
+
     }
 }

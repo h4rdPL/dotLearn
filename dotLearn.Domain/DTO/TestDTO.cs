@@ -12,6 +12,7 @@ namespace dotLearn.Domain.DTO
         string? TestName,
         int Time,
         DateTime ActiveDate,
+        DateTime EndDate,
         int ClassId,
         string ProfessorFirstName, 
         string ProfessorLastName,  

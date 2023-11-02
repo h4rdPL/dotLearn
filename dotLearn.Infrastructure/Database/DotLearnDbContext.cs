@@ -1,5 +1,6 @@
 ﻿using dotLearn.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 public class DotLearnDbContext : DbContext
 {
@@ -53,6 +54,11 @@ public class DotLearnDbContext : DbContext
             .HasMany(x => x.PdfFiles)
             .WithMany(x => x.Classes);
 
+
+        modelBuilder.Entity<UserTest>()
+            .HasOne(ut => ut.Test)
+            .WithMany(tc => tc.UserTests)
+            .HasForeignKey(ut => ut.TestId);
 
         base.OnModelCreating(modelBuilder);
     }

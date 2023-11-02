@@ -88,6 +88,7 @@ namespace dotLearn.Infrastructure.ClassEntitities
                 {
                     Id = ce.Id,
                     ClassName = ce.ClassName,
+                    ClassCode = ce.ClassCode,
                     FirstName = ce.Professor.FirstName,
                     LastName = ce.Professor.LastName,
                     PdfFiles = _context.ClassPdfFiles

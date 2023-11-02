@@ -183,7 +183,8 @@ export const ClassPageDetail = () => {
     fetchUserClasses();
     fetchGrades();
   }, []);
-  console.log(grades);
+  console.log("selectedClass");
+  console.log(selectedClass);
   return (
     <PlatformLayout>
       <Wrapper>
@@ -268,6 +269,13 @@ export const ClassPageDetail = () => {
             </>
           )}
         </MaterialsContainer>
+        <span style={{ fontSize: "24px" }}>
+          <p>
+            {role === "Professor" &&
+              selectedClass &&
+              selectedClass.map((data: any) => `Kod klasy: ${data.ClassCode}`)}
+          </p>
+        </span>
       </Wrapper>
     </PlatformLayout>
   );

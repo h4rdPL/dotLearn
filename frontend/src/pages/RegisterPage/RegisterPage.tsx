@@ -5,7 +5,7 @@ import { SecondaryHeading } from "../../components/atoms/Heading/SecondaryHeadin
 import { Cta } from "../../components/atoms/Button/Cta";
 import { Checkbox } from "../../components/atoms/Checkbox/Checkbox";
 import { LandingPageLayout } from "../../templates/LandingPageLayout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DataInterface } from "../../interfaces/types";
 
 const Wrapper = styled.div`
@@ -30,6 +30,7 @@ const InnerWrapper = styled.form`
 `;
 
 export const RegisterPage = () => {
+  const navigate = useNavigate();
   const [checkboxes, setCheckboxes] = useState([
     {
       id: 1,
@@ -47,7 +48,7 @@ export const RegisterPage = () => {
     LastName: "",
     Email: "",
     Password: "",
-    Role: checkboxes[1].checked ? "Professor" : "Student",
+    Role: checkboxes[1].checked === true ? "Professor" : "Student",
   });
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export const RegisterPage = () => {
       checkbox.id === id ? { ...checkbox, checked } : checkbox
     );
     setCheckboxes(updatedCheckboxes);
+    console.log(updatedCheckboxes);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,26 +79,31 @@ export const RegisterPage = () => {
     e.preventDefault();
     console.log(formData);
     try {
-      const response = await fetch(
-        "https://localhost:7024/api/Authentication/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ...formData }),
+      if (checkboxes[0].checked == true) {
+        const response = await fetch(
+          "https://localhost:7024/api/Authentication/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...formData }),
+          }
+        );
+
+        console.log("Response Status:", response.status);
+        const responseBody = await response.text();
+        console.log("Response Body:", responseBody);
+
+        if (response.ok) {
+          console.log("udało się zarejestrować");
+          return navigate("/login");
         }
-      );
-
-      console.log("Response Status:", response.status);
-      const responseBody = await response.text();
-      console.log("Response Body:", responseBody);
-
-      if (!response.ok) {
-        console.error("Response Error:", responseBody);
+      } else {
+        console.log("Nie zaakceptowano danych");
       }
     } catch (error) {
-      console.error("Error during fetch:", error);
+      console.error("Coś nie wyszło", error);
     }
   };
 

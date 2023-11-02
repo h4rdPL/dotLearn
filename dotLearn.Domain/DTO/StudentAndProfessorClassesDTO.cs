@@ -10,6 +10,7 @@ namespace dotLearn.Domain.DTO
     public record struct StudentAndProfessorClassesDTO(
         int Id,
         string? ClassName,
+        string ClassCode,
         string? FirstName,
         string LastName,
         List<PdfFile> PdfFiles,
