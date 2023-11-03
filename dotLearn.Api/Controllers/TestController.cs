@@ -56,7 +56,15 @@ namespace dotLearn.Api.Controllers
             var result = await _testService.GetNextTests();
             return result;
         }
+        [HttpGet("GetStudentGrades")]
+        public async Task<List<GradeSummaryDTO>> GetGradesFromStudents()
+        {
+            var result = await _testService.GetGradesFromStudent();
+            return result;
+        }
 
 
     }
+
+
 }

@@ -1,4 +1,5 @@
-﻿using dotLearn.Domain.DTO;
+﻿
+using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,6 @@ namespace dotLearn.Application.Services.Test
         void AssignScoreToStudent(int testId, double score, int studentId);
         Task<List<TestResultDTO>> GetTestResult();
         Task<List<TestListDTO>> GetNextTests();
+        Task<List<GradeSummaryDTO>> GetGradesFromStudent();
     }
 }

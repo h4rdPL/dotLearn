@@ -129,6 +129,17 @@ namespace dotLearn.Infrastructure.Test
             };
         }
 
+        public async Task<List<GradeSummaryDTO>> GetGradesFromStudent()
+        {
+            var gradeSummaries = await _context.StudentScores
+                //.Where(score => score.TestId == testId)
+                .GroupBy(score => score.Grade)
+                .Select(group => new GradeSummaryDTO(group.Key, group.Count()))
+                .ToListAsync();
+
+            return gradeSummaries;
+        }
+
         public async Task<List<TestListDTO>> GetNextTests()
         {
             var userId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;

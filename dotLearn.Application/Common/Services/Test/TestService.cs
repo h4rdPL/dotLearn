@@ -40,6 +40,11 @@ namespace dotLearn.Application.Services.Test
             _testRepository.Create(testClass);
         }
 
+        public async Task<List<GradeSummaryDTO>> GetGradesFromStudent()
+        {
+            return await _testRepository.GetGradesFromStudent();
+        }
+
         public async Task<List<TestListDTO>> GetNextTests()
         {
             return await _testRepository.GetNextTests(); 

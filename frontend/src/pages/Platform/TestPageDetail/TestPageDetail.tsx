@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 import { getUserRole } from "../../../utils/GetUserRole";
+import Chart from "chart.js/auto";
+import { TestResultsChart } from "./Chart";
 
 const TestPageWrapper = styled.div`
   display: flex;
@@ -87,7 +89,7 @@ const RadioCustomButton = styled.span<{ checked: boolean }>`
 
 export const TestPageDetail = () => {
   const [role, setRole] = useState<string | undefined>();
-  const { testId } = useParams<{ testId: any }>();
+  const { testId } = useParams<{ testId: string }>();
   const [testResults, setTestResults] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<string, number>
@@ -99,6 +101,8 @@ export const TestPageDetail = () => {
   const [finishedTestScore, setFinishedTestScore] = useState<any>(0);
   const [resultsToSend, setResultsToSend] = useState<any[]>([]);
   const [testSubmitted, setTestSubmitted] = useState(false);
+  const [testData, setTestData] = useState(null);
+
   let navigate = useNavigate();
 
   const handleAnswerSelect = (questionId: number, id: number) => {
@@ -167,6 +171,21 @@ export const TestPageDetail = () => {
       console.log(err);
     }
   };
+  const fetchTestData = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7024/api/Test/GetStudentGrades/${testId}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setTestData(data);
+      } else {
+        console.error("Błąd podczas pobierania danych testu");
+      }
+    } catch (error) {
+      console.error("Błąd podczas pobierania danych testu:", error);
+    }
+  };
 
   const fetchTest = async () => {
     try {
@@ -205,6 +224,7 @@ export const TestPageDetail = () => {
 
   useEffect(() => {
     fetchTest();
+    fetchTestData();
   }, [testId]);
 
   useEffect(() => {
@@ -237,6 +257,7 @@ export const TestPageDetail = () => {
       };
     }
   }, [test]);
+  console.log(testResults);
   return (
     <PlatformLayout>
       <TestPageWrapper>
@@ -297,6 +318,20 @@ export const TestPageDetail = () => {
             ) : (
               <>
                 <h1>Wyniki testu</h1>
+                {
+                  <TestResultsChart
+                    data={{
+                      labels: ["5", "4", "3", "2", "1"],
+                      datasets: [
+                        {
+                          label: "Ilość studentów",
+                          data: [10, 4, 3, 2, 1],
+                          backgroundColor: "rgba(53, 162, 235, 0.5)",
+                        },
+                      ],
+                    }}
+                  />
+                }
               </>
             )}
           </div>
@@ -322,7 +357,7 @@ export const TestPageDetail = () => {
             </SubmitButton>
           </>
         ) : (
-          <p>Test nie jest dostępny. :((</p>
+          <p></p>
         )}
 
         {remainingTime !== null &&

@@ -16,5 +16,7 @@ namespace dotLearn.Application.Common.Interfaces.Test
         void AddGrade(int testId, double score, int studentId);
         Task<List<TestResultDTO>> GetTestResult();
         Task<List<TestListDTO>> GetNextTests();
+        Task<List<GradeSummaryDTO>> GetGradesFromStudent();
+
     }
 }

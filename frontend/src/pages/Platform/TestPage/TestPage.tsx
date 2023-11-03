@@ -155,12 +155,10 @@ export const TestPage: React.FC<TestInterface> = () => {
                     </span>
                     <Cta
                       as={Link}
-                      to={`${data.UserTestData.IsFinished ? "#" : "data.Id"} `}
+                      to={`${data.Id}`}
                       style={{ alignSelf: "flex-start" }}
                       label={`${
-                        data.UserTestData.IsFinished
-                          ? "Test niedostępny"
-                          : "Wejdź"
+                        data.UserTestData.IsFinished ? "Zobacz wyniki" : "Wejdź"
                       } `}
                       isJobOffer
                     />
