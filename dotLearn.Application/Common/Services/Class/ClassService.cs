@@ -1,21 +1,10 @@
-﻿using dotLearn.Domain.Data.Enum;
-using dotLearn.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using System.Web.Http;
-using dotLearn.Application.Common.Services.Class;
+﻿using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Application.Common.Interfaces.ClassPersistence;
 using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Application.Common.Interfaces.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using dotLearn.Application.Common.Services.Class;
 using dotLearn.Domain.DTO;
-using Microsoft.AspNetCore.Mvc;
+using dotLearn.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace dotLearn.Application.Services.Class
 {
@@ -98,6 +87,10 @@ namespace dotLearn.Application.Services.Class
             _classRepository.Remove(myClass);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<StudentAndProfessorClassesDTO> GetClass()
         {
             var user = _jwtTokenGenerator.GetProfessorIdFromJwt();
@@ -107,27 +100,56 @@ namespace dotLearn.Application.Services.Class
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<List<PdfFile>> GetClassPDFFiles(int userId)
         {
             return await _classRepository.GetClassPDFFiles(userId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <returns></returns>
         public async Task<int> GetNumberOfStudents(int classId)
         {
 
             return await _classRepository.GetNumberOfStudents(classId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public PdfFile GetPdfFileContent(int userId, string fileName)
         {
             return _classRepository.GetPdfFileContent(userId, fileName);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="classCode"></param>
+        /// <returns></returns>
         public Task<ClassEntitiesStudent> JoinToClassByCode(int userId, string classCode)
         {
             return _classRepository.JoinToClassByCode(userId, classCode);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<bool> RemoveStudentFromClass(int classId, Guid studentId)
         {
             throw new NotImplementedException();

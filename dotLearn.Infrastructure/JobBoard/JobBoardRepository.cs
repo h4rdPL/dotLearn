@@ -1,11 +1,5 @@
 ﻿using dotLearn.Application.Common.Interfaces.JobBoard;
 using dotLearn.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace dotLearn.Infrastructure.JobBoard
 {
@@ -27,6 +21,11 @@ namespace dotLearn.Infrastructure.JobBoard
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="job"></param>
+        /// <param name="jobId"></param>
         public void Delete(Job job, int jobId)
         {
             var jobOffr = _jobs.FirstOrDefault(j => j.Id == jobId);
@@ -37,13 +36,13 @@ namespace dotLearn.Infrastructure.JobBoard
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public List<Job> GetAll()
         {
-            //var query = _jobs
-            //    .Include(j => j.Offer)
-            //    .Include(j => j.Expectations)
-            //    .Include(j => j.Benefits);
-            //return query.ToList();     
             throw new NotImplementedException();
         }
     }

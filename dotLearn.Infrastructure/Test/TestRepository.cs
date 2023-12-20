@@ -1,20 +1,8 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
-using dotLearn.Application.Common.Interfaces.ClassPersistence;
-using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Common.Interfaces.Test;
-using dotLearn.Application.Helpers;
-using dotLearn.Application.Services.Test;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace dotLearn.Infrastructure.Test
 {

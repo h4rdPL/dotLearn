@@ -1,18 +1,17 @@
-﻿using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Domain.Data.Enum;
+﻿using dotLearn.Domain.Data.Enum;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace dotLearn.Application.Common.Interfaces.Services.Profile
 {
     public class UserProfile
     {
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
         [Authorize(Policy = "StudentPolicy")]
         public bool AddSubject(Subject subject, string role)
         {

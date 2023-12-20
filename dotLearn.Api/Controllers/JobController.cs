@@ -37,6 +37,13 @@ namespace dotLearn.Api.Controllers
             var jobsList = await _jobService.GetJobs();
             return Ok(jobsList);
         }
+
+        /// <summary>
+        /// Deletes a job with the specified jobId.
+        /// </summary>
+        /// <param name="job">The job object representing the job to be deleted.</param>
+        /// <param name="jobId">The unique identifier of the job to be deleted.</param>
+
         [HttpDelete("deleteJob")]
         public void DeleteJob(Job job, int jobId)
         {

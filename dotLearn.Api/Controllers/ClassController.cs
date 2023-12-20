@@ -1,11 +1,8 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
-using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Common.Services.Class;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace dotLearn.Api.Controllers
 {

@@ -1,19 +1,10 @@
-﻿using dotLearn.Application.Common.Interfaces.FlashCards;
-using dotLearn.Application.Services.Flashcards;
-using dotLearn.Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using dotLearn.Application.Common.Interfaces.Authentication;
+﻿using dotLearn.Application.Common.Interfaces.Authentication;
+using dotLearn.Application.Common.Interfaces.FlashCards;
 using dotLearn.Application.Common.Interfaces.Persisence;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System.Web.Http.ModelBinding;
+using dotLearn.Application.Services.Flashcards;
 using dotLearn.Domain.DTO;
+using dotLearn.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace dotLearn.Application.Common.Services.Flashcards
 {
@@ -38,7 +29,6 @@ namespace dotLearn.Application.Common.Services.Flashcards
         /// <param name="flashCard">the flash card entity to be created.</param>
         /// <returns>new entity which will be created</returns>
         /// <exception cref="NotImplementedException"></exception>
-      
         public void Create(DeckDTO model)
         {
             try
@@ -75,7 +65,6 @@ namespace dotLearn.Application.Common.Services.Flashcards
         /// <param name="flashCard">The flash card entity to be deleted.</param>
         /// <returns>Returns true if the flash card was successfully deleted.</returns>
         /// <exception cref="NotImplementedException">Thrown to indicate that the method is not yet implemented.</exception>
-      
         public bool Delete(int deckId)
         {
             _flashCardsRepository.Delete(deckId);
@@ -89,7 +78,6 @@ namespace dotLearn.Application.Common.Services.Flashcards
         /// <param name="flashCard">The updated flash card entity.</param>
         /// <returns>Returns the updated flash card entity.</returns>
         /// <exception cref="NotImplementedException">Thrown to indicate that the method is not yet implemented.</exception>
-       
         public FlashCard Update(FlashCard flashCard)
         {
             throw new NotImplementedException();
@@ -112,7 +100,5 @@ namespace dotLearn.Application.Common.Services.Flashcards
 
             return decks;
         }
-
-
     }
 }

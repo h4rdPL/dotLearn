@@ -1,17 +1,6 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
-using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.EntityFrameworkCore;
 using dotLearn.Application.Common.Interfaces.Test;
 using dotLearn.Domain.DTO;
-using System.Web.Http;
 
 namespace dotLearn.Application.Services.Test
 {
@@ -40,16 +29,28 @@ namespace dotLearn.Application.Services.Test
             _testRepository.Create(testClass);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<GradeSummaryDTO>> GetGradesFromStudent()
         {
             return await _testRepository.GetGradesFromStudent();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<TestListDTO>> GetNextTests()
         {
             return await _testRepository.GetNextTests(); 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<TestDTO> GetTest()
         {
             var user = _jwtTokenGenerator.GetProfessorIdFromJwt();
@@ -57,13 +58,19 @@ namespace dotLearn.Application.Services.Test
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<TestResultDTO>> GetTestResult()
         {
             var result = await _testRepository.GetTestResult();
             return result;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void OpenTest()
         {
             _testRepository.OpenTestsOnActiveDateAsync();

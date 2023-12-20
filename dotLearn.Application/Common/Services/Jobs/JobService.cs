@@ -1,11 +1,5 @@
-﻿using dotLearn.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using dotLearn.Application.Common.Interfaces.JobBoard;
+﻿using dotLearn.Application.Common.Interfaces.JobBoard;
+using dotLearn.Domain.Entities;
 
 namespace dotLearn.Application.Services.Jobs
 {
@@ -27,6 +21,11 @@ namespace dotLearn.Application.Services.Jobs
             return job;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="job"></param>
+        /// <param name="jobId"></param>
         public void DeleteJob(Job job, int jobId)
         {
             _JobBoardRepository.Delete(job, jobId); 

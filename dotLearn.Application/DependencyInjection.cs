@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using dotLearn.Application.Common.Interfaces.Authentication;
-using dotLearn.Application.Common.Interfaces.Persisence;
-
-using dotLearn.Application.Services.Class;
+﻿using dotLearn.Application.Common.Services.Class;
+using dotLearn.Application.Common.Services.Flashcards;
 using dotLearn.Application.Services.Authentication;
+using dotLearn.Application.Services.Class;
+using dotLearn.Application.Services.Flashcards;
 using dotLearn.Application.Services.Jobs;
 using dotLearn.Application.Services.Test;
-using dotLearn.Application.Services.Flashcards;
-using dotLearn.Application.Common.Services.Flashcards;
-using dotLearn.Application.Common.Services.Class;
-using dotLearn.Application.Common.Interfaces.JobBoard;
-using dotLearn.Application.Common.Services;
-using Microsoft.Extensions.Hosting;
-using dotLearn.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace dotLearn.Application
 {

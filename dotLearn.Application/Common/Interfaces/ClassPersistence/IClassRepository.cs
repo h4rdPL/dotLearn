@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using dotLearn.Domain.DTO;
+﻿using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace dotLearn.Application.Common.Interfaces.ClassPersistence
 {

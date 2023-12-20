@@ -1,17 +1,8 @@
-﻿using dotLearn.Application.Common.Interfaces.Authentication;
-using dotLearn.Application.Common.Interfaces.ClassPersistence;
-using dotLearn.Application.Common.Interfaces.Persisence;
+﻿using dotLearn.Application.Common.Interfaces.ClassPersistence;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
-using dotLearn.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace dotLearn.Infrastructure.ClassEntitities
 {
@@ -23,6 +14,14 @@ namespace dotLearn.Infrastructure.ClassEntitities
         {
             _context = context;
         }
+
+        /// <summary>
+        /// Adds a PDF file to a class for a professor.
+        /// </summary>
+        /// <param name="professorId">The ID of the professor.</param>
+        /// <param name="fileUploadDTO">The PDF file to be added.</param>
+        /// <param name="classId">The ID of the class.</param>
+        /// <returns>An asynchronous task representing the added ClassPdfFile.</returns>
         public async Task<ClassPdfFile> AddPDFFIle(int professorId, IFormFile fileUploadDTO, int ClassId)
         {
             try
@@ -65,6 +64,12 @@ namespace dotLearn.Infrastructure.ClassEntitities
             }
         }
 
+        /// <summary>
+        /// Creates a new class entity.
+        /// </summary>
+        /// <param name="classEntity">The class entity to be created.</param>
+        /// <returns>An asynchronous task representing the created ClassEntities.</returns>
+        /// <exception cref="Exception">Thrown if class creation fails.</exception>
         public async Task<ClassEntities> Create(ClassEntities classEntity)
         {
             try
@@ -79,6 +84,11 @@ namespace dotLearn.Infrastructure.ClassEntitities
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of classes for a user (student or professor) along with related information.
+        /// </summary>
+        /// <param name="user">The user for whom classes are retrieved.</param>
+        /// <returns>A list of StudentAndProfessorClassesDTO representing the classes with professors and PDFs.</returns>
         public List<StudentAndProfessorClassesDTO> GetAll(User user)
         {
             var classesWithProfessorsAndPDFs = _context.Classes
@@ -107,7 +117,12 @@ namespace dotLearn.Infrastructure.ClassEntitities
         }
 
 
-
+        /// <summary>
+        /// Retrieves a list of PDF files associated with classes taught by a professor.
+        /// </summary>
+        /// <param name="userId">The ID of the professor.</param>
+        /// <returns>An asynchronous task representing the list of PdfFile entities.</returns>
+        /// <exception cref="Exception">Thrown if an error occurs during retrieval.</exception>
         public async Task<List<PdfFile>> GetClassPDFFiles(int userId)
         {
             try
@@ -125,6 +140,12 @@ namespace dotLearn.Infrastructure.ClassEntitities
             }
         }
 
+        /// <summary>
+        /// Retrieves the number of students enrolled in a class.
+        /// </summary>
+        /// <param name="classId">The ID of the class.</param>
+        /// <returns>An asynchronous task representing the number of students in the class.</returns>
+        /// <exception cref="Exception">Thrown if an error occurs during retrieval.</exception>
         public async Task<int> GetNumberOfStudents(int classId)
         {
             try
@@ -142,6 +163,14 @@ namespace dotLearn.Infrastructure.ClassEntitities
             }
         }
 
+
+        /// <summary>
+        /// Retrieves the content of a PDF file associated with a user (student) and a specified filename.
+        /// </summary>
+        /// <param name="userId">The ID of the user (student).</param>
+        /// <param name="fileName">The name of the PDF file to retrieve.</param>
+        /// <returns>The retrieved PdfFile entity.</returns>
+        /// <exception cref="FileNotFoundException">Thrown if the PDF file is not found.</exception>
         public PdfFile GetPdfFileContent(int userId, string fileName)
         {
             var userClass = _context.ClassEntitiesStudents
@@ -166,7 +195,14 @@ namespace dotLearn.Infrastructure.ClassEntitities
 
             return pdfFileResponse;
         }
-        
+
+        /// <summary>
+        /// Joins a student to a class using a class code.
+        /// </summary>
+        /// <param name="userId">The ID of the student.</param>
+        /// <param name="classCode">The class code to join.</param>
+        /// <returns>An asynchronous task representing the created ClassEntitiesStudent.</returns>
+        /// <exception cref="Exception">Thrown if an error occurs during joining.</exception>
         public async Task<ClassEntitiesStudent> JoinToClassByCode(int userId, string classCode)
         {
             try
@@ -192,9 +228,13 @@ namespace dotLearn.Infrastructure.ClassEntitities
             {
                 throw new Exception(ex.Message);
             }
-
         }
 
+        /// <summary>
+        /// Removes a class entity (not implemented).
+        /// </summary>
+        /// <param name="classEntity">The class entity to be removed.</param>
+        /// <exception cref="NotImplementedException">Thrown as removal is not implemented.</exception>
         public void Remove(ClassEntities classEntity)
         {
             throw new NotImplementedException();

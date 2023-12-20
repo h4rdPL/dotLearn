@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using dotLearn.Application.Common.Interfaces.FlashCards;
+﻿using dotLearn.Application.Common.Interfaces.FlashCards;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotLearn.Infrastructure.FlashCards
@@ -23,12 +14,24 @@ namespace dotLearn.Infrastructure.FlashCards
             _context = context;
         }
 
+        /// <summary>
+        /// Creates a new deck.
+        /// </summary>
+        /// <param name="deck">The deck to be created.</param>
+        /// <returns>An asynchronous task representing the created Deck.</returns>
         public async Task<Deck> Create(Deck deck)
         {
             _context.Add(deck);
             await _context.SaveChangesAsync();
             return deck;
         }
+
+
+        /// <summary>
+        /// Deletes a deck by its ID.
+        /// </summary>
+        /// <param name="deckId">The ID of the deck to delete.</param>
+        /// <returns>True if the deck is successfully deleted; otherwise, false.</returns>
         public bool Delete(int deckId)
         {
             try
@@ -51,9 +54,12 @@ namespace dotLearn.Infrastructure.FlashCards
                 return false;
             }
 
-        }
-
-
+        }   
+        /// <summary>
+        /// Retrieves a list of decks for a user by user ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A list of DeckDTOs representing the user's decks and associated flash cards.</returns>
         public List<DeckDTO> GetDecksByUserId(int userId)
         {
             var decksForUser = _context.Decks

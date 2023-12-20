@@ -1,17 +1,7 @@
-﻿using dotLearn.Application.Common.Interfaces.Authentication;
-using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Application.Services.Flashcards;
-using dotLearn.Application.Services.Jobs;
+﻿using dotLearn.Application.Services.Flashcards;
 using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
-using dotLearn.Infrastructure.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace dotLearn.Api.Controllers
 {
@@ -28,7 +18,6 @@ namespace dotLearn.Api.Controllers
         /// Creates a new flash card.
         /// </summary>
         /// <returns>Returns the newly created flash card entity.</returns>
-
         [HttpPost("create")]
         public async Task<IActionResult> Create(DeckDTO model)
         {
@@ -45,7 +34,6 @@ namespace dotLearn.Api.Controllers
         /// </summary>
         /// <param name="flashCard">The updated flash card entity.</param>
         /// <returns>Returns the updated flash card entity.</returns>
-
         [HttpPut("update")]
         public async Task<ActionResult<FlashCard>> Update(FlashCard flashCard)
         {

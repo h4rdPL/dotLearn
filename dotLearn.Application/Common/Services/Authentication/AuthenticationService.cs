@@ -1,25 +1,11 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Application.Common.Interfaces.Validation;
-using dotLearn.Domain.Data.Enum;
-using dotLearn.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
-using static dotLearn.Domain.Entities.Student;
 using dotLearn.Application.Helpers;
-using dotLearn.Domain.DTO;
-using System.Web.Http.Results;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-
-using Microsoft.AspNetCore.Authorization;
 using dotLearn.Contracts.Authentication;
+using dotLearn.Domain.Data.Enum;
+using dotLearn.Domain.DTO;
+using dotLearn.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace dotLearn.Application.Services.Authentication
 {

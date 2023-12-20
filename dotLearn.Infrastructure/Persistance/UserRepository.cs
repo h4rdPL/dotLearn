@@ -1,15 +1,6 @@
 ﻿using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Application.Helpers;
-using dotLearn.Application.Services.Authentication;
 using dotLearn.Domain.Data.Enum;
-using dotLearn.Domain.DTO;
 using dotLearn.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace dotLearn.Infrastructure.Persistance
 {

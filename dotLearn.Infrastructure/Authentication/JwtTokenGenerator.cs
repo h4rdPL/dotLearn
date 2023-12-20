@@ -1,19 +1,12 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
 using dotLearn.Application.Common.Interfaces.Persisence;
-using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.Entities;
-using dotLearn.Infrastructure.Persistance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace dotLearn.Infrastructure.Authentication
 {
@@ -30,6 +23,11 @@ namespace dotLearn.Infrastructure.Authentication
             _userRepository = userRepository;
         }
 
+        /// <summary>
+        /// Generates a JWT (JSON Web Token) for the provided user.
+        /// </summary>
+        /// <param name="user">The user for whom the JWT is generated.</param>
+        /// <returns>A string representing the generated JWT.</returns>
         public string GenerateToken(User user)
         {
             var secureKey = "My secret from application config";
@@ -58,6 +56,11 @@ namespace dotLearn.Infrastructure.Authentication
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
 
+        /// <summary>
+        /// Verifies the provided JWT token and returns the corresponding JWT security token.
+        /// </summary>
+        /// <param name="token">The JWT token to be verified.</param>
+        /// <returns>The verified JWT security token.</returns>
         public JwtSecurityToken Verify(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -83,6 +86,10 @@ namespace dotLearn.Infrastructure.Authentication
             }
         }
 
+        /// <summary>
+        /// Retrieves the user associated with the professor's JWT token from the HTTP request headers.
+        /// </summary>
+        /// <returns>The user associated with the JWT token, or null if not found.</returns>
         public User? GetProfessorIdFromJwt()
         {
             var jwtToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);

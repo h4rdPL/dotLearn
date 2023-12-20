@@ -1,6 +1,5 @@
 ﻿using dotLearn.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 public class DotLearnDbContext : DbContext
 {

@@ -1,14 +1,7 @@
 ﻿using dotLearn.Application.Common.Interfaces.Authentication;
-using dotLearn.Application.Common.Interfaces.Persisence;
 using dotLearn.Application.Services.Authentication;
-using dotLearn.Application.Services.Jobs;
 using dotLearn.Contracts.Authentication;
-using dotLearn.Domain.Data.Enum;
 using dotLearn.Domain.DTO;
-using dotLearn.Domain.Entities;
-using dotLearn.Infrastructure.Persistance;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotLearn.Api.Controllers
@@ -18,16 +11,21 @@ namespace dotLearn.Api.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
-        private readonly IJobService _jobService;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AuthenticationController(IAuthenticationService authenticationService, IJobService jobService, IJwtTokenGenerator jwtTokenGenerator, IHttpContextAccessor contextAccessor)
+        public AuthenticationController(IAuthenticationService authenticationService, IJwtTokenGenerator jwtTokenGenerator, IHttpContextAccessor contextAccessor)
         {
-            _jobService = jobService;
             _authenticationService = authenticationService;
             _jwtTokenGenerator = jwtTokenGenerator;
             _httpContextAccessor = contextAccessor;
         }
+
+
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <param name="userDTO">The data transfer object containing user registration information.</param>
+        /// <returns>An asynchronous task that represents the HTTP response containing the authentication result.</returns>
 
         [HttpPost("register")]
         public async Task<ActionResult<AuthenticationResult>> Register(UserDTO userDTO)
@@ -38,6 +36,11 @@ namespace dotLearn.Api.Controllers
         }
 
 
+        /// <summary>
+        /// Logs in a user.
+        /// </summary>
+        /// <param name="request">The login request containing user credentials.</param>
+        /// <returns>An asynchronous task that represents the HTTP response containing the authentication result.</returns>
         [HttpPost("login")]
         public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)
         {
@@ -46,7 +49,10 @@ namespace dotLearn.Api.Controllers
             var jwt = _jwtTokenGenerator.GenerateToken(authResult.user);
             return await Task.FromResult(Ok(response));
         }
-
+        /// <summary>
+        /// Retrieves user information based on the provided JWT token.
+        /// </summary>
+        /// <returns>An HTTP response containing the user information.</returns>
         [HttpGet("user")]
         public IActionResult User()
         {
@@ -63,7 +69,10 @@ namespace dotLearn.Api.Controllers
             return Ok(userResult);
         }
 
-
+        /// <summary>
+        /// Logs out a user by removing the JWT token from the response cookies.
+        /// </summary>
+        /// <returns>An HTTP response indicating the success of the logout operation.</returns>
         [HttpPost("logout")] 
         public IActionResult Logout()
         {
@@ -72,7 +81,6 @@ namespace dotLearn.Api.Controllers
             {
                 message = "success"
             });
-
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using dotLearn.Domain.DTO;
-using dotLearn.Domain.Entities;
+﻿using dotLearn.Domain.Entities;
 namespace dotLearn.Application.Common.Interfaces.Persisence
 {
     public interface IUserRepository
