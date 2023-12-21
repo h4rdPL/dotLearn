@@ -57,7 +57,7 @@ const IconWrapper = styled.span`
 `;
 
 export const DashboardPage: React.FC<CalendarInterface> = () => {
-  const [grades, setGrades] = useState<any>();
+  const [grades, setGrades] = useState<number[]>();
   const [tests, setTests] = useState<any>();
   const fetchData = async () => {
     try {

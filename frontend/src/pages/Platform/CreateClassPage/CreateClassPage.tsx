@@ -5,6 +5,7 @@ import { Cta } from "../../../components/atoms/Button/Cta";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 import { ClassInput } from "../../../components/atoms/Input/ClassInput";
 import { useNavigate } from "react-router-dom";
+import { ClassDataInterface } from "../../../interfaces/types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const Wrapper = styled.div`
 
 export const CreateClassPage = () => {
   const navigate = useNavigate();
-  const [classData, setClassData] = useState<any>({
+  const [classData, setClassData] = useState<ClassDataInterface>({
     ClassName: "",
     CardId: [],
   });

@@ -107,15 +107,16 @@ interface Flashcard {
   id: number;
   concept: string;
   translation: string;
-  definition: string;
+  Content?: string;
+  Definition: string;
 }
 
 export interface FlashCardsInterface {
   id: number;
-  name: string;
+  Name: string;
+  Category: string;
   flashcards: Flashcard[];
 }
-
 
 export interface CalendarInterface {
   month?: number | undefined;
@@ -216,4 +217,23 @@ export interface DataInterface {
 export interface LoginDataInterface {
   Email: string;
   Password: string;
+}
+
+interface PdfFilesInterface {
+  $id: number;
+  $values: string[];
+}
+export interface ClassTypes {
+  ClassCode: string;
+  ClassName: string;
+  FirstName: string;
+  Id: number;
+  LastName: string;
+  PdfFiles: PdfFilesInterface[];
+  StudentNumbers: number;
+}
+
+export interface ClassDataInterface {
+  ClassName: string;
+  CardId: number[];
 }

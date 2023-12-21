@@ -7,6 +7,7 @@ import { Button } from "../../../components/atoms/Button/Button";
 import { Link } from "react-router-dom";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 import { getUserRole } from "../../../utils/GetUserRole";
+import { ClassTypes } from "../../../interfaces/types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const Wrapper = styled.div`
 const ClassHeading = styled.h2``;
 
 export const ClassPage: React.FC = () => {
-  const [classes, setClasses] = useState<any>();
+  const [classes, setClasses] = useState<ClassTypes[] | null>();
   const [role, setRole] = useState<string | undefined>();
 
   const fetchUserClasses = async () => {
@@ -51,6 +52,7 @@ export const ClassPage: React.FC = () => {
   useEffect(() => {
     fetchUserClasses();
   }, []);
+  console.log(classes);
   return (
     <PlatformLayout>
       <Wrapper>

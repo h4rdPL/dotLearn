@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { IoIosAdd } from "react-icons/io";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { FlashCardsInterface } from "../../../interfaces/types";
 
 const FlashCardWrapper = styled.div`
   display: flex;
@@ -55,19 +56,32 @@ const FlashCardInputWrapper = styled.div`
 
 export const CreateFlashCards = () => {
   const [flashcardCount, setFlashcardCount] = useState<number>(1);
-  const [flashcardData, setFlashcardData] = useState({
+  const [flashcardData, setFlashcardData] = useState<FlashCardsInterface>({
+    id: 0,
     Name: "",
     Category: "",
-    flashCards: Array(flashcardCount).fill({ Content: "", Definition: "" }),
+    flashcards: Array(flashcardCount).fill({
+      id: 0,
+      concept: "",
+      translation: "",
+      Content: "",
+      Definition: "",
+    }),
   });
 
   const handleAddFlashcard = () => {
     setFlashcardCount(flashcardCount + 1);
     setFlashcardData({
       ...flashcardData,
-      flashCards: [
-        ...flashcardData.flashCards,
-        { Content: "", Definition: "" },
+      flashcards: [
+        ...flashcardData.flashcards,
+        {
+          id: flashcardCount,
+          concept: "",
+          translation: "",
+          Content: "",
+          Definition: "",
+        },
       ],
     });
   };
@@ -75,7 +89,6 @@ export const CreateFlashCards = () => {
   const handleCreateFlashcards = async () => {
     const authToken = getAuthTokenFromCookies();
 
-    // Sprawdzenie, czy jakieś pola są puste
     if (
       flashcardData.Name.trim() === "" ||
       flashcardData.Category.trim() === ""
@@ -84,9 +97,9 @@ export const CreateFlashCards = () => {
       return;
     }
 
-    for (const flashcard of flashcardData.flashCards) {
+    for (const flashcard of flashcardData.flashcards) {
       if (
-        flashcard.Content.trim() === "" ||
+        flashcard.Content?.trim() === "" ||
         flashcard.Definition.trim() === ""
       ) {
         console.error("Pojęcie i znaczenie nie mogą być puste.");
@@ -124,12 +137,12 @@ export const CreateFlashCards = () => {
     field: "Content" | "Definition",
     value: string
   ) => {
-    const updatedFlashcards = [...flashcardData.flashCards];
+    const updatedFlashcards = [...flashcardData.flashcards];
     updatedFlashcards[index] = {
       ...updatedFlashcards[index],
       [field]: value,
     };
-    setFlashcardData({ ...flashcardData, flashCards: updatedFlashcards });
+    setFlashcardData({ ...flashcardData, flashcards: updatedFlashcards });
   };
 
   return (
@@ -161,7 +174,7 @@ export const CreateFlashCards = () => {
               <FlashCard>
                 <FlashCardInput
                   type="text"
-                  value={flashcardData.flashCards[index]?.Content || ""}
+                  value={flashcardData.flashcards[index]?.Content || ""}
                   onChange={(e) =>
                     handleFlashcardChange(index, "Content", e.target.value)
                   }
@@ -172,7 +185,7 @@ export const CreateFlashCards = () => {
               <FlashCard>
                 <FlashCardInput
                   type="text"
-                  value={flashcardData.flashCards[index]?.Definition || ""}
+                  value={flashcardData.flashcards[index]?.Definition || ""}
                   onChange={(e) =>
                     handleFlashcardChange(index, "Definition", e.target.value)
                   }

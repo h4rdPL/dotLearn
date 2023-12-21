@@ -46,11 +46,12 @@ namespace dotLearn.Api.Controllers
         {
             var authResult = _authenticationService.Login(request);
             var response = new AuthenticationResponse(authResult.user.Id, authResult.user.FirstName, authResult.user.LastName, authResult.user.Email, authResult.Token);
-            var jwt = _jwtTokenGenerator.GenerateToken(authResult.user);
             return await Task.FromResult(Ok(response));
         }
+
+
         /// <summary>
-        /// Retrieves user information based on the provided JWT token.
+        /// Retrieves user information based on the prowvided JWT token.
         /// </summary>
         /// <returns>An HTTP response containing the user information.</returns>
         [HttpGet("user")]

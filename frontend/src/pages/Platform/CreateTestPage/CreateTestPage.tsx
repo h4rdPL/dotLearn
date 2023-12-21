@@ -115,7 +115,7 @@ export const CreateTestPage = () => {
     setTestQuestions([...testQuestions, newQuestion]);
   };
 
-  const handleQuestionChange = (index: any, value: any) => {
+  const handleQuestionChange = (index: number, value: string) => {
     const updatedQuestions = [...testQuestions];
     updatedQuestions[index].questionName = value;
     setTestQuestions(updatedQuestions);
