@@ -26,7 +26,6 @@ namespace dotLearn.Api.Controllers
         /// </summary>
         /// <param name="userDTO">The data transfer object containing user registration information.</param>
         /// <returns>An asynchronous task that represents the HTTP response containing the authentication result.</returns>
-
         [HttpPost("register")]
         public async Task<ActionResult<AuthenticationResult>> Register(UserDTO userDTO)
         {

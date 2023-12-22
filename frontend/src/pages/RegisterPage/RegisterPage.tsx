@@ -6,7 +6,7 @@ import { Cta } from "../../components/atoms/Button/Cta";
 import { Checkbox } from "../../components/atoms/Checkbox/Checkbox";
 import { LandingPageLayout } from "../../templates/LandingPageLayout";
 import { Link, useNavigate } from "react-router-dom";
-import { DataInterface } from "../../interfaces/types";
+import { UserInterface } from "../../interfaces/types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -43,7 +43,7 @@ export const RegisterPage = () => {
       checked: false,
     },
   ]);
-  const [formData, setFormData] = useState<DataInterface>({
+  const [formData, setFormData] = useState<UserInterface>({
     FirstName: "",
     LastName: "",
     Email: "",

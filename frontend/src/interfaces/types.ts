@@ -206,7 +206,7 @@ export interface FlashCardSet {
 }
 
 
-export interface DataInterface {
+export interface UserInterface {
   FirstName: string;
   LastName: string;
   Email: string;
@@ -236,4 +236,43 @@ export interface ClassTypes {
 export interface ClassDataInterface {
   ClassName: string;
   CardId: number[];
+}
+
+
+interface Answer {
+  AnswerName: string;
+  IsCorrect: boolean;
+}
+
+interface Question {
+  QuestionName: string;
+  TestId: number;
+  Answer: {
+    $values: Answer[]
+  }
+}
+
+interface TestData {
+  IsActive: boolean;
+  IsFinished: boolean;
+}
+
+export interface Test {
+  Id: number;
+  TestName: string;
+  Time: string;
+  ActiveDate: string;
+  EndDate: string;
+  ClassId: number;
+  ProfessorFirstName: string;
+  ProfessorLastName: string;
+  Questions: {
+    $values: Question[];
+  };
+  UserTestData: TestData;
+}
+
+export interface TestResult {
+  QuestionId: number;
+  Score: number;
 }

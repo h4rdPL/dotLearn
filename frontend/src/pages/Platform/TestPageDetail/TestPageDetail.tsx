@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { styled } from "styled-components";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
 import { getUserRole } from "../../../utils/GetUserRole";
-import Chart from "chart.js/auto";
 import { TestResultsChart } from "./Chart";
+import { Test, TestResult } from "../../../interfaces/types";
 
 const TestPageWrapper = styled.div`
   display: flex;
@@ -96,12 +96,13 @@ export const TestPageDetail = () => {
   >({});
   const [isTestAvailable, setIsTestAvailable] = useState(true);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
-  const [test, setTest] = useState<any>(null);
+  const [test, setTest] = useState<Test | null>(null);
   const [totalPoints, setTotalPoints] = useState<number>(0);
-  const [finishedTestScore, setFinishedTestScore] = useState<any>(0);
-  const [resultsToSend, setResultsToSend] = useState<any[]>([]);
-  const [testSubmitted, setTestSubmitted] = useState(false);
-  const [testData, setTestData] = useState(null);
+  const [finishedTestScore, setFinishedTestScore] = useState<
+    bigint | string | number
+  >(0);
+
+  const [resultsToSend, setResultsToSend] = useState<TestResult[]>([]);
 
   let navigate = useNavigate();
 
@@ -116,12 +117,13 @@ export const TestPageDetail = () => {
     setIsTestAvailable(!isTestAvailable);
     try {
       let totalPoints = 0;
-      for (const questionId in selectedAnswers) {
+      for (const questionId of Object.keys(selectedAnswers)) {
         const selectedAnswerIndex = selectedAnswers[questionId];
-        const question = test.Questions.$values[questionId];
+        const question = test?.Questions.$values[parseInt(questionId, 10)];
         if (
           selectedAnswerIndex !== undefined &&
           selectedAnswerIndex >= 0 &&
+          question?.Answer?.$values?.length &&
           selectedAnswerIndex < question.Answer.$values.length
         ) {
           if (question.Answer.$values[selectedAnswerIndex].IsCorrect) {
@@ -133,21 +135,31 @@ export const TestPageDetail = () => {
           QuestionId: parseInt(questionId, 10),
           Score: totalPoints,
         });
+        console.log(
+          resultsToSend.push({
+            QuestionId: parseInt(questionId, 10),
+            Score: totalPoints,
+          })
+        );
       }
 
       setTestResults(totalPoints);
 
-      const totalMaxPoints = test.Questions?.$values?.length;
+      const totalMaxPoints = test?.Questions?.$values.length;
 
-      const newFinishedTestScore = totalPoints / totalMaxPoints;
+      const newFinishedTestScore =
+        totalPoints > 0 && totalMaxPoints
+          ? (totalPoints / totalMaxPoints) * 100
+          : 0;
       setFinishedTestScore(newFinishedTestScore);
     } catch (error) {
       console.error("Błąd podczas wysyłania wyników testu:", error);
     }
   };
+
   const handleSubmitTest = async () => {
     const authToken = getAuthTokenFromCookies();
-    const roundedScore = parseFloat(finishedTestScore).toFixed(2);
+    const roundedScore = parseFloat(finishedTestScore.toString()).toFixed(2);
     setIsTestAvailable(!isTestAvailable);
     try {
       const response = await fetch(
@@ -178,7 +190,6 @@ export const TestPageDetail = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setTestData(data);
       } else {
         console.error("Błąd podczas pobierania danych testu");
       }
@@ -250,7 +261,6 @@ export const TestPageDetail = () => {
 
       const totalMaxPoints = test.Questions?.$values?.length;
       setTotalPoints(totalMaxPoints);
-      setTestSubmitted(true);
 
       return () => {
         clearInterval(interval);
@@ -272,10 +282,7 @@ export const TestPageDetail = () => {
         <TestInfo></TestInfo>
         <div>
           <div>
-            {test &&
-            // test.UserTestData?.IsFinished === false &&
-            // test.UserTestData?.IsActive === true &&
-            role === "Student" ? (
+            {test && role === "Student" ? (
               test.Questions?.$values?.map((question: any, index: any) => (
                 <TestQuestion key={index}>
                   <div>
@@ -369,7 +376,7 @@ export const TestPageDetail = () => {
             </p>
           )}
         <p>Maksymalna ilość punktów: {totalPoints}</p>
-        <p>Poprawne odpowiedzi: {(finishedTestScore * 100).toFixed(2)}%</p>
+        <p>Poprawne odpowiedzi: {Number(finishedTestScore) * 100}%</p>
       </TestPageWrapper>
     </PlatformLayout>
   );

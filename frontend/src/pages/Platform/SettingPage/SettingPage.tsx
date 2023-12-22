@@ -51,7 +51,7 @@ const SaveButton = styled.button`
   }
 `;
 
-export const SettingPage = () => {
+export const SettingPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
