@@ -276,3 +276,26 @@ export interface TestResult {
   QuestionId: number;
   Score: number;
 }
+
+interface StudentFlashcard {
+  Id: number;
+  Content: string;
+  Definition: string;
+}
+
+export interface GetStudentDeck {
+  Name: string;
+  Category: string;
+  flashCards:{
+    $values: StudentFlashcard[];
+  } 
+}
+
+
+export interface FlashCardItem {
+  Name: string;
+  Category: string;
+  FlashCards: {
+    $values:FlashCardValue[]; 
+  } 
+}

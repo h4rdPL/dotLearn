@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { PlatformLayout } from "../../../templates/PlatformLayout";
 import { Cta } from "../../../components/atoms/Button/Cta";
 import { Span } from "../../../components/atoms/Span/Span";
-import { TestInterface } from "../../../interfaces/types";
+import { Test, TestInterface } from "../../../interfaces/types";
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/atoms/Button/Button";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 const ClassHeading = styled.h2``;
 
 export const TestPage: React.FC<TestInterface> = () => {
-  const [test, setTest] = useState<any>();
+  const [test, setTest] = useState<Test[]>();
   const [role, setRole] = useState<string | undefined>();
   const fetchUserClasses = async () => {
     try {
@@ -57,7 +57,7 @@ export const TestPage: React.FC<TestInterface> = () => {
           <ClassHeading>Aktywne testy:</ClassHeading>
         </span>
         {test &&
-          test.map((data: any) => {
+          test.map((data: Test) => {
             const originalDate = dateConverter(data.ActiveDate);
             const isTestActive =
               data.UserTestData?.IsActive === true &&

@@ -37,14 +37,23 @@ namespace dotLearn.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the details of the class including students and professor.
+        /// </summary>
+        /// <returns>Details of the class as a StudentAndProfessorClassesDTO.</returns>
         [HttpGet("GetClass")]
         public async Task<ActionResult<StudentAndProfessorClassesDTO>> GetClass()
         {
             var result = _classService.GetClass();
-            return await Task.FromResult(Ok(result));    
-
+            return await Task.FromResult(Ok(result));
         }
 
+        /// <summary>
+        /// Uploads a PDF file for a specific class.
+        /// </summary>
+        /// <param name="id">Class ID.</param>
+        /// <param name="formFile">PDF file to upload.</param>
+        /// <returns>ActionResult representing the result of the upload operation.</returns>
         [HttpPost("upload-pdf")]
         public async Task<IActionResult> UploadPdf(string id, IFormFile formFile)
         {
@@ -54,6 +63,10 @@ namespace dotLearn.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get the list of PDF files associated with a class.
+        /// </summary>
+        /// <returns>List of PDF files as ActionResult.</returns>
         [HttpGet("getPDFFiles")]
         public async Task<ActionResult<List<PdfFile>>> GetClassPDFFiles()
         {
@@ -69,17 +82,20 @@ namespace dotLearn.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Downloads a specific PDF file associated with a class.
+        /// </summary>
+        /// <param name="fileName">Name of the PDF file to download.</param>
+        /// <returns>PDF file content as FileResult.</returns>
         [HttpGet("download-pdf/{fileName}")]
         public IActionResult DownloadPdf(string fileName)
         {
             var userId = _jwtTokenGenerator.GetProfessorIdFromJwt().Id;
-
-
             var pdfFileContent = _classService.GetPdfFileContent(userId, fileName);
 
             if (pdfFileContent == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
@@ -88,6 +104,11 @@ namespace dotLearn.Api.Controllers
             return File(pdfFileContent.FileContent, "application/pdf");
         }
 
+        /// <summary>
+        /// Joins a student to a class using a class code.
+        /// </summary>
+        /// <param name="classCode">Class code for joining.</param>
+        /// <returns>Details of the class entity for the student.</returns>
         [HttpPost("JoinToClassByCode")]
         public async Task<ClassEntitiesStudent> JoinToClassByCode(string classCode)
         {
@@ -103,7 +124,12 @@ namespace dotLearn.Api.Controllers
             }
         }
 
-        [HttpGet("getStudentsList")] 
+        /// <summary>
+        /// Get the number of students in a class.
+        /// </summary>
+        /// <param name="classId">Class ID.</param>
+        /// <returns>Number of students in the class.</returns>
+        [HttpGet("getStudentsList")]
         public async Task<int> GetNumberOfStudents(int classId)
         {
             var result = await _classService.GetNumberOfStudents(classId);

@@ -189,7 +189,7 @@ export const TestPageDetail = () => {
         `https://localhost:7024/api/Test/GetStudentGrades/${testId}`
       );
       if (response.ok) {
-        const data = await response.json();
+        await response.json();
       } else {
         console.error("Błąd podczas pobierania danych testu");
       }

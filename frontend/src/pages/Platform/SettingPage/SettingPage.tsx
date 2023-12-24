@@ -52,20 +52,17 @@ const SaveButton = styled.button`
 `;
 
 export const SettingPage: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const { userData } = useContext(UserContext);
-  console.log(userData);
+
   useEffect(() => {
     (async () => {
-      const response = await fetch(
-        "https://localhost:7024/api/Authentication/user",
-        {
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      await fetch("https://localhost:7024/api/Authentication/user", {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
     })();
   });
 

@@ -4,6 +4,7 @@ import { Cta } from "../../../components/atoms/Button/Cta";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
 import { getAuthTokenFromCookies } from "../../../utils/getAuthToken";
+import { GetStudentDeck } from "../../../interfaces/types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,7 +29,7 @@ const FlashCardsListItem = styled.li`
 `;
 
 export const LearnPage: React.FC = () => {
-  const [deck, setDeck] = useState<any[]>([]);
+  const [deck, setDeck] = useState<GetStudentDeck[]>([]);
 
   const fetchFlashcards = async () => {
     try {
@@ -65,17 +66,22 @@ export const LearnPage: React.FC = () => {
         <FlashCardsList>
           {deck.length > 0 ? (
             deck.map((flashcardSet) => (
-              <FlashCardsListItem key={flashcardSet.flashCards.$values.Id}>
-                <div key={flashcardSet.flashCards.$values.Id}>
-                  Nazwa: {flashcardSet.Name} - {flashcardSet.Category}
+              <FlashCardsListItem key={flashcardSet.Name}>
+                <div>
+                  {flashcardSet.Name} - {flashcardSet.Category}
                   <br />
-                  <Cta
-                    as={Link}
-                    to={`/platform/learn/${flashcardSet.flashCards.$values[0].Id}`}
-                    style={{ alignSelf: "flex-start" }}
-                    label="Wejdź"
-                    isJobOffer
-                  />
+                  {flashcardSet.flashCards.$values.map((flashcard) => (
+                    <div key={flashcard.Id}>
+                      <br />
+                      <Cta
+                        as={Link}
+                        to={`/platform/learn/${flashcard.Id}`}
+                        style={{ alignSelf: "flex-start" }}
+                        label="Wejdź"
+                        isJobOffer
+                      />
+                    </div>
+                  ))}
                 </div>
               </FlashCardsListItem>
             ))
@@ -85,6 +91,7 @@ export const LearnPage: React.FC = () => {
             </center>
           )}
         </FlashCardsList>
+
         <Link to="/platform/learn/create">
           <Cta
             style={{ alignSelf: "flex-start" }}

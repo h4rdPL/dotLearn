@@ -4,6 +4,7 @@ import { PlatformLayout } from "../../../templates/PlatformLayout";
 import styled, { css } from "styled-components";
 import { ImArrowLeft2, ImArrowRight2 } from "react-icons/im";
 import {
+  FlashCardItem,
   FlashCardSet,
   FlashCardState,
   FlashCardValue,
@@ -159,10 +160,10 @@ export const FlashCardDetails: React.FC = () => {
       const myData = data.$values;
       setDeck(myData);
 
-      const flashCardSets = myData.map((item: any) => ({
+      const flashCardSets = myData.map((item: FlashCardItem) => ({
         Name: item.Name,
         Category: item.Category,
-        FlashCards: item.flashCards.$values,
+        FlashCards: item.FlashCards.$values,
       }));
 
       setDeck(flashCardSets);

@@ -132,7 +132,6 @@ export const DashboardPage: React.FC<CalendarInterface> = () => {
               {tests &&
                 tests.map((test: any) => {
                   const originalDate = dateConverter(test.ActiveDate);
-
                   return (
                     <span>
                       <Span
