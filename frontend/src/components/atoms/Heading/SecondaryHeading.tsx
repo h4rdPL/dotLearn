@@ -7,7 +7,7 @@ const Heading = styled.h2<SecondaryHeadingProps>`
   position: relative;
   font-size: 1.4rem;
   width: fit-content;
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.darkBackground};
   text-transform: uppercase;
 
   ${({ secondary }) =>

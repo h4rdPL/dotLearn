@@ -16,8 +16,8 @@ const InnerWrapper = styled.div`
 `;
 
 const SubHeading = styled.h2`
-  color: ${({ theme }) => theme.white};
-  font-weight: lighter;
+  color: ${({ theme }) => theme.purple};
+  font-weight: 500;
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     font-size: 3rem;
   }
@@ -25,7 +25,7 @@ const SubHeading = styled.h2`
 const Paragraph = styled.p`
   font-size: 1.2rem;
   line-height: 1.4;
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.purple};
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     width: 90%;
   }

@@ -40,11 +40,12 @@ const Span = styled.span`
   font-size: 1.3rem;
 `;
 const SubHeading = styled.h3`
-  color: ${({ theme }) => theme.textGray};
+  color: ${({ theme }) => theme.purple};
   font-size: 3rem;
 `;
 const Paragraph = styled.p`
   font-weight: 500;
+  color: ${({ theme }) => theme.purple};
 `;
 export const Section = () => {
   return (

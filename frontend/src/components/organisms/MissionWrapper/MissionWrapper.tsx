@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Mission } from "../../molecules/Mission/Mission";
 import reliability from "../../../assets/icons/diamond.svg";

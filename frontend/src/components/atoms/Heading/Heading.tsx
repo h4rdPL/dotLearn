@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { HeadingProps } from "../../../interfaces/types";
 const MainHeading = styled.h1`
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.darkBlue};
   font-size: 1.5rem;
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
     font-size: 3.875rem;

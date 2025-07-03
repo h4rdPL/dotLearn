@@ -3,13 +3,24 @@ import { styled, css } from "styled-components";
 import arrow from "../../../assets/icons/arrowRight.svg";
 import arrowWhite from "../../../assets/icons/arrowRightWhite.svg";
 import { CTAInterface } from "../../../interfaces/types";
-
-const CtaButton = styled.a`
-  color: ${({ theme }) => theme.highlight};
+import { Link } from "react-router-dom";
+const CtaButton = styled.a<{ disabled?: boolean }>`
+  color: ${({ theme }) => theme.darkBlue};
   font-weight: 600;
+  text-decoration: none;
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
 `;
 
-const Wrapper = styled.a<CTAInterface>`
+const RouterLink = styled(Link)<{ disabled?: boolean }>`
+  color: ${({ theme }) => theme.darkBlue};
+  font-weight: 600;
+  text-decoration: none;
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
+`;
+
+const Wrapper = styled.span<CTAInterface>`
   display: flex;
   gap: 0.5rem;
   justify-content: center;
@@ -18,14 +29,19 @@ const Wrapper = styled.a<CTAInterface>`
   font-size: 1.1rem;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+
   &:hover {
     gap: 0.8rem;
   }
+
   ${({ isJobOffer }) =>
     isJobOffer &&
     css`
+      color: white;
       @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
-        color: #fff;
+        color: ${({ theme }) => theme.darkBlue};
         font-weight: lighter;
       }
     `};
@@ -33,6 +49,10 @@ const Wrapper = styled.a<CTAInterface>`
 
 const Img = styled.img`
   width: 15px;
+  transition: transform 0.3s ease;
+  ${Wrapper}:hover & {
+    transform: translateX(2px);
+  }
 `;
 
 export const Cta: React.FC<CTAInterface> = ({
@@ -46,15 +66,8 @@ export const Cta: React.FC<CTAInterface> = ({
   disabled,
 }) => {
   return (
-    <CtaButton style={style}>
-      <Wrapper
-        onClick={onClick}
-        href={href}
-        isJobOffer={isJobOffer}
-        to={to}
-        as={as}
-        disabled={disabled}
-      >
+    <CtaButton style={style} href={href} onClick={onClick} disabled={disabled}>
+      <Wrapper isJobOffer={isJobOffer}>
         {label} <Img src={isJobOffer ? arrowWhite : arrow} alt="arrow" />
       </Wrapper>
     </CtaButton>

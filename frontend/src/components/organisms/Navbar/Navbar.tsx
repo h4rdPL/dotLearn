@@ -44,7 +44,7 @@ const NavWrapper = styled.div<MenuProps>`
   position: absolute;
   top: 100%;
   left: 0;
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
   padding: 0 1rem;
   border-radius: 5px;
   transform: translateX(100%);

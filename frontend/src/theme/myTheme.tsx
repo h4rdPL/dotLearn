@@ -1,11 +1,11 @@
 export const theme = {
   // landing page
-  background: "#401386",
+  background: "#e5e9e7",
   darkBackground: "#330E6A",
   highlight: "#54DE62",
   textGray: "#BCBCBC",
   textGrayDark: "#A3A3A3",
-  purple: "#571D86",
+  purple: "#000000",
   purpleLight: "#9036D9",
   darkBlue: "#140747",
   white: "#fff",

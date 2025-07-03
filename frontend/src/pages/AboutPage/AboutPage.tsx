@@ -31,24 +31,6 @@ export const AboutPage = () => {
         <SectionWrapper>
           <MissionWrapper />
         </SectionWrapper>
-        <SecondaryHeading label="Historia_projektu" secondary isSectionTitle />
-        <SectionWrapper>
-          <Paragraph
-            style={{ alignSelf: "center" }}
-            isQuotes
-            label="Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum has been the industry's. Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum has been the industry's.Lorem Ipsum is simply "
-          />
-          <SecondaryHeading
-            style={{ alignSelf: "flex-end", fontSize: "1rem" }}
-            label="CEO & CO-FOUNDER"
-            secondary
-            isSectionTitle
-          />
-        </SectionWrapper>
-        <SecondaryHeading label="Nasz_zespół" secondary isSectionTitle />
-        <SectionWrapper>
-          <Team />
-        </SectionWrapper>
       </Wrapper>
     </LandingPageLayout>
   );

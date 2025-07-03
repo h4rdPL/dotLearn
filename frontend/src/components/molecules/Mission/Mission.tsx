@@ -21,7 +21,7 @@ const IconWrapper = styled.span`
   align-items: center;
   padding: 1rem;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.darkBackground};
+  border-color: ${({ theme }) => theme.purpleLight};
 `;
 const Icon = styled.img`
   width: 35px;

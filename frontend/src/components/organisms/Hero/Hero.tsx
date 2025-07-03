@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Heading } from "../../atoms/Heading/Heading";
-import { HeadingProps } from "../../../interfaces/types";
 import { Cta } from "../../atoms/Button/Cta";
 import styled from "styled-components";
 import onlineLearning from "../../../assets/images/onlineLearning.svg";
-import backgroundCirclesDesktop from "../../../assets/images/backgroundCirclesDesktop.svg";
-import backgroundCirclesMobile from "../../../assets/images/backgroundCirclesMobile.svg";
 
 const HeadingWrapper = styled.div`
-  min-height: 120vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -44,28 +41,9 @@ const Image = styled.img`
   }
 `;
 
-const ImageContainer = styled.div`
-  align-self: center;
-`;
-
 export const Hero = () => {
-  const [backgroundURL, setBackgroundURL] = useState<string>("");
-
-  const handleResize = () => {
-    const isMobile = window.innerWidth < 1200;
-    setBackgroundURL(
-      isMobile ? backgroundCirclesMobile : backgroundCirclesDesktop
-    );
-  };
-  useEffect(() => {
-    const isMobile = window.innerWidth < 1200;
-    setBackgroundURL(
-      isMobile ? backgroundCirclesMobile : backgroundCirclesDesktop
-    );
-    window.addEventListener("resize", handleResize, false);
-  }, []);
   return (
-    <>
+    <HeadingWrapper>
       <HeadingWrapper>
         <Wrapper>
           <InnerWrapper>
@@ -74,10 +52,7 @@ export const Hero = () => {
           </InnerWrapper>
           <Image src={onlineLearning} alt="learning" />
         </Wrapper>
-        <ImageContainer>
-          <img src={backgroundURL} alt="icon" />
-        </ImageContainer>
       </HeadingWrapper>
-    </>
+    </HeadingWrapper>
   );
 };

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { LinkProps } from "../../../interfaces/types";
 
 const NavbarLink = styled.a`
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
   position: relative;
   cursor: pointer;
   &::before {
