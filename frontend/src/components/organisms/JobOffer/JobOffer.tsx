@@ -7,7 +7,7 @@ const JobOfferWrapper = styled.div`
   display: flex;
   gap: 0.75rem;
   flex-direction: column;
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
 `;
 
 const InnerWrapper = styled.div`
@@ -20,7 +20,7 @@ const InnerWrapper = styled.div`
 `;
 
 const SmallParagraph = styled.p`
-  color: ${({ theme }) => theme.highlight};
+  color: ${({ theme }) => theme.darkBackground};
 `;
 export const JobOffer: React.FC<JobInterface> = ({
   id,

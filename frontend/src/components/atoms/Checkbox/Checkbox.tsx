@@ -11,14 +11,14 @@ const CheckboxWrapper = styled.label`
 const CustomCheckbox = styled.span<CheckboxProps>`
   min-width: 16px;
   min-height: 16px;
-  border: 2px solid ${({ theme }) => theme.white};
-  color: ${({ theme }) => theme.white};
+  border: 2px solid ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.black};
   background-color: ${({ isChecked, theme }) =>
-    isChecked ? theme.white : "transparent"};
+    isChecked ? theme.black : "transparent"};
   margin-right: 8px;
 `;
 const Label = styled.label`
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
   cursor: pointer;
 `;
 export const Checkbox: React.FC<CheckboxProps> = ({

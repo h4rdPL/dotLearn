@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { ParagraphProps } from "../../../interfaces/types";
 import quotesIcon from "../../../assets/icons/quotes.svg";
 const ParagraphStyled = styled.p<ParagraphProps>`
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
   text-align: center;
   font-weight: ${({ isLight }) => (isLight ? "400" : "bold")};
   ${({ isLight, isQuotes }) => {

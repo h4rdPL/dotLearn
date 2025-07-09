@@ -111,7 +111,10 @@ export const LoginPage = () => {
               label="Zaloguj się"
               isJobOffer
             />
-            <Link style={{ alignSelf: "flex-end" }} to={"/register"}>
+            <Link
+              style={{ alignSelf: "flex-end", color: "#000" }}
+              to={"/register"}
+            >
               Nie masz konta?
               <span style={{ textDecoration: "underline" }}>
                 Zarejestruj się

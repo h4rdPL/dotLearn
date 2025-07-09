@@ -39,7 +39,7 @@ const Wrapper = styled.span<CTAInterface>`
   ${({ isJobOffer }) =>
     isJobOffer &&
     css`
-      color: white;
+      color: #000;
       @media (min-width: ${({ theme }) => theme.breakpoints.desktop}px) {
         color: ${({ theme }) => theme.darkBlue};
         font-weight: lighter;

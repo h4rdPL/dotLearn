@@ -79,7 +79,7 @@ export const RegisterPage = () => {
     e.preventDefault();
     console.log(formData);
     try {
-      if (checkboxes[0].checked == true) {
+      if (checkboxes[0].checked === true) {
         const response = await fetch(
           "https://localhost:7024/api/Authentication/register",
           {
@@ -158,7 +158,7 @@ export const RegisterPage = () => {
               isJobOffer
               onClick={handleSubmit}
             />
-            <Link to="/login" style={{ alignSelf: "flex-end" }}>
+            <Link to="/login" style={{ alignSelf: "flex-end", color: "#000" }}>
               Masz już konto?
               <span style={{ textDecoration: "underline" }}>zaloguj się</span>
             </Link>

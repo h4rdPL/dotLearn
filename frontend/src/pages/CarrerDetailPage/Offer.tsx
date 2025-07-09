@@ -11,7 +11,7 @@ const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
   padding: ${({ theme }) => theme.padding.innerPadding};
 `;
 const Wrapper = styled.div`
